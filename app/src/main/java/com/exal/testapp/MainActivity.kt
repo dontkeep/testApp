@@ -33,5 +33,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.composeViewCalender.setContent {
+            MaterialTheme{
+                Surface() {
+                    ScrollBoxesSmooth()
+                }
+            }
+        }
+
     }
 }

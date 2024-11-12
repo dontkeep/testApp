@@ -1,5 +1,6 @@
 package com.exal.testapp
 
+import android.util.Log
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -66,9 +68,10 @@ val labelProperties = LabelProperties(
     enabled = true,
     padding = 16.dp,
     textStyle = TextStyle(
-        Color.White,
+        fontSize = 12.sp,
+        color = Color.White,
     ),
-    labels = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+    labels = listOf("Wk 1", "Wk 2", "Wk 3", "Wk 4"),
 )
 
 @Composable
@@ -80,17 +83,8 @@ fun LineSample() {
                 values = listOf(
                     75.0,
                     5.0,
-                    70.0,
+                    200.0,
                     85.0,
-                    0.0,
-                    10.0,
-                    20.0,
-                    30.0,
-                    40.0,
-                    50.0,
-                    60.0,
-                    70.0,
-                    40.0
                 ),
                 color = SolidColor(Color(0xFF2B8130)),
                 firstGradientFillColor = Color(0xFF66BB6A).copy(alpha = .4f),
@@ -102,7 +96,7 @@ fun LineSample() {
             ),
         )
     }
-    Card(modifier= Modifier.height(270.dp).fillMaxWidth()
+    Card(modifier= Modifier.height(180.dp).width(225.dp)
         .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
         elevation = CardDefaults.elevatedCardElevation(2.dp),
         colors = CardDefaults.cardColors(
@@ -127,7 +121,8 @@ fun LineSample() {
                         color = Color.White,
                     ),
                     contentBuilder = {
-                        it.format(1) + " Million"
+                        Log.d("TAG", "LineSample: $it")
+                        it.format(1) + " Ribu Rupiah"
                     },
                     containerColor = Color(0xff414141)
                 ),
@@ -137,7 +132,7 @@ fun LineSample() {
                         color = Color.White,
                     ),
                     contentBuilder = {
-                        it.format(1) + " M"
+                        it.format(1) + " k"
                     },
                 ),
                 labelHelperProperties = LabelHelperProperties(textStyle = TextStyle(fontSize = 12.sp, color = Color.White)),

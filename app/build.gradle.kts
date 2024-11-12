@@ -45,6 +45,8 @@ android {
 }
 
 dependencies {
+    implementation("com.github.ozcanalasalvar.picker:datepicker:2.0.7")
+    implementation("com.github.ozcanalasalvar.picker:wheelview:2.0.7")
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.compose.foundation:foundation-layout:1.7.5")
     implementation("io.github.ehsannarmani:compose-charts:0.0.17")
