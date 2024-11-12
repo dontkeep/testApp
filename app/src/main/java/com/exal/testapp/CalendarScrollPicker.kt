@@ -57,7 +57,16 @@ fun ScrollBoxesSmooth() {
         textSize = 16,
         selectorEffectEnabled = true,
         onDateChanged = {month, year ->
-            Log.d("TAG", "ScrollBoxesSmooth: $month $year")
+            val fixedYear: Int = year - 1
+            val fixedMonth: Int = when (month) {
+                0 -> {
+                    11
+                } else -> {
+                    month - 1
+                }
+            }
+
+            Log.d("TAG", "ScrollBoxesSmooth: $fixedMonth $fixedYear")
         }
     )
 }
