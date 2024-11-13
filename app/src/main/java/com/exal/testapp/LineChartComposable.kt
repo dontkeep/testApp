@@ -3,6 +3,7 @@ package com.exal.testapp
 import android.util.Log
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
@@ -71,7 +72,7 @@ val labelProperties = LabelProperties(
         fontSize = 12.sp,
         color = Color.White,
     ),
-    labels = listOf("Wk 1", "Wk 2", "Wk 3", "Wk 4"),
+    labels = listOf("Week 1", "Week 2", "Week 3", "Week 4"),
 )
 
 @Composable
@@ -96,19 +97,21 @@ fun LineSample() {
             ),
         )
     }
-    Card(modifier= Modifier.height(180.dp).width(225.dp)
+    Card(modifier= Modifier.height(240.dp).fillMaxWidth()
         .border(2.dp,Color.Transparent, RoundedCornerShape(12.dp)),
-        elevation = CardDefaults.elevatedCardElevation(2.dp),
+//        elevation = CardDefaults.elevatedCardElevation(2.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xff2D2D2D)
         )
     ) {
-        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp)){
+        Box(modifier = Modifier.fillMaxSize().padding(vertical = 12.dp).border(2.dp, Color.Transparent, RoundedCornerShape(12.dp))){
             LineChart(
                 labelProperties = labelProperties,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 22.dp),
+                    .padding(horizontal = 22.dp)
+                    .border(2.dp, Color.Transparent, RoundedCornerShape(12.dp)),
                 data = data,
                 animationMode = AnimationMode.Together(delayBuilder = {
                     it * 500L

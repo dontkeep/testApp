@@ -7,21 +7,43 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/compose_view"
+    <TextView
+        android:id="@+id/recent_text"
+        android:text="Recently Added"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/compose_view_calender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toEndOf="@id/compose_view"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        android:textSize="24sp"
         />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/item_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recent_text"
+        android:layout_margin="16dp"
+        />
+
+<!--    <me.ibrahimsn.lib.SmoothBottomBar-->
+<!--        android:contentDescription="Bot Nav"-->
+<!--        android:id="@+id/bottomBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="70dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:backgroundColor="@color/colorPrimary"-->
+<!--        app:indicatorRadius="8dp"-->
+<!--        app:cornerRadius="20dp"-->
+<!--        app:corners="all"-->
+<!--        android:layout_marginHorizontal="15dp"-->
+<!--        android:layout_marginBottom="15dp"-->
+<!--        />-->
+
+<!--    smooth bottom bar ada di repo fundamental submission, pake yang disitu ae-->
 </androidx.constraintlayout.widget.ConstraintLayout>

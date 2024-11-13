@@ -101,8 +101,8 @@ fun CustomWheelDatePicker(
 
     Box(
         modifier = Modifier
-            .height(185.dp)
-            .width(120.dp)
+            .height(IntrinsicSize.Max)
+            .width(150.dp)
             .background(if (darkModeEnabled) PickerTheme.colors.primary else colorLightPrimary),
         contentAlignment = Alignment.Center
     ) {
