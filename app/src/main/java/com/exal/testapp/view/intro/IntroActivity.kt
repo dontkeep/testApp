@@ -8,7 +8,6 @@ import com.exal.testapp.R
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroCustomLayoutFragment.Companion.newInstance
 import android.content.res.Configuration
-import com.exal.testapp.MainActivity
 import com.exal.testapp.view.landing.LandingActivity
 
 class IntroActivity : AppIntro() {
