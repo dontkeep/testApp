@@ -3,5 +3,11 @@
     <style name="Base.Theme.TestApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/BlueLight</item>
+        <item name="colorOnPrimary">@color/gray</item>
+        <item name="colorSecondary">@color/BlueLight</item>
+        <item name="colorOnSecondary">@color/gray</item>
+        <item name="android:statusBarColor">#424242</item>
+        <item name="android:navigationBarColor">@color/gray</item>
     </style>
 </resources>
