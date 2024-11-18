@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
+    implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.compose.foundation:foundation-layout:1.7.5")
     implementation("io.github.ehsannarmani:compose-charts:0.0.17")
@@ -67,6 +68,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-
+    //smooth bottombar
     implementation(libs.smoothbottombar)
 }
