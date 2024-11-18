@@ -3,8 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#353535</color>
+    <color name="icon">#E6E6E6</color>
     <color name="BlueLight">#7AB2D3</color>
     <color name="BlueLightSecond">#B9E5E8</color>
     <color name="Blue">#4A628A</color>
     <color name="BlueSecond">#DF7E848A</color>
+    <color name="colorSurfaceDark">#0B0B0B</color>
 </resources>
