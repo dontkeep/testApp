@@ -9,12 +9,188 @@
     tools:context=".view.home.HomeFragment">
 
     <TextView
+        android:id="@+id/homeTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home Fragment"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/home"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/icPeople"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="32dp"
+        android:clickable="true"
+        android:contentDescription="@string/content_image"
+        android:src="@drawable/ic_people"
+        app:layout_constraintBottom_toBottomOf="@+id/homeTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/homeTxt"
+        app:tint="@color/iconButton"/>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/half_shape_up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeTxt" />
+
+    <ImageView
+        android:id="@+id/wallet"
+        android:layout_width="129dp"
+        android:layout_height="104dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/content_image"
+        android:src="@drawable/wallet"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2" />
+
+    <TextView
+        android:id="@+id/totalTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/totalExpenses"
+        android:textSize="16sp"
+        android:textColor="@color/textShape"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/total"
+        app:layout_constraintStart_toStartOf="@+id/total"
+        app:layout_constraintTop_toTopOf="@+id/view2" />
+
+    <TextView
+        android:id="@+id/total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Rp. 20.000.000"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/textShape"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toEndOf="@+id/wallet"
+        app:layout_constraintTop_toBottomOf="@+id/totalTxt" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/half_shape_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="128dp"
+        android:layout_height="102dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/content_image"
+        android:src="@drawable/edc"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintEnd_toEndOf="@+id/view3" />
+
+    <TextView
+        android:id="@+id/itemTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/totalItems"
+        android:textColor="@color/textShape"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintEnd_toEndOf="@+id/items"
+        app:layout_constraintStart_toStartOf="@+id/items"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <TextView
+        android:id="@+id/items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="362 Items"
+        android:textColor="@color/textShape"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="@+id/view3"
+        app:layout_constraintTop_toBottomOf="@+id/itemTxt" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/card_rounded"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+    <TextView
+        android:id="@+id/recentTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/recent"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view4" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recentTxt" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/item_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:clipToPadding="false"
+        android:paddingTop="6dp"
+        android:paddingBottom="160dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/divider" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="100dp"
+        android:contentDescription="@string/fab_description"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/colorSurfaceDark"
+        app:backgroundTint="@color/BlueLight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

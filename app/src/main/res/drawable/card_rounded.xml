@@ -7,5 +7,5 @@
         android:bottomLeftRadius="0dp"
         android:bottomRightRadius="0dp" />
 
-    <solid android:color="?attr/colorOnPrimary" />
+    <solid android:color="@color/cardColor" />
 </shape>

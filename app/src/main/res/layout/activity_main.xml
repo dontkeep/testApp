@@ -36,7 +36,8 @@
             android:contentDescription="@string/bottom_navigation"
             app:cornerRadius="20dp"
             app:corners="all"
-            app:iconSize="22dp"
+            app:backgroundColor="@color/navColor"
+            app:iconSize="25dp"
             app:iconTint="@color/icon"
             app:indicatorRadius="8dp"
             app:menu="@menu/menu" />
