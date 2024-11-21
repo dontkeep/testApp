@@ -16,6 +16,9 @@
         android:theme="@style/Theme.TestApp"
         tools:targetApi="31">
         <activity
+            android:name=".view.createlist.CreateListActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.perspective.PerspectiveActivity"
             android:exported="false" />
         <activity
