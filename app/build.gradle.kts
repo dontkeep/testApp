@@ -7,6 +7,7 @@ android {
     namespace = "com.exal.testapp"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.exal.testapp"
         minSdk = 26
@@ -17,9 +18,19 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("x86", "x86_64", "armeabi", "armeabi-v7a", "mips", "mips64", "arm64-v8a")
+            isUniversalApk = false
+        }
+    }
+
     buildFeatures {
         viewBinding = true
         compose = true
+
     }
 
     composeOptions {
@@ -28,11 +39,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            isMinifyEnabled = true
+            isShrinkResources = true
         }
     }
     compileOptions {

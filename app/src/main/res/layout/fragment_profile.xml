@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:icon="@drawable/ic_calendar"
+        app:tint="@color/iconButton"
         app:iconGravity="textStart"
-        app:iconTint="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/composeView"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 

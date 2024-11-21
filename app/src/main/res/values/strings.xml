@@ -11,6 +11,7 @@
     <string name="content_image">Image View</string>
     <string name="fab_description">Floating Action Button Add.</string>
     <string name="add_list">Add List</string>
+    <string name="expenses">Expenses</string>
 
 
     <!-- Data dummy -->
