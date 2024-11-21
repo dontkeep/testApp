@@ -82,6 +82,4 @@ dependencies {
     // OpenCV lib
     implementation("com.quickbirdstudios:opencv-contrib:4.5.3.0")
 
-    // calendar lib
-
 }
