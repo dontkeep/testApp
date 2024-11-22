@@ -1,5 +1,6 @@
 package com.exal.testapp.view.home
 
+import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import com.exal.testapp.R
 import com.exal.testapp.databinding.FragmentHomeBinding
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.RecentlyAdapter
+import com.exal.testapp.view.createlist.CreateListActivity
 
 class HomeFragment : Fragment() {
 
@@ -33,9 +35,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
 
-        // Tampilkan total price dan total items ke UI
         binding.total.text = formatRupiah(totalPrice)
         binding.items.text = "$totalItem Items"
+
+        binding.floatingActionButton.setOnClickListener {
+            val intent = Intent(requireContext(), CreateListActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupRecyclerView() {

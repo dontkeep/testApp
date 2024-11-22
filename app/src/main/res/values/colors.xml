@@ -18,4 +18,5 @@
     <color name="navIconColor">#0B0B0B</color>
     <color name="textGradient">#CAC4D0</color>
     <color name="navIndicator">#19555555</color>
+    <color name="inputText">#FFFFFFFF</color>
 </resources>
