@@ -10,8 +10,20 @@
     <string name="recent">Recently Added</string>
     <string name="content_image">Image View</string>
     <string name="fab_description">Floating Action Button Add.</string>
-    <string name="add_list">Add List</string>
+    <string name="save_list">Save List</string>
     <string name="expenses">Expenses</string>
+    <string name="fab_scan">Scan Receipt</string>
+    <string name="fab_add_manual">Add Manual</string>
+    <string name="create_list">Create List</string>
+    <string name="input_title_list">Title</string>
+    <string name="fab_bottom_app_bar">Add list option</string>
+    <string name="item_name">Dorayaki</string>
+    <string name="category">Makanan</string>
+    <string name="quantity">"Quantity : "</string>
+    <string name="quantity_value">2 Items</string>
+    <string name="price">"Price : "</string>
+    <string name="price_value">Rp30.000,00</string>
+    <string name="delete_button">Delete button</string>
 
 
     <!-- Data dummy -->

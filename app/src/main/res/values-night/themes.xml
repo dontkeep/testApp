@@ -11,4 +11,13 @@
     <style name="Theme.TestApp.Icon" parent="Base.Theme.TestApp" >
         <item name="icon">@color/white</item>
     </style>
+
+    <style name="ShapeAppearanceOverlayExtended" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">0dp</item>
+        <item name="cornerSizeTopLeft">100%</item>
+        <item name="cornerSizeTopRight">100%</item>
+        <item name="cornerSizeBottomRight">100%</item>
+        <item name="cornerSizeBottomLeft">100%</item>
+    </style>
 </resources>

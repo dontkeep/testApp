@@ -10,6 +10,8 @@
     <color name="BlueSecond">#DF7E848A</color>
     <color name="colorSurfaceDark">#0B0B0B</color>
     <color name="textShape">#48454e</color>
+    <color name="deleteBtn">#FF8484</color>
+    <color name="iconBtnLight">#0B0B0B</color>
 
     <!--    Support Dark Mode-->
     <color name="iconButton">#0B0B0B</color>
@@ -18,4 +20,5 @@
     <color name="navIconColor">#0B0B0B</color>
     <color name="textGradient">#CAC4D0</color>
     <color name="navIndicator">#19555555</color>
+    <color name="inputText">#FFFFFFFF</color>
 </resources>
