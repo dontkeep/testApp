@@ -94,4 +94,8 @@ dependencies {
     // OpenCV lib
     implementation("com.quickbirdstudios:opencv-contrib:4.5.3.0")
 
+    //retrofit2
+    implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
+    implementation(libs.converter.gson)
 }
