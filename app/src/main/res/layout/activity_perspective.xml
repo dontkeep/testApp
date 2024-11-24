@@ -21,26 +21,34 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#CCCCCC"
             android:layout_gravity="center"
+            android:background="#CCCCCC"
             android:scaleType="fitCenter" />
 
     </androidx.cardview.widget.CardView>
 
-    <com.exal.testapp.view.perspective.EditPerspectiveImageView
-        android:id="@+id/edtView"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_image2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="85dp"
-        android:layout_weight="1"
-        android:background="#EEEEEE"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/saveBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_image" />
+        app:layout_constraintTop_toBottomOf="@+id/card_image"
+        app:layout_constraintDimensionRatio="3:4" >
+
+        <com.exal.testapp.view.perspective.EditPerspectiveImageView
+            android:id="@+id/edtView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/transformButton"

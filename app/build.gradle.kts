@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.exifinterface)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -96,17 +97,25 @@ dependencies {
     // OpenCV lib
     implementation("com.quickbirdstudios:opencv-contrib:4.5.3.0")
 
-    //retrofit2
+    // Retrofit2 lib
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
 
+    // Room lib
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    // Datastore lib
     implementation(libs.androidx.datastore.preferences)
 
+    // Hilt lib
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
+
+    // cameraX lib
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
 }

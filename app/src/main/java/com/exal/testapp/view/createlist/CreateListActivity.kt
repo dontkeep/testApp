@@ -1,16 +1,22 @@
 package com.exal.testapp.view.createlist
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.Animation
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.exal.testapp.R
 import com.exal.testapp.databinding.ActivityCreateListBinding
+import com.exal.testapp.view.camera.CameraActivity
 
 class CreateListActivity : AppCompatActivity() {
 
@@ -41,6 +47,23 @@ class CreateListActivity : AppCompatActivity() {
         )
     }
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Toast.makeText(this, R.string.permission_request_granted, Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, R.string.permission_request_denied, Toast.LENGTH_LONG).show()
+            }
+        }
+
+    private fun allPermissionsGranted() =
+        ContextCompat.checkSelfPermission(
+            this,
+            REQUIRED_PERMISSION
+        ) == PackageManager.PERMISSION_GRANTED
+
     private var clicked = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +82,12 @@ class CreateListActivity : AppCompatActivity() {
         }
 
         binding.fabScanReceipt.setOnClickListener {
-            Toast.makeText(this, "Scan Receipt", Toast.LENGTH_SHORT).show()
+            if (!allPermissionsGranted()) {
+                requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+            } else {
+                val intent = Intent(this, CameraActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         binding.fabAddManual.setOnClickListener {
@@ -104,5 +132,9 @@ class CreateListActivity : AppCompatActivity() {
             binding.fabScanReceipt.isClickable = false
             binding.fabAddManual.isClickable = false
         }
+    }
+
+    companion object {
+        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
     }
 }

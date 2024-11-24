@@ -24,6 +24,13 @@
     <string name="price">"Price : "</string>
     <string name="price_value">Rp30.000,00</string>
     <string name="delete_button">Delete button</string>
+    <string name="empty_image">Please select or capture an image</string>
+    <string name="failed_take_picture">Failed to take picture</string>
+    <string name="failed_show_camera_preview">Failed to open camera</string>
+    <string name="imageView">ImageView</string>
+    <string name="cameraSwitch">Switch camera</string>
+    <string name="permission_request_granted">Permission request granted</string>
+    <string name="permission_request_denied">Permission request denied</string>
 
 
     <!-- Data dummy -->
