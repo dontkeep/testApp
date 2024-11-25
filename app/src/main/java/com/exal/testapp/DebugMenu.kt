@@ -9,7 +9,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.exal.testapp.databinding.ActivityDebugMenuBinding
 import com.exal.testapp.view.intro.IntroActivity
 import com.exal.testapp.view.perspective.PerspectiveActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DebugMenu : AppCompatActivity() {
 
     private lateinit var binding: ActivityDebugMenuBinding

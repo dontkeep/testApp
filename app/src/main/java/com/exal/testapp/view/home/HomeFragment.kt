@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.R
 import com.exal.testapp.databinding.FragmentHomeBinding
 import com.exal.testapp.helper.formatRupiah
-import com.exal.testapp.view.adapter.RecentlyAdapter
 import com.exal.testapp.view.createlist.CreateListActivity
 
 class HomeFragment : Fragment() {
@@ -75,7 +74,7 @@ class HomeFragment : Fragment() {
         itemImages.recycle()
 
         // Set up RecyclerView adapter
-        val adapter = RecentlyAdapter(itemList)
+//        val adapter = RecentlyAdapter(itemList)
         binding.itemRv.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = adapter
