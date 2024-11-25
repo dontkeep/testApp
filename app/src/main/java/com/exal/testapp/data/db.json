@@ -1,150 +1,60 @@
 {
-  "expense-list": {
-    "response_message": "successful",
-    "id_user": "1",
-    "data": [
-      {
-        "list_id": "11",
-        "list_name": "belanja akhir Maret",
-        "list_total_price": "155000",
-        "image": "path to image",
-        "date": "2024-03-29T00:00:00.000Z"
-      },
-      {
-        "list_id": "12",
-        "list_name": "belanja minggu ke-1 bulan Apr",
-        "list_total_price": "200000",
-        "image": "path to image",
-        "date": "2024-04-05T00:00:00.000Z"
-      },
-      {
-        "list_id": "13",
-        "list_name": "belanja minggu ke-2 bulan Apr",
-        "list_total_price": "95000",
-        "image": "path to image",
-        "date": "2024-04-12T00:00:00.000Z"
-      },
-      {
-        "list_id": "14",
-        "list_name": "belanja minggu ke-3 bulan Apr",
-        "list_total_price": "185000",
-        "image": "path to image",
-        "date": "2024-04-19T00:00:00.000Z"
-      },
-      {
-        "list_id": "15",
-        "list_name": "belanja akhir Apr",
-        "list_total_price": "125000",
-        "image": "path to image",
-        "date": "2024-04-26T00:00:00.000Z"
-      },
-      {
-        "list_id": "16",
-        "list_name": "belanja awal Mei",
-        "list_total_price": "105000",
-        "image": "path to image",
-        "date": "2024-05-03T00:00:00.000Z"
-      },
-      {
-        "list_id": "17",
-        "list_name": "belanja pertengahan Mei",
-        "list_total_price": "140000",
-        "image": "path to image",
-        "date": "2024-05-15T00:00:00.000Z"
-      },
-      {
-        "list_id": "18",
-        "list_name": "belanja akhir Mei",
-        "list_total_price": "175000",
-        "image": "path to image",
-        "date": "2024-05-29T00:00:00.000Z"
-      },
-      {
-        "list_id": "19",
-        "list_name": "belanja minggu ke-1 bulan Jun",
-        "list_total_price": "115000",
-        "image": "path to image",
-        "date": "2024-06-04T00:00:00.000Z"
-      },
-      {
-        "list_id": "20",
-        "list_name": "belanja minggu ke-2 bulan Jun",
-        "list_total_price": "160000",
-        "image": "path to image",
-        "date": "2024-06-11T00:00:00.000Z"
-      },
-      {
-        "list_id": "21",
-        "list_name": "belanja minggu ke-3 bulan Jun",
-        "list_total_price": "90000",
-        "image": "path to image",
-        "date": "2024-06-18T00:00:00.000Z"
-      },
-      {
-        "list_id": "22",
-        "list_name": "belanja akhir Jun",
-        "list_total_price": "195000",
-        "image": "path to image",
-        "date": "2024-06-25T00:00:00.000Z"
-      },
-      {
-        "list_id": "23",
-        "list_name": "belanja awal Jul",
-        "list_total_price": "130000",
-        "image": "path to image",
-        "date": "2024-07-02T00:00:00.000Z"
-      },
-      {
-        "list_id": "24",
-        "list_name": "belanja pertengahan Jul",
-        "list_total_price": "180000",
-        "image": "path to image",
-        "date": "2024-07-16T00:00:00.000Z"
-      },
-      {
-        "list_id": "25",
-        "list_name": "belanja akhir Jul",
-        "list_total_price": "145000",
-        "image": "path to image",
-        "date": "2024-07-31T00:00:00.000Z"
-      },
-      {
-        "list_id": "26",
-        "list_name": "belanja minggu ke-1 bulan Aug",
-        "list_total_price": "125000",
-        "image": "path to image",
-        "date": "2024-08-06T00:00:00.000Z"
-      },
-      {
-        "list_id": "27",
-        "list_name": "belanja minggu ke-2 bulan Aug",
-        "list_total_price": "150000",
-        "image": "path to image",
-        "date": "2024-08-13T00:00:00.000Z"
-      },
-      {
-        "list_id": "28",
-        "list_name": "belanja minggu ke-3 bulan Aug",
-        "list_total_price": "95000",
-        "image": "path to image",
-        "date": "2024-08-20T00:00:00.000Z"
-      },
-      {
-        "list_id": "29",
-        "list_name": "belanja akhir Aug",
-        "list_total_price": "135000",
-        "image": "path to image",
-        "date": "2024-08-27T00:00:00.000Z"
-      },
-      {
-        "list_id": "30",
-        "list_name": "belanja awal Sep",
-        "list_total_price": "170000",
-        "image": "path to image",
-        "date": "2024-09-03T00:00:00.000Z"
-      }
-    ]
-  },
+  "user_list": [
+    {
+      "id_user": "1",
+      "nama": "John",
+      "email": "test1@test2.com",
+      "password": "12345678",
+      "token": "abcd1234efgh5678ijkl9012"
+    },
+    {
+      "id_user": "2",
+      "nama": "Maykel",
+      "email": "test2@test2.com",
+      "password": "12345678",
+      "token": "mnop3456qrst7890uvwx2345"
+    }
+  ],
+  "expense-lists": [
+    {
+      "id_user": "1",
+      "data": [
+        {
+          "list_id": "11",
+          "list_name": "belanja akhir Maret",
+          "list_total_price": "155000",
+          "image": "path to image",
+          "date": "2024-03-29T00:00:00.000Z"
+        },
+        {
+          "list_id": "12",
+          "list_name": "belanja minggu ke-1 bulan Apr",
+          "list_total_price": "200000",
+          "image": "path to image",
+          "date": "2024-04-05T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "id_user": "2",
+      "data": [
+        {
+          "list_id": "21",
+          "list_name": "belanja mingguan awal April",
+          "list_total_price": "175000",
+          "image": "path to image",
+          "date": "2024-04-03T00:00:00.000Z"
+        },
+        {
+          "list_id": "22",
+          "list_name": "belanja untuk pesta kecil",
+          "list_total_price": "300000",
+          "image": "path to image",
+          "date": "2024-04-08T00:00:00.000Z"
+        }
+      ]
+    }
+  ],
   "expense-detail": [
     {
       "list_id": "11",
@@ -169,14 +79,6 @@
           "item_category": "Groceries",
           "item_price": "35000",
           "list_id": "11"
-        },
-        {
-          "item_id": "3",
-          "item_name": "Gula",
-          "item_quantity": 2,
-          "item_category": "Groceries",
-          "item_price": "40000",
-          "list_id": "11"
         }
       ]
     },
@@ -189,7 +91,7 @@
       "date": "2024-04-05T00:00:00.000Z",
       "items": [
         {
-          "item_id": "4",
+          "item_id": "3",
           "item_name": "Minyak Goreng",
           "item_quantity": 1,
           "item_category": "Groceries",
@@ -197,54 +99,64 @@
           "list_id": "12"
         },
         {
-          "item_id": "5",
+          "item_id": "4",
           "item_name": "Sayur",
           "item_quantity": 3,
           "item_category": "Groceries",
           "item_price": "60000",
           "list_id": "12"
-        },
-        {
-          "item_id": "6",
-          "item_name": "Daging Ayam",
-          "item_quantity": 2,
-          "item_category": "Protein",
-          "item_price": "70000",
-          "list_id": "12"
         }
       ]
     },
     {
-      "list_id": "13",
-      "list_name": "belanja minggu ke-2 bulan Apr",
-      "total_price": "95000",
+      "list_id": "21",
+      "list_name": "belanja akhir Maret",
+      "total_price": "155000",
       "total_items": 3,
       "image": "path to image",
-      "date": "2024-04-12T00:00:00.000Z",
+      "date": "2024-03-29T00:00:00.000Z",
+      "items": [
+        {
+          "item_id": "5",
+          "item_name": "Beras",
+          "item_quantity": 2,
+          "item_category": "Groceries",
+          "item_price": "40000",
+          "list_id": "11"
+        },
+        {
+          "item_id": "6",
+          "item_name": "Telur",
+          "item_quantity": 1,
+          "item_category": "Groceries",
+          "item_price": "35000",
+          "list_id": "11"
+        }
+      ]
+    },
+    {
+      "list_id": "22",
+      "list_name": "belanja minggu ke-1 bulan Apr",
+      "total_price": "200000",
+      "total_items": 3,
+      "image": "path to image",
+      "date": "2024-04-05T00:00:00.000Z",
       "items": [
         {
           "item_id": "7",
-          "item_name": "Roti",
-          "item_quantity": 2,
-          "item_category": "Bakery",
-          "item_price": "30000",
-          "list_id": "13"
+          "item_name": "Minyak Goreng",
+          "item_quantity": 1,
+          "item_category": "Groceries",
+          "item_price": "70000",
+          "list_id": "12"
         },
         {
           "item_id": "8",
-          "item_name": "Selai",
-          "item_quantity": 1,
-          "item_category": "Condiments",
-          "item_price": "20000",
-          "list_id": "13"
-        },
-        {
-          "item_id": "9",
-          "item_name": "Keju",
-          "item_quantity": 1,
-          "item_category": "Dairy",
-          "item_price": "45000",
-          "list_id": "13"
+          "item_name": "Sayur",
+          "item_quantity": 3,
+          "item_category": "Groceries",
+          "item_price": "60000",
+          "list_id": "12"
         }
       ]
     }
