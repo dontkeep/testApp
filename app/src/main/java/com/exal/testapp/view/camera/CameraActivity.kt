@@ -11,6 +11,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraControl
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -26,7 +27,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
-    private var flashMode: Int = ImageCapture.FLASH_MODE_OFF
+    private var cameraControl: CameraControl? = null // Tambahkan variabel untuk CameraControl
+    private var isTorchEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,21 +53,15 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun toggleFlashMode() {
-        flashMode = when (flashMode) {
-            ImageCapture.FLASH_MODE_OFF -> {
-                binding.flashCamera.setImageResource(R.drawable.ic_flash_off)
-                ImageCapture.FLASH_MODE_ON
-            }
+        isTorchEnabled = !isTorchEnabled // Toggle status torch
+        cameraControl?.enableTorch(isTorchEnabled) // Atur status torch
 
-            ImageCapture.FLASH_MODE_ON -> {
-                binding.flashCamera.setImageResource(R.drawable.ic_flash_on)
-                ImageCapture.FLASH_MODE_OFF
-            }
+        // Ubah ikon berdasarkan status
+        binding.flashCamera.setImageResource(
+            if (isTorchEnabled) R.drawable.ic_flash_on else R.drawable.ic_flash_off
+        )
 
-            else -> ImageCapture.FLASH_MODE_OFF
-        }
-        Log.d(TAG, "Flash mode: $flashMode")
-        imageCapture?.flashMode = flashMode
+        Log.d(TAG, "Torch mode: ${if (isTorchEnabled) "ON" else "OFF"}")
     }
 
     public override fun onResume() {
@@ -86,18 +82,18 @@ class CameraActivity : AppCompatActivity() {
                 }
 
             imageCapture = ImageCapture.Builder()
-                .setFlashMode(flashMode)
                 .build()
 
-            Log.d(TAG, "Flash mode: $flashMode")
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+
+                val camera = cameraProvider.bindToLifecycle(
                     this,
                     cameraSelector,
                     preview,
                     imageCapture
                 )
+                cameraControl = camera.cameraControl
 
             } catch (exc: Exception) {
                 Toast.makeText(
