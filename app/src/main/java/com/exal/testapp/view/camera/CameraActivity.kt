@@ -1,7 +1,7 @@
 package com.exal.testapp.view.camera
 
 import android.content.Intent
-import android.net.Uri
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +17,6 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.exal.testapp.R
 import com.exal.testapp.databinding.ActivityCameraBinding
 import com.exal.testapp.helper.createCustomTempFile
@@ -31,6 +30,8 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)

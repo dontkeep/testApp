@@ -28,8 +28,8 @@ class EditPerspectiveImageView @JvmOverloads constructor(
 
     fun setBitmap(newBitmap: Bitmap?) {
         bitmap = newBitmap
-        resetPoints()
         invalidate()
+        resetPoints()
     }
 
     fun getPerspective(): PerspectivePoints {
@@ -57,6 +57,39 @@ class EditPerspectiveImageView @JvmOverloads constructor(
         )
     }
 
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        bitmap?.let { bmp ->
+            // Draw the bitmap scaled to fit within the view
+            canvas.drawBitmap(bmp, null, bitmapRect, null)
+
+            val scale: Float = min(width.toFloat() / bmp.width, height.toFloat() / bmp.height)
+            val scaledWidth = bmp.width * scale
+            val scaledHeight = bmp.height * scale
+            val left = (width - scaledWidth) / 2f
+            val top = (height - scaledHeight) / 2f
+
+            bitmapRect.set(left, top, left + scaledWidth, top + scaledHeight)
+
+            // Draw perspective lines
+            paint.color = Color.BLUE
+            paint.strokeWidth = dpToPx(LINE_WIDTH_DP)
+            paint.style = Paint.Style.STROKE
+            drawLine(canvas, perspectivePoints.pointLeftTop, perspectivePoints.pointRightTop)
+            drawLine(canvas, perspectivePoints.pointRightTop, perspectivePoints.pointRightBottom)
+            drawLine(canvas, perspectivePoints.pointRightBottom, perspectivePoints.pointLeftBottom)
+            drawLine(canvas, perspectivePoints.pointLeftBottom, perspectivePoints.pointLeftTop)
+
+            // Draw perspective points
+            paint.color = Color.RED
+            paint.style = Paint.Style.FILL
+            drawPoint(canvas, perspectivePoints.pointLeftTop)
+            drawPoint(canvas, perspectivePoints.pointRightTop)
+            drawPoint(canvas, perspectivePoints.pointRightBottom)
+            drawPoint(canvas, perspectivePoints.pointLeftBottom)
+        }
+    }
+
     private fun resetPoints() {
         bitmap?.let { bmp ->
             // Calculate how the bitmap should be scaled and positioned to fit the view
@@ -78,29 +111,9 @@ class EditPerspectiveImageView @JvmOverloads constructor(
         }
     }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        bitmap?.let { bmp ->
-            // Draw the bitmap scaled to fit within the view
-            canvas.drawBitmap(bmp, null, bitmapRect, null)
-
-            // Draw perspective lines
-            paint.color = Color.BLUE
-            paint.strokeWidth = dpToPx(LINE_WIDTH_DP)
-            paint.style = Paint.Style.STROKE
-            drawLine(canvas, perspectivePoints.pointLeftTop, perspectivePoints.pointRightTop)
-            drawLine(canvas, perspectivePoints.pointRightTop, perspectivePoints.pointRightBottom)
-            drawLine(canvas, perspectivePoints.pointRightBottom, perspectivePoints.pointLeftBottom)
-            drawLine(canvas, perspectivePoints.pointLeftBottom, perspectivePoints.pointLeftTop)
-
-            // Draw perspective points
-            paint.color = Color.RED
-            paint.style = Paint.Style.FILL
-            drawPoint(canvas, perspectivePoints.pointLeftTop)
-            drawPoint(canvas, perspectivePoints.pointRightTop)
-            drawPoint(canvas, perspectivePoints.pointRightBottom)
-            drawPoint(canvas, perspectivePoints.pointLeftBottom)
-        }
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        resetPoints()
     }
 
     private fun drawLine(canvas: Canvas, start: PointF, end: PointF) {
