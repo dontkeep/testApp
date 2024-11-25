@@ -2,6 +2,7 @@ package com.exal.testapp.view.camera
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,8 @@ import android.view.Surface
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraControl
 import androidx.camera.core.CameraSelector
@@ -49,7 +52,30 @@ class CameraActivity : AppCompatActivity() {
             toggleFlashMode()
         }
 
+        binding.galleryBtn.setOnClickListener {
+            openGallery()
+        }
+
         binding.captureImage.setOnClickListener { takePhoto() }
+    }
+
+    private fun openGallery() {
+        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            // Kirim URI gambar ke PerspectiveActivity
+            val intent = Intent(this, PerspectiveActivity::class.java)
+            intent.putExtra(PerspectiveActivity.EXTRA_CAMERAX_IMAGE, uri.toString())
+            Log.d(TAG, "Gambar dari galeri: $uri")
+            startActivity(intent)
+            finish()
+        } else {
+            Log.d("PerspectiveActivity", "Tidak ada gambar yang dipilih")
+        }
     }
 
     private fun toggleFlashMode() {
