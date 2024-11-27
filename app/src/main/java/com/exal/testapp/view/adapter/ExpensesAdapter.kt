@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.exal.testapp.R
 import com.exal.testapp.data.network.response.DataItem
 import com.exal.testapp.databinding.ItemRowExpenseBinding
@@ -19,6 +21,14 @@ class ExpensesAdapter: ListAdapter<DataItem, ExpensesAdapter.ItemViewHolder>(DIF
             binding.itemPrice.text = formatRupiah(item.listTotalPrice.toInt())
             "${item.totalItems} Items".also { binding.itemTotal.text = it }
             binding.itemDate.text = item.date.let { DateFormatter.localizeDate(it) }
+
+            Glide.with(itemView.context)
+                .load(item.image)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.placeholder)
+                        .error(R.drawable.ic_close)
+                )
+                .into(binding.itemImage)
         }
     }
 

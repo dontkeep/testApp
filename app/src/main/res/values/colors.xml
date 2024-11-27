@@ -12,13 +12,15 @@
     <color name="textShape">#48454e</color>
     <color name="deleteBtn">#FF8484</color>
     <color name="iconBtnLight">#0B0B0B</color>
+    <color name="greenLight">#CEE8BF</color>
+    <color name="green">#97CD78</color>
 
     <!--    Support Dark Mode-->
     <color name="iconButton">#0B0B0B</color>
     <color name="cardColor">#EFEFEF</color>
     <color name="navColor">#F4F4F4</color>
     <color name="navIconColor">#0B0B0B</color>
-    <color name="textGradient">#CAC4D0</color>
+    <color name="textGradient">#141118</color>
     <color name="navIndicator">#19555555</color>
-    <color name="inputText">#FFFFFFFF</color>
+    <color name="text">#FFFFFFFF</color>
 </resources>

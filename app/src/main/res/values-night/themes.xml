@@ -20,4 +20,8 @@
         <item name="cornerSizeBottomRight">100%</item>
         <item name="cornerSizeBottomLeft">100%</item>
     </style>
+
+    <style name="RoundedSquare">
+        <item name="cornerSize">10%</item>
+    </style>
 </resources>

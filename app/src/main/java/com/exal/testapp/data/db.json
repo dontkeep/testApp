@@ -29,19 +29,83 @@
       "data": [
         {
           "list_id": "11",
-          "list_name": "belanja akhir Maret",
+          "list_name": "Belanja Akhir Maret",
           "list_total_price": "155000",
-          "image": "path to image",
-          "total_items": 3,
+          "image": "https://picsum.photos/200/300?random=1",
+          "total_items": 5,
           "date": "2024-03-29T00:00:00.000Z"
         },
         {
           "list_id": "12",
-          "list_name": "belanja minggu ke-1 bulan Apr",
+          "list_name": "Belanja Minggu Ke-1 April",
           "list_total_price": "200000",
-          "image": "path to image",
+          "image": "https://picsum.photos/200/300?random=2",
           "total_items": 3,
           "date": "2024-04-05T00:00:00.000Z"
+        },
+        {
+          "list_id": "13",
+          "list_name": "Belanja Sayur dan Buah",
+          "list_total_price": "120000",
+          "image": "https://picsum.photos/200/300?random=3",
+          "total_items": 4,
+          "date": "2024-04-07T00:00:00.000Z"
+        },
+        {
+          "list_id": "14",
+          "list_name": "Persiapan Bulan Ramadhan",
+          "list_total_price": "300000",
+          "image": "https://picsum.photos/200/300?random=4",
+          "total_items": 6,
+          "date": "2024-04-10T00:00:00.000Z"
+        },
+        {
+          "list_id": "15",
+          "list_name": "Belanja Minggu Ke-2 April",
+          "list_total_price": "180000",
+          "image": "https://picsum.photos/200/300?random=5",
+          "total_items": 3,
+          "date": "2024-04-12T00:00:00.000Z"
+        },
+        {
+          "list_id": "16",
+          "list_name": "Promo Akhir Pekan",
+          "list_total_price": "220000",
+          "image": "https://picsum.photos/200/300?random=6",
+          "total_items": 7,
+          "date": "2024-04-15T00:00:00.000Z"
+        },
+        {
+          "list_id": "17",
+          "list_name": "Belanja Kebutuhan Dapur",
+          "list_total_price": "100000",
+          "image": "https://picsum.photos/200/300?random=7",
+          "total_items": 2,
+          "date": "2024-04-18T00:00:00.000Z"
+        },
+        {
+          "list_id": "18",
+          "list_name": "Persiapan Acara Keluarga",
+          "list_total_price": "400000",
+          "image": "https://picsum.photos/200/300?random=8",
+          "total_items": 10,
+          "date": "2024-04-20T00:00:00.000Z"
+        },
+        {
+          "list_id": "19",
+          "list_name": "Belanja Mingguan Hemat",
+          "list_total_price": "150000",
+          "image": "https://picsum.photos/200/300?random=9",
+          "total_items": 4,
+          "date": "2024-04-25T00:00:00.000Z"
+        },
+        {
+          "list_id": "20",
+          "list_name": "Belanja Keperluan Sehari-hari",
+          "list_total_price": "250000",
+          "image": "https://picsum.photos/200/300?random=1jpg",
+          "total_items": 5,
+          "date": "2024-04-28T00:00:00.000Z"
         }
       ]
     },

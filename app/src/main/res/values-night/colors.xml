@@ -4,6 +4,7 @@
     <color name="cardColor">#454545</color>
     <color name="navColor">#313131</color>
     <color name="navIconColor">#E6E6E6</color>
+    <color name="textGradient">#FFFFFF</color>
     <color name="navIndicator">#555555</color>
-    <color name="inputText">#141118</color>
+    <color name="text">#141118</color>
 </resources>

@@ -26,29 +26,27 @@
         android:layout_marginEnd="16dp"
         android:clickable="true"
         android:contentDescription="@string/content_image"
-        app:tint="@color/iconButton"
         android:src="@drawable/ic_calendar"
         app:layout_constraintBottom_toBottomOf="@+id/expensesTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/expensesTxt"
-        />
+        app:tint="@color/iconButton" />
 
     <HorizontalScrollView
         android:id="@+id/groupedChip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/expensesTxt"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         android:scrollbars="none"
-        >
+        app:layout_constraintTop_toBottomOf="@id/expensesTxt">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/groupChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:layout_constraintTop_toBottomOf="@id/expensesTxt">
+            app:layout_constraintTop_toBottomOf="@id/expensesTxt"
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/lessThan10k"
@@ -74,17 +72,17 @@
             <com.google.android.material.chip.Chip
                 android:id="@+id/lessThan500k"
                 style="@style/Widget.Material3.Chip.Filter"
-                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="&lt; Rp500.000" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/lessThan1M"
                 style="@style/Widget.Material3.Chip.Filter"
-                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="&lt; Rp1.000.000" />
         </com.google.android.material.chip.ChipGroup>
 
@@ -94,16 +92,20 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/groupedChip"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/groupedChip" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvExpense"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toBottomOf="@id/groupedChip"/>
+        android:clipToPadding="false"
+        android:paddingBottom="110dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/groupedChip" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.exal.testapp.view.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.exal.testapp.LineSample
-import com.exal.testapp.R
-import com.exal.testapp.databinding.FragmentHomeBinding
 import com.exal.testapp.databinding.FragmentProfileBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
+import com.exal.testapp.view.appsettings.AppSettingsActivity
 import java.text.DateFormatSymbols
 
 class ProfileFragment : Fragment() {
@@ -47,6 +47,11 @@ class ProfileFragment : Fragment() {
                 val monthName = DateFormatSymbols().months[month]
                 binding.dateTxt.text = "$monthName $year"
             }.show()
+        }
+
+        binding.accSeting.setOnClickListener {
+            val intent = Intent(requireContext(), AppSettingsActivity::class.java)
+            startActivity(intent)
         }
     }
 
