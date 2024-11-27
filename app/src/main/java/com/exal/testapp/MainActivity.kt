@@ -1,5 +1,6 @@
 package com.exal.testapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.PopupMenu
 import androidx.activity.enableEdgeToEdge
@@ -9,16 +10,28 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.exal.testapp.databinding.ActivityMainBinding
+import com.exal.testapp.helper.TokenManager
+import com.exal.testapp.view.landing.LandingActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
+    @Inject
+    lateinit var tokenManager: TokenManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        if (!isUserLoggedIn()) {
+            redirectToLandingActivity()
+            return
+        }
+
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -31,6 +44,16 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
         navController = navHostFragment.navController
         setupSmoothBottomMenu()
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        return tokenManager.isLoggedIn()
+    }
+
+    private fun redirectToLandingActivity() {
+        val intent = Intent(this, LandingActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun setupSmoothBottomMenu() {
