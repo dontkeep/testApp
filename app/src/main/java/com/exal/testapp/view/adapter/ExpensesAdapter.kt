@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.exal.testapp.R
 import com.exal.testapp.data.network.response.DataItem
 import com.exal.testapp.databinding.ItemRowExpenseBinding
+import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 
 class ExpensesAdapter: ListAdapter<DataItem, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
@@ -16,8 +17,8 @@ class ExpensesAdapter: ListAdapter<DataItem, ExpensesAdapter.ItemViewHolder>(DIF
         fun bind(item: DataItem) {
             binding.itemImage.setImageResource(R.drawable.placeholder)
             binding.itemPrice.text = formatRupiah(item.listTotalPrice.toInt())
-            binding.itemTotal.text = item.listName
-            binding.itemDate.text = item.date
+            "${item.totalItems} Items".also { binding.itemTotal.text = it }
+            binding.itemDate.text = item.date.let { DateFormatter.localizeDate(it) }
         }
     }
 

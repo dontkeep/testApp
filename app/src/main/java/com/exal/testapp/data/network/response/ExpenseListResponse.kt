@@ -22,6 +22,9 @@ data class DataItem(
 	@field:SerializedName("list_id")
 	val listId: String,
 
+	@field:SerializedName("total_items")
+	val totalItems: Int,
+
 	@field:SerializedName("list_name")
 	val listName: String
 )
