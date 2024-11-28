@@ -35,6 +35,8 @@
     <string name="acc_settings">Account Settings</string>
     <string name="plans">Plans</string>
     <string name="theme">Theme App</string>
+    <string name="select_language">App Language</string>
+    <string name="save">Save</string>
 
 
     <!-- Data dummy -->

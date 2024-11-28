@@ -8,8 +8,8 @@
     tools:context=".view.profile.ProfileFragment">
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
         android:paddingBottom="99dp"
         android:clipToPadding="false"
@@ -199,41 +199,50 @@
 
             </androidx.cardview.widget.CardView>
 
-            <Button
-                android:id="@+id/accSeting"
-                style="@style/Widget.Material3.Button.TextButton"
+            <ListView
+                android:id="@+id/listViewMenu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:padding="20dp"
-                android:text="@string/acc_settings"
-                android:textAlignment="textStart"
-                android:textColor="@color/iconButton"
-                android:textSize="16sp"
-                app:cornerRadius="0dp"
-                app:icon="@drawable/ic_account_settings"
-                app:iconGravity="textStart"
-                app:iconPadding="16dp"
-                app:iconSize="28dp"
-                app:iconTint="@color/iconButton"
+                android:layout_height="230dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardview2" />
 
-            <Button
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:text="@string/app_settings"
-                android:textAlignment="textStart"
-                android:textColor="@color/iconButton"
-                android:textSize="16sp"
-                app:cornerRadius="0dp"
-                app:icon="@drawable/ic_setting"
-                app:iconGravity="textStart"
-                app:iconPadding="16dp"
-                app:iconSize="28dp"
-                app:iconTint="@color/iconButton"
-                app:layout_constraintTop_toBottomOf="@+id/accSeting" />
+<!--            <Button-->
+<!--                android:id="@+id/accSeting"-->
+<!--                style="@style/Widget.Material3.Button.TextButton"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:padding="20dp"-->
+<!--                android:text="@string/acc_settings"-->
+<!--                android:textAlignment="textStart"-->
+<!--                android:textColor="@color/iconButton"-->
+<!--                android:textSize="16sp"-->
+<!--                app:cornerRadius="0dp"-->
+<!--                app:icon="@drawable/ic_account_settings"-->
+<!--                app:iconGravity="textStart"-->
+<!--                app:iconPadding="16dp"-->
+<!--                app:iconSize="28dp"-->
+<!--                app:iconTint="@color/iconButton"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/cardview2" />-->
+
+<!--            <Button-->
+<!--                style="@style/Widget.Material3.Button.TextButton"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="20dp"-->
+<!--                android:text="@string/app_settings"-->
+<!--                android:textAlignment="textStart"-->
+<!--                android:textColor="@color/iconButton"-->
+<!--                android:textSize="16sp"-->
+<!--                app:cornerRadius="0dp"-->
+<!--                app:icon="@drawable/ic_setting"-->
+<!--                app:iconGravity="textStart"-->
+<!--                app:iconPadding="16dp"-->
+<!--                app:iconSize="28dp"-->
+<!--                app:iconTint="@color/iconButton"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/accSeting" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
