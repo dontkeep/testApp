@@ -2,6 +2,7 @@ package com.exal.testapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.PopupMenu
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         if (!isUserLoggedIn()) {
+            val token = tokenManager.getToken()
+            Log.d("MainActivity", "Token: $token")
             redirectToLandingActivity()
             return
         }

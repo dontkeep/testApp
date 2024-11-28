@@ -54,6 +54,7 @@ class LoginActivity : AppCompatActivity() {
                     finish()
                 }
                 is Resource.Error -> {
+                    resetUIState()
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
                 }
