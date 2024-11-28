@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.exal.testapp.data.DataRepository
 import com.exal.testapp.data.Resource
-import com.exal.testapp.data.network.ApiServices
-import com.exal.testapp.helper.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

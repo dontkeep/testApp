@@ -1,4 +1,4 @@
-package com.exal.testapp.helper
+package com.exal.testapp.helper.manager
 
 import android.content.SharedPreferences
 import javax.inject.Inject

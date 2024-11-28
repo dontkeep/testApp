@@ -1,11 +1,8 @@
 package com.exal.testapp.data
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.exal.testapp.data.network.ApiServices
-import com.exal.testapp.data.network.response.ExpenseListResponse
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
-import com.exal.testapp.helper.TokenManager
+import com.exal.testapp.helper.manager.TokenManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -42,6 +39,42 @@ class DataRepository @Inject constructor(private val apiService: ApiServices, pr
             emit(
                 Resource.Error(
                     exception.message ?: "An error occurred during login"
+                )
+            )
+        }
+    }
+
+    fun register(name: String, email: String, password: String, passwordRepeat: String): Flow<Resource<Boolean>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.register(name, email, password, passwordRepeat)
+            if (response.status == true) {
+                emit(Resource.Success(true))
+                } else {
+                emit(Resource.Error("Registration failed: ${response.message}")) // Emit error with message
+            }
+        } catch (exception: Exception) {
+            emit(
+                Resource.Error(
+                    exception.message ?: "An error occurred during registration"
+                )
+            )
+        }
+    }
+
+    fun logout(): Flow<Resource<Boolean>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.logout("Bearer: ${tokenManager.getToken()}")
+            if (response.status == true) {
+                emit(Resource.Success(true))
+            } else {
+                emit(Resource.Error("Logout failed: ${response.message}"))
+            }
+        } catch (exception: Exception) {
+            emit(
+                Resource.Error(
+                    exception.message ?: "An error occurred during logout"
                 )
             )
         }

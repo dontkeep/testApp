@@ -8,13 +8,26 @@ import com.exal.testapp.R
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroCustomLayoutFragment.Companion.newInstance
 import android.content.res.Configuration
+import com.exal.testapp.helper.manager.IntroManager
 import com.exal.testapp.view.landing.LandingActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class IntroActivity : AppIntro() {
+
+    @Inject
+    lateinit var introManager: IntroManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        if (introManager.isIntroCompleted()) {
+            navigateToLanding()
+            return
+        }
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
         addSlide(newInstance(R.layout.fragment_intro1))
         addSlide(newInstance(R.layout.fragment_intro2))
@@ -42,6 +55,12 @@ class IntroActivity : AppIntro() {
         }
     }
 
+    private fun navigateToLanding() {
+        val intent = Intent(this, LandingActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     private fun isDarkMode(): Boolean {
         return when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> true
@@ -52,6 +71,7 @@ class IntroActivity : AppIntro() {
 
     public override fun onSkipPressed(currentFragment: Fragment?) {
         super.onSkipPressed(currentFragment)
+        introManager.setIntroCompleted()
         val intent = Intent(this, LandingActivity::class.java)
         startActivity(intent)
         finish()
@@ -59,6 +79,7 @@ class IntroActivity : AppIntro() {
 
     public override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
+        introManager.setIntroCompleted()
         val intent = Intent(this, LandingActivity::class.java)
         startActivity(intent)
         finish()

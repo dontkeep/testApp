@@ -31,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
-
         setupObservers()
         setupListeners()
     }

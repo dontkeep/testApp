@@ -7,16 +7,26 @@
     android:layout_height="match_parent"
     tools:context=".view.register.RegisterActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/image_header"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:src="@drawable/login_illus_2"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/login_illus_2"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/loginTextTitle"
@@ -25,14 +35,12 @@
         android:text="Register"
         android:textColor="@color/white"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:textStyle="bold"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@id/image_header"
         app:layout_constraintStart_toStartOf="parent"
         />
-
-
 
     <TextView
         android:id="@+id/insertUsernameText"

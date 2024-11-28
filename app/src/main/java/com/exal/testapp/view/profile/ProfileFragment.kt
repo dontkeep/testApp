@@ -14,19 +14,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.exal.testapp.LineSample
 import com.exal.testapp.R
+import com.exal.testapp.data.Resource
 import com.exal.testapp.databinding.FragmentProfileBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
+import com.exal.testapp.helper.manager.TokenManager
 import com.exal.testapp.view.adapter.MenuItem
 import com.exal.testapp.view.adapter.MenuProfileAdapter
 import com.exal.testapp.view.appsettings.AppSettingsActivity
+import com.exal.testapp.view.landing.LandingActivity
+import com.exal.testapp.view.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DateFormatSymbols
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: ProfileViewModel by viewModels()
+
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +66,11 @@ class ProfileFragment : Fragment() {
                     val intent = Intent(requireContext(), AppSettingsActivity::class.java)
                     startActivity(intent)
                 }
-                2 -> Toast.makeText(requireContext(), "Logout clicked", Toast.LENGTH_SHORT).show()
+                2 -> {
+                    viewModel.logout()
+                    tokenManager.clearToken()
+                    logoutObserver()
+                }
             }
         }
 
@@ -76,13 +89,31 @@ class ProfileFragment : Fragment() {
             }.show()
         }
 
-//        binding.accSeting.setOnClickListener {
+//        binding.accSetting.setOnClickListener {
 //            val intent = Intent(requireContext(), AppSettingsActivity::class.java)
 //            startActivity(intent)
 //        }
     }
 
-
+    private fun logoutObserver() {
+        viewModel.logoutState.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    val intent = Intent(requireContext(), LandingActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
