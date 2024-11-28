@@ -27,7 +27,7 @@ class IntroActivity : AppIntro() {
             return
         }
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         addSlide(newInstance(R.layout.fragment_intro1))
         addSlide(newInstance(R.layout.fragment_intro2))

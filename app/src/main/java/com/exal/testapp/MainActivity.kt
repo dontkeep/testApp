@@ -34,9 +34,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         if (!introManager.isIntroCompleted()) {
-            val intent = Intent(this, IntroActivity::class.java)
-            startActivity(intent)
-            finish()
+            redirectToIntroActivity()
+            return
         }
 
         if (!isUserLoggedIn()) {
@@ -63,6 +62,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun isUserLoggedIn(): Boolean {
         return tokenManager.isLoggedIn()
+    }
+
+    private fun redirectToIntroActivity() {
+        val intent = Intent(this, IntroActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun redirectToLandingActivity() {
