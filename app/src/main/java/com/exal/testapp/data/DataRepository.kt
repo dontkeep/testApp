@@ -1,7 +1,9 @@
 package com.exal.testapp.data
 
+import android.util.Log
 import com.exal.testapp.data.network.ApiServices
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
+import com.exal.testapp.data.network.response.ResultListResponseItem
 import com.exal.testapp.helper.manager.TokenManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,6 +25,22 @@ class DataRepository @Inject constructor(private val apiService: ApiServices, pr
                 )
             }
      }
+
+    fun getResultList(id: String): Flow<Resource<List<ResultListResponseItem>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val data = apiService.getResultList(id)
+            emit(Resource.Success(data))
+            Log.d("DataRepository", "Data: $data")
+        } catch (exception: Exception) {
+            emit(
+                Resource.Error(
+                    exception.message ?: "Error fetching data"
+                )
+            )
+            Log.d("DataRepository", "Error: ${exception.message}")
+        }
+    }
 
     fun login(username: String, password: String): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading()) // Emit loading state

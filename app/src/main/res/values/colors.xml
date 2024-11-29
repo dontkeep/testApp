@@ -14,6 +14,7 @@
     <color name="iconBtnLight">#0B0B0B</color>
     <color name="greenLight">#CEE8BF</color>
     <color name="green">#97CD78</color>
+    <color name="font">#141118</color>
 
     <!--    Support Dark Mode-->
     <color name="iconButton">#0B0B0B</color>

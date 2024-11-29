@@ -1,5 +1,6 @@
 package com.exal.testapp.view.perspective
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -7,12 +8,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.exal.testapp.databinding.ActivityPerspectiveBinding
+import com.exal.testapp.view.editlist.EditListActivity
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.Mat
@@ -40,21 +45,30 @@ class PerspectiveActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPerspectiveBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.perspectiveActivity) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         if (!OpenCVLoader.initDebug()) {
             Toast.makeText(this, "OpenCV tidak dapat dimuat", Toast.LENGTH_SHORT).show()
             finish()
         }
 
-        binding.transformButton.setOnClickListener {
+        binding.transformBtn.setOnClickListener {
             performPerspectiveTransform()
             transformedBitmap?.let {
                 binding.imageView.setImageBitmap(it)
             }
         }
 
-        binding.galleryBtn.setOnClickListener { openGallery() }
+        binding.nextBtn.setOnClickListener {
+            val intent = Intent(this, EditListActivity::class.java)
+            startActivity(intent)
+        }
 
         val imageUri = intent.getStringExtra(EXTRA_CAMERAX_IMAGE)?.toUri()
         Log.d("PerspectiveActivity", "Image URI Camera: $imageUri")
@@ -63,14 +77,6 @@ class PerspectiveActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Path gambar tidak tersedia!", Toast.LENGTH_SHORT).show()
             finish()
-        }
-
-        binding.saveBtn.setOnClickListener {
-            transformedBitmap?.let {
-                saveImageToGallery(it)
-            } ?: run {
-                Toast.makeText(this, "Transformasi belum dilakukan!", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
