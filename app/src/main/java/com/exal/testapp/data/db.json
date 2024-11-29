@@ -145,16 +145,64 @@
           "item_name": "Beras",
           "item_quantity": 2,
           "item_category": "Groceries",
-          "item_price": "40000",
+          "item_price": 40000,
           "list_id": "11"
         },
         {
           "item_id": "2",
           "item_name": "Telur",
+          "item_quantity": 2,
+          "item_category": "Groceries",
+          "item_price": 13000,
+          "list_id": "11"
+        },
+        {
+          "item_id": "3",
+          "item_name": "Minyak Goreng",
           "item_quantity": 1,
           "item_category": "Groceries",
-          "item_price": "35000",
+          "item_price": 70000,
+          "list_id": "12"
+        },
+        {
+          "item_id": "4",
+          "item_name": "Sayur",
+          "item_quantity": 3,
+          "item_category": "Groceries",
+          "item_price": 20000,
+          "list_id": "12"
+        },
+        {
+          "item_id": "5",
+          "item_name": "Beras",
+          "item_quantity": 2,
+          "item_category": "Groceries",
+          "item_price": 40000,
           "list_id": "11"
+        },
+        {
+          "item_id": "6",
+          "item_name": "Telur",
+          "item_quantity": 1,
+          "item_category": "Groceries",
+          "item_price": 35000,
+          "list_id": "11"
+        },
+        {
+          "item_id": "7",
+          "item_name": "Minyak Goreng",
+          "item_quantity": 1,
+          "item_category": "Groceries",
+          "item_price": 70000,
+          "list_id": "12"
+        },
+        {
+          "item_id": "8",
+          "item_name": "Sayur",
+          "item_quantity": 3,
+          "item_category": "Groceries",
+          "item_price": 20000,
+          "list_id": "12"
         }
       ]
     },
@@ -166,22 +214,6 @@
       "image": "path to image",
       "date": "2024-04-05T00:00:00.000Z",
       "items": [
-        {
-          "item_id": "3",
-          "item_name": "Minyak Goreng",
-          "item_quantity": 1,
-          "item_category": "Groceries",
-          "item_price": "70000",
-          "list_id": "12"
-        },
-        {
-          "item_id": "4",
-          "item_name": "Sayur",
-          "item_quantity": 3,
-          "item_category": "Groceries",
-          "item_price": "60000",
-          "list_id": "12"
-        }
       ]
     },
     {
@@ -192,22 +224,6 @@
       "image": "path to image",
       "date": "2024-03-29T00:00:00.000Z",
       "items": [
-        {
-          "item_id": "5",
-          "item_name": "Beras",
-          "item_quantity": 2,
-          "item_category": "Groceries",
-          "item_price": "40000",
-          "list_id": "11"
-        },
-        {
-          "item_id": "6",
-          "item_name": "Telur",
-          "item_quantity": 1,
-          "item_category": "Groceries",
-          "item_price": "35000",
-          "list_id": "11"
-        }
       ]
     },
     {
@@ -218,22 +234,6 @@
       "image": "path to image",
       "date": "2024-04-05T00:00:00.000Z",
       "items": [
-        {
-          "item_id": "7",
-          "item_name": "Minyak Goreng",
-          "item_quantity": 1,
-          "item_category": "Groceries",
-          "item_price": "70000",
-          "list_id": "12"
-        },
-        {
-          "item_id": "8",
-          "item_name": "Sayur",
-          "item_quantity": 3,
-          "item_category": "Groceries",
-          "item_price": "60000",
-          "list_id": "12"
-        }
       ]
     }
   ]
