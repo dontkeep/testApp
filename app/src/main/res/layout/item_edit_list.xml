@@ -39,7 +39,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,7 +54,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,14 +74,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             app:layout_constraintEnd_toStartOf="@+id/tvAmountLabel"
             app:layout_constraintStart_toStartOf="@+id/textFieldName"
             app:layout_constraintTop_toBottomOf="@+id/textFieldCategory">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,6 +94,7 @@
             android:layout_marginEnd="8dp"
             android:text="Quantity"
             android:textSize="16sp"
+            android:inputType="numberDecimal"
             app:layout_constraintBottom_toBottomOf="@+id/textFieldPrice"
             app:layout_constraintEnd_toStartOf="@+id/textFieldQuantity"
             app:layout_constraintTop_toTopOf="@+id/textFieldPrice" />
@@ -105,7 +110,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:singleLine="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
