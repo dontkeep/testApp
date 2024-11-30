@@ -38,10 +38,10 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        if (!isUserLoggedIn()) {
-            redirectToLandingActivity()
-            return
-        }
+//        if (!isUserLoggedIn()) {
+//            redirectToLandingActivity()
+//            return
+//        }
 
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val token = tokenManager.getToken()
-        Log.d("MainActivity", "Token: $token")
+//        val token = tokenManager.getToken()
+//        Log.d("MainActivity", "Token: $token")
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment

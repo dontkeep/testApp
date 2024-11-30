@@ -4,15 +4,19 @@ import android.util.Log
 import com.exal.testapp.data.network.ApiServices
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.ResultListResponseItem
+import com.exal.testapp.data.network.response.ScanImageResponse
+import com.exal.testapp.helper.hilt.MlApiService
+import com.exal.testapp.helper.hilt.RegularApiService
 import com.exal.testapp.helper.manager.TokenManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataRepository @Inject constructor(private val apiService: ApiServices, private val tokenManager: TokenManager) {
-     fun getExpensesList(id: String): Flow<Resource<List<ExpenseListResponseItem>>> = flow {
+class DataRepository @Inject constructor(@RegularApiService private val apiService: ApiServices, @MlApiService private val apiServiceML: ApiServices, private val tokenManager: TokenManager) {
+    fun getExpensesList(id: String): Flow<Resource<List<ExpenseListResponseItem>>> = flow {
             emit(Resource.Loading()) // Emit loading state
             try {
                 val data = apiService.getExpensesList(id) // Fetch data from API
@@ -95,6 +99,25 @@ class DataRepository @Inject constructor(private val apiService: ApiServices, pr
                     exception.message ?: "An error occurred during logout"
                 )
             )
+        }
+    }
+
+    fun scanImage(file: MultipartBody.Part): Flow<Resource<ScanImageResponse>> = flow {
+        emit(Resource.Loading()) // Emitting loading state initially
+        try {
+            // Make the API call and get the ScanImageResponse directly
+            val response = apiServiceML.scanImage(file)
+
+            // Check if the response contains products and is not null
+            if (response.products?.isNotEmpty() == true) {
+                emit(Resource.Success(response)) // Emit success if products exist
+                Log.d("DataRepository", "Data: $response")
+            } else {
+                emit(Resource.Error("No products found in the response")) // Emit error if products are empty or null
+            }
+        } catch (exception: Exception) {
+            // In case of any exception, emit error with exception message
+            emit(Resource.Error(exception.message ?: "An error occurred during image scanning"))
         }
     }
 }

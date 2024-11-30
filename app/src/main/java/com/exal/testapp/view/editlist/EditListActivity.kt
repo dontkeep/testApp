@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.data.Resource
+import com.exal.testapp.data.network.response.ScanImageResponse
 import com.exal.testapp.databinding.ActivityEditListBinding
 import com.exal.testapp.view.adapter.EditListAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +23,8 @@ class EditListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditListBinding
     private val editListViewModel: EditListViewModel by viewModels()
     private lateinit var editListAdapter: EditListAdapter
+
+    private val viewModel: EditListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,34 +42,23 @@ class EditListActivity : AppCompatActivity() {
         binding.rvScanResult.layoutManager = LinearLayoutManager(this@EditListActivity)
         binding.rvScanResult.adapter = editListAdapter
 
-        fetchData()
+        val scanData = intent.getParcelableExtra<ScanImageResponse>("SCAN_DATA")
+        if (scanData != null) {
+            viewModel.setScanData(scanData)
+        }
 
+        observeViewModel()
     }
 
-    private fun fetchData() {
-        val listId = "11"
-        lifecycleScope.launch {
-            editListViewModel.resultList.collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                        Log.d("EditListActivity", "Loading...")
-                    }
-                    is Resource.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        val data = resource.data?.firstOrNull()?.items
-                        editListAdapter.submitList(data)
-                        Log.d("EditListActivity", "Data: $data")
-                    }
-                    is Resource.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        Toast.makeText(this@EditListActivity, resource.message, Toast.LENGTH_SHORT).show()
-                        Log.d("EditListActivity", "Error: ${resource.message}")
-                    }
-                }
+    private fun observeViewModel() {
+        viewModel.scanData.observe(this) { scanData ->
+            if (scanData != null) {
+                displayScanData(scanData)
             }
         }
-        editListViewModel.fetchResultList(listId)
     }
 
+    private fun displayScanData(scanData: ScanImageResponse) {
+        Log.d("EditListActivity", "Scan Data: $scanData")
+    }
 }

@@ -6,8 +6,10 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.min
 
+@AndroidEntryPoint
 class EditPerspectiveImageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
@@ -33,7 +35,6 @@ class EditPerspectiveImageView @JvmOverloads constructor(
     }
 
     fun getPerspective(): PerspectivePoints {
-        // Transform points back to the bitmap's original scale
         val scaleX = bitmap?.width?.toFloat()?.div(bitmapRect.width()) ?: 1f
         val scaleY = bitmap?.height?.toFloat()?.div(bitmapRect.height()) ?: 1f
 

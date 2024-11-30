@@ -1,6 +1,7 @@
 package com.exal.testapp.view.editlist
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.exal.testapp.data.DataRepository
 import com.exal.testapp.data.Resource
 import com.exal.testapp.data.network.response.ResultListResponseItem
+import com.exal.testapp.data.network.response.ScanImageResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +21,13 @@ class EditListViewModel @Inject constructor(private val repository: DataReposito
 
     private val _resultList = MutableStateFlow<Resource<List<ResultListResponseItem>>>(Resource.Loading())
     val resultList: StateFlow<Resource<List<ResultListResponseItem>>> = _resultList
+
+    private val _scanData = MutableLiveData<ScanImageResponse?>()
+    val scanData: LiveData<ScanImageResponse?> get() = _scanData
+
+    fun setScanData(scanImageResponse: ScanImageResponse?) {
+        _scanData.value = scanImageResponse
+    }
 
     fun fetchResultList(id: String) {
         viewModelScope.launch {
