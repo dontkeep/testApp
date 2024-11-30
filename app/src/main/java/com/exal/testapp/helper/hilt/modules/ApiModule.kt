@@ -2,6 +2,8 @@ package com.exal.testapp.helper.hilt.modules
 
 import com.exal.testapp.data.network.ApiConfig
 import com.exal.testapp.data.network.ApiServices
+import com.exal.testapp.helper.hilt.MlApiService
+import com.exal.testapp.helper.hilt.RegularApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,14 @@ object ApiModule {
     }
 
     @Provides
+    @RegularApiService
     fun provideApiServices(apiConfig: ApiConfig): ApiServices {
         return apiConfig.getApiService()
+    }
+
+    @Provides
+    @MlApiService
+    fun provideApiServicesML(apiConfig: ApiConfig): ApiServices {
+        return apiConfig.getMLApiService()
     }
 }
