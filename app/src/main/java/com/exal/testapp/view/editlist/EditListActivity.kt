@@ -1,6 +1,7 @@
 package com.exal.testapp.view.editlist
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -25,14 +26,31 @@ class EditListActivity : AppCompatActivity() {
         binding = ActivityEditListBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.scanResultActivity) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.scanResultActivity) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+
+            // Gabungkan padding untuk status bar, navigation bar, dan keyboard
+            view.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                maxOf(systemBars.bottom, imeInsets.bottom) // Menangani keyboard
+            )
+
             insets
         }
 
         editListAdapter = EditListAdapter { updatedItem ->
             editListViewModel.updateItem(updatedItem)
+        }
+
+        binding.nextBtn.setOnClickListener {
+            val productList = editListAdapter.currentList
+
+            productList.forEach { productItem ->
+                Log.d("ProductList", "Name: ${productItem.name}, Price: ${productItem.price}, Quantity: ${productItem.amount}")
+            }
         }
 
         binding.rvScanResult.layoutManager = LinearLayoutManager(this@EditListActivity)

@@ -1,8 +1,11 @@
 package com.exal.testapp.view.adapter
 
+import android.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,22 +13,47 @@ import com.exal.testapp.data.network.response.ProductsItem
 import com.exal.testapp.databinding.ItemEditListBinding
 import com.exal.testapp.helper.formatRupiah
 
-class EditListAdapter(private val onItemUpdated: (ProductsItem) -> Unit): ListAdapter<ProductsItem, EditListAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class EditListAdapter(
+    private val onItemUpdated: (ProductsItem) -> Unit
+) : ListAdapter<ProductsItem, EditListAdapter.ItemViewHolder>(DIFF_CALLBACK) {
+
+    private val categoryMapping = mapOf(
+        "home living" to "Home & Living",
+        "minuman" to "Drink",
+        "product-segar" to "Fresh Product",
+        "kecantikan" to "Beauty",
+        "kesehatan" to "Health",
+        "makanan" to "Food",
+        "lainnya" to "Other"
+    )
+
+    private val reverseCategoryMapping = categoryMapping.entries.associate { (key, value) -> value to key }
 
     inner class ItemViewHolder(private val binding: ItemEditListBinding) : RecyclerView.ViewHolder(binding.root) {
 
         private var isUpdating = false
 
         fun bind(item: ProductsItem) {
+            // Set up category dropdown
+            val categories = categoryMapping.values.toList()
+            val adapter = ArrayAdapter(
+                binding.textFieldCategory.context,
+                R.layout.simple_dropdown_item_1line,
+                categories
+            )
+            (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
+            // Pre-fill data in views
             if (binding.textFieldName.editText?.text.toString() != item.name) {
                 isUpdating = true
                 binding.textFieldName.editText?.setText(item.name)
                 isUpdating = false
             }
 
-            if (binding.textFieldCategory.editText?.text.toString() != item.detail?.category) {
+            val displayCategory = categoryMapping[item.detail?.category]
+            if (binding.textFieldCategory.editText?.text.toString() != displayCategory) {
                 isUpdating = true
-                binding.textFieldCategory.editText?.setText(item.detail?.category)
+                (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setText(displayCategory, false)
                 isUpdating = false
             }
 
@@ -43,6 +71,7 @@ class EditListAdapter(private val onItemUpdated: (ProductsItem) -> Unit): ListAd
 
             updateTotal(item.price ?: 0, item.amount ?: 0)
 
+            // Add listeners
             binding.textFieldName.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus && !isUpdating) {
                     val updatedName = binding.textFieldName.editText?.text.toString()
@@ -52,12 +81,11 @@ class EditListAdapter(private val onItemUpdated: (ProductsItem) -> Unit): ListAd
                 }
             }
 
-            binding.textFieldCategory.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus && !isUpdating) {
-                    val updatedCategory = binding.textFieldCategory.editText?.text.toString()
-                    if (updatedCategory != item.detail?.category) {
-                        onItemUpdated(item.copy(detail = item.detail?.copy(category = updatedCategory)))
-                    }
+            (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setOnItemClickListener { _, _, position, _ ->
+                val selectedCategory = categories[position]
+                val originalCategory = reverseCategoryMapping[selectedCategory]
+                if (originalCategory != item.detail?.category) {
+                    onItemUpdated(item.copy(detail = item.detail?.copy(category = originalCategory)))
                 }
             }
 
@@ -103,7 +131,7 @@ class EditListAdapter(private val onItemUpdated: (ProductsItem) -> Unit): ListAd
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ProductsItem>() {
             override fun areItemsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {
-                return oldItem.detail?.type == newItem.detail?.type // Bandingkan menggunakan ID (type)
+                return oldItem.detail?.type == newItem.detail?.type
             }
 
             override fun areContentsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {
@@ -111,5 +139,4 @@ class EditListAdapter(private val onItemUpdated: (ProductsItem) -> Unit): ListAd
             }
         }
     }
-
 }

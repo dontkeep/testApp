@@ -46,16 +46,18 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textFieldCategory"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="@+id/textFieldName"
             app:layout_constraintStart_toStartOf="@+id/textFieldName"
             app:layout_constraintTop_toBottomOf="@+id/textFieldName">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true" />
+                android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,6 +75,7 @@
             android:id="@+id/textFieldPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toStartOf="@+id/tvAmountLabel"
