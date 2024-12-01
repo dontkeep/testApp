@@ -1,43 +1,31 @@
 package com.exal.testapp.view.perspective
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.exal.testapp.data.Resource
 import com.exal.testapp.databinding.ActivityPerspectiveBinding
 import com.exal.testapp.helper.compressFile
-import com.exal.testapp.helper.createCustomTempFile
-import com.exal.testapp.helper.reduceFileImage
 import com.exal.testapp.view.editlist.EditListActivity
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import org.opencv.android.OpenCVLoader
-import org.opencv.android.Utils
-import org.opencv.core.Mat
-import org.opencv.core.MatOfPoint2f
-import org.opencv.core.Point
-import org.opencv.core.Size
-import org.opencv.imgproc.Imgproc
 import java.io.File
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
-import kotlin.math.pow
 
 @AndroidEntryPoint
 class PerspectiveActivity : AppCompatActivity() {
@@ -75,7 +63,7 @@ class PerspectiveActivity : AppCompatActivity() {
         binding.transformBtn.setOnClickListener {
             val points = binding.edtView.getPerspective()
             if (points == null || !viewModel.isValidPoints(points)) {
-                Toast.makeText(this, "Titik perspektif tidak valid!", Toast.LENGTH_SHORT).show()
+                showSnackbar("Titik perspektif tidak valid!")
                 return@setOnClickListener
             }
 
@@ -90,9 +78,9 @@ class PerspectiveActivity : AppCompatActivity() {
             viewModel.transformedBitmap.observe(this) { transformedBitmap ->
                 if (transformedBitmap != null) {
                     binding.imageView.setImageBitmap(transformedBitmap) // Display transformed image
-                    Toast.makeText(this, "Transformasi selesai!", Toast.LENGTH_SHORT).show()
+                    showSnackbar("Transformasi selesai!")
                 } else {
-                    Toast.makeText(this, "Transformasi gagal!", Toast.LENGTH_SHORT).show()
+                    showSnackbar("Transformasi gagal!")
                 }
             }
             with(binding){
@@ -112,29 +100,32 @@ class PerspectiveActivity : AppCompatActivity() {
                     )
                     viewModel.scanImage(filePart)
                 } else {
-                    Toast.makeText(this, "Gagal memproses gambar!", Toast.LENGTH_SHORT).show()
+                    showSnackbar("Gagal memproses gambar!")
                 }
             } else {
-                Toast.makeText(this, "Tidak ada gambar untuk dipindai!", Toast.LENGTH_SHORT).show()
+                showSnackbar("Tidak ada gambar untuk dipindai!")
             }
         }
 
         viewModel.scanState.observe(this) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    Toast.makeText(this, "Memindai gambar...", Toast.LENGTH_SHORT).show()
+                    showLoading(true)
+                    showSnackbar("Memindai gambar...")
                 }
                 is Resource.Success -> {
                     val scanResponse = resource.data
                     if (scanResponse != null) {
+                        showLoading(false)
                         val intent = Intent(this, EditListActivity::class.java)
                         intent.putExtra("SCAN_DATA", scanResponse)
                         startActivity(intent)
                     }
                 }
                 is Resource.Error -> {
+                    showLoading(false)
                     Log.d("PerspectiveActivity", "Error: ${resource.message}")
-                    Toast.makeText(this, "Gagal memindai: ${resource.message}", Toast.LENGTH_SHORT).show()
+                    showSnackbar("Gagal memindai: ${resource.message}")
                 }
             }
         }
@@ -196,6 +187,18 @@ class PerspectiveActivity : AppCompatActivity() {
             Toast.makeText(this, "Gagal memuat gambar!", Toast.LENGTH_SHORT).show()
             finish()
         }
+    }
+
+    private fun showLoading(b: Boolean) {
+        binding.progressIndicator.visibility = if (b) View.VISIBLE else View.GONE
+        binding.nextBtn.isEnabled = !b
+        binding.transformBtn.isEnabled = !b
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.perspectiveActivity, message, Snackbar.LENGTH_LONG)
+            .setAnchorView(binding.nextBtn)
+            .show()
     }
 
     companion object {

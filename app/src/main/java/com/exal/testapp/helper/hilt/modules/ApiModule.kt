@@ -15,7 +15,6 @@ object ApiModule {
     @Provides
     fun provideApiConfig(): ApiConfig {
         return ApiConfig()
-        //TODO: add sharedPreferenceToken in the future
     }
 
     @Provides
