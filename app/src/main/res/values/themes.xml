@@ -21,6 +21,10 @@
         <item name="cornerSizeBottomLeft">100%</item>
     </style>
 
+    <style name="Theme.TestApp.SplashScreen" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorOnBackground">@color/splash_screen_background</item>
+    </style>
+
     <style name="RoundedSquare">
         <item name="cornerSize">10%</item>
     </style>

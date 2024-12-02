@@ -24,4 +24,5 @@
     <color name="textGradient">#141118</color>
     <color name="navIndicator">#19555555</color>
     <color name="text">#FFFFFFFF</color>
+    <color name="splash_screen_background">#FFFFFF</color>
 </resources>

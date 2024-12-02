@@ -12,6 +12,10 @@
         <item name="icon">@color/white</item>
     </style>
 
+    <style name="Theme.TestApp.SplashScreen" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorOnBackground">@color/splash_screen_background</item>
+    </style>
+
     <style name="ShapeAppearanceOverlayExtended" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">0dp</item>

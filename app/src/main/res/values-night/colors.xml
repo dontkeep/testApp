@@ -7,4 +7,5 @@
     <color name="textGradient">#FFFFFF</color>
     <color name="navIndicator">#555555</color>
     <color name="text">#141118</color>
+    <color name="splash_screen_background">#13181C</color>
 </resources>
