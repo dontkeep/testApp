@@ -61,7 +61,6 @@ class EditPerspectiveImageView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         bitmap?.let { bmp ->
-            // Draw the bitmap scaled to fit within the view
             canvas.drawBitmap(bmp, null, bitmapRect, null)
 
             val scale: Float = min(width.toFloat() / bmp.width, height.toFloat() / bmp.height)
@@ -72,7 +71,6 @@ class EditPerspectiveImageView @JvmOverloads constructor(
 
             bitmapRect.set(left, top, left + scaledWidth, top + scaledHeight)
 
-            // Draw perspective lines
             paint.color = Color.BLUE
             paint.strokeWidth = dpToPx(LINE_WIDTH_DP)
             paint.style = Paint.Style.STROKE
