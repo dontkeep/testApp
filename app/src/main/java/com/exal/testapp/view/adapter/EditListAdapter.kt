@@ -34,7 +34,6 @@ class EditListAdapter(
         private var isUpdating = false
 
         fun bind(item: ProductsItem) {
-            // Set up category dropdown
             val categories = categoryMapping.values.toList()
             val adapter = ArrayAdapter(
                 binding.textFieldCategory.context,
@@ -43,7 +42,6 @@ class EditListAdapter(
             )
             (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-            // Pre-fill data in views
             if (binding.textFieldName.editText?.text.toString() != item.name) {
                 isUpdating = true
                 binding.textFieldName.editText?.setText(item.name)
@@ -71,7 +69,6 @@ class EditListAdapter(
 
             updateTotal(item.price ?: 0, item.amount ?: 0)
 
-            // Add listeners
             binding.textFieldName.editText?.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus && !isUpdating) {
                     val updatedName = binding.textFieldName.editText?.text.toString()

@@ -11,15 +11,20 @@ import android.view.animation.Animation
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.R
 import com.exal.testapp.data.network.response.ProductsItem
 import com.exal.testapp.databinding.ActivityCreateListBinding
+import com.exal.testapp.view.adapter.ItemAdapter
 import com.exal.testapp.view.camera.CameraActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateListBinding
@@ -48,6 +53,8 @@ class CreateListActivity : AppCompatActivity() {
             R.anim.to_bottom_anim
         )
     }
+
+    private val viewModel: CreateListViewModel by viewModels()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -79,10 +86,9 @@ class CreateListActivity : AppCompatActivity() {
             insets
         }
 
-        val productList: ArrayList<ProductsItem>? = intent.getParcelableArrayListExtra("PRODUCT_LIST")
-        productList?.forEach { product ->
-            Log.d("CreateListActivity", "Name: ${product.name}, Price: ${product.price}, Quantity: ${product.amount}, ID: ${product.id}")
-        }
+        saveReceivedData()
+
+        rvSetup()
 
         binding.fabBottomAppBar.setOnClickListener {
             onAddButtonClick()
@@ -99,6 +105,31 @@ class CreateListActivity : AppCompatActivity() {
 
         binding.fabAddManual.setOnClickListener {
             Toast.makeText(this, "Add Manual", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun saveReceivedData(){
+        val productList: ArrayList<ProductsItem>? = intent.getParcelableArrayListExtra("PRODUCT_LIST")
+        val price = intent.getIntExtra("PRICE", 0)
+        if (productList != null) {
+            viewModel.setProductList(productList.toList(), price)
+        }
+    }
+
+    private fun rvSetup() {
+        val adapter = ItemAdapter{ item ->
+            viewModel.deleteProduct(item)
+        }
+
+        val layoutManager = LinearLayoutManager(this)
+        binding.itemRv.layoutManager = layoutManager
+        binding.itemRv.adapter = adapter
+
+        viewModel.productList.observe(this) {
+            adapter.submitList(it)
+        }
+        viewModel.totalPrice.observe(this) { price ->
+            Log.d("CreateListActivity", "Total Price: $price")
         }
     }
 
