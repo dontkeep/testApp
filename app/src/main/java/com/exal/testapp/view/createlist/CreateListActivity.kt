@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.R
 import com.exal.testapp.data.network.response.ProductsItem
 import com.exal.testapp.databinding.ActivityCreateListBinding
+import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ItemAdapter
 import com.exal.testapp.view.camera.CameraActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -129,6 +130,7 @@ class CreateListActivity : AppCompatActivity() {
             adapter.submitList(it)
         }
         viewModel.totalPrice.observe(this) { price ->
+            binding.totalPriceTv.text = formatRupiah(price)
             Log.d("CreateListActivity", "Total Price: $price")
         }
     }

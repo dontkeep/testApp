@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     app:cardCornerRadius="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,8 +37,9 @@
             android:paddingBottom="4dp"
             android:text="@string/category"
             android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +47,7 @@
             android:id="@+id/quatityTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:text="@string/quantity"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/item_name"
@@ -63,7 +66,7 @@
             android:id="@+id/priceTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="16dp"
             android:text="@string/price"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -75,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/price_value"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/priceTxt"
             app:layout_constraintStart_toEndOf="@+id/priceTxt"
@@ -84,8 +87,8 @@
         <Button
             android:id="@+id/deleteButton"
             style="?attr/materialIconButtonFilledStyle"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:backgroundTint="@color/deleteBtn"

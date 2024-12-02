@@ -17,11 +17,21 @@ import com.exal.testapp.helper.formatRupiah
 
 class ItemAdapter(private val onDelete: (ProductsItem) -> Unit): ListAdapter<ProductsItem, ItemAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
+    private val categoryMapping = mapOf(
+        "home living" to "Home & Living",
+        "minuman" to "Drink",
+        "product-segar" to "Fresh Product",
+        "kecantikan" to "Beauty",
+        "kesehatan" to "Health",
+        "makanan" to "Food",
+        "lainnya" to "Other"
+    )
+
     inner class ItemViewHolder(private val binding: ItemExpensesItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ProductsItem) {
             with(binding) {
                 itemName.text = item.name
-                itemCategory.text = item.detail?.category
+                itemCategory.text = categoryMapping[item.detail?.category]
                 itemQuantity.text = item.amount.toString()
                 itemPrice.text = item.price?.let { formatRupiah(it) }
 
