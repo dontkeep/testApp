@@ -1,5 +1,6 @@
 package com.exal.testapp.view.editlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.exal.testapp.data.network.response.ProductsItem
 import com.exal.testapp.data.network.response.ScanImageResponse
 import com.exal.testapp.databinding.ActivityEditListBinding
 import com.exal.testapp.view.adapter.EditListAdapter
+import com.exal.testapp.view.createlist.CreateListActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,12 +33,11 @@ class EditListActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
 
-            // Gabungkan padding untuk status bar, navigation bar, dan keyboard
             view.setPadding(
                 systemBars.left,
                 systemBars.top,
                 systemBars.right,
-                maxOf(systemBars.bottom, imeInsets.bottom) // Menangani keyboard
+                maxOf(systemBars.bottom, imeInsets.bottom)
             )
 
             insets
@@ -50,10 +52,11 @@ class EditListActivity : AppCompatActivity() {
             val totalPrice = productList.sumOf { (it.price ?: 0) * (it.amount ?: 0) }
 
             productList.forEach { productItem ->
-                Log.d("ProductList", "Name: ${productItem.name}, Price: ${productItem.price}, Quantity: ${productItem.amount}")
+                Log.d("ProductList", "Name: ${productItem.name}, Price: ${productItem.price}, Quantity: ${productItem.amount}, id: ${productItem.id}")
             }
 
             Log.d("ProductList", "Total Price: $totalPrice")
+            navigateToCreateListActivity(productList)
         }
 
         binding.rvScanResult.layoutManager = LinearLayoutManager(this@EditListActivity)
@@ -76,5 +79,11 @@ class EditListActivity : AppCompatActivity() {
                 Toast.makeText(this, "No data available", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun navigateToCreateListActivity(productList: List<ProductsItem>) {
+        val intent = Intent(this, CreateListActivity::class.java)
+        intent.putParcelableArrayListExtra("PRODUCT_LIST", ArrayList(productList))
+        startActivity(intent)
     }
 }

@@ -12,6 +12,7 @@ data class ScanImageResponse(
 
 @Parcelize
 data class ProductsItem(
+	val id: Int? = null,
 
 	@field:SerializedName("amount")
 	val amount: Int? = null,
