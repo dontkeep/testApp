@@ -47,10 +47,13 @@ class EditListActivity : AppCompatActivity() {
 
         binding.nextBtn.setOnClickListener {
             val productList = editListAdapter.currentList
+            val totalPrice = productList.sumOf { (it.price ?: 0) * (it.amount ?: 0) }
 
             productList.forEach { productItem ->
                 Log.d("ProductList", "Name: ${productItem.name}, Price: ${productItem.price}, Quantity: ${productItem.amount}")
             }
+
+            Log.d("ProductList", "Total Price: $totalPrice")
         }
 
         binding.rvScanResult.layoutManager = LinearLayoutManager(this@EditListActivity)

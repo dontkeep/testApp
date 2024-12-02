@@ -23,6 +23,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".DebugMenu"
+            android:exported="false" />
+        <activity
             android:name=".view.editlist.EditListActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -54,7 +57,7 @@
             android:name=".view.intro.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".DebugMenu"
+            android:name=".view.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

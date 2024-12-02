@@ -6,10 +6,13 @@ import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.graphics.drawable.DrawableCompat.applyTheme
 import com.exal.testapp.R
 import com.exal.testapp.databinding.ActivityAppSettingsBinding
 import com.exal.testapp.databinding.BottomSheetLanguageBinding
 import com.exal.testapp.databinding.BottomSheetThemeBinding
+import com.exal.testapp.helper.manager.ThemeManager
 import com.exal.testapp.view.adapter.MenuAppSettingAdapter
 import com.exal.testapp.view.adapter.MenuItemApp
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -40,38 +43,42 @@ class AppSettingsActivity : AppCompatActivity() {
     }
 
     private fun showThemeBottomSheet() {
-        // Inflate BottomSheet layout using View Binding
         val bottomSheetBinding = BottomSheetThemeBinding.inflate(layoutInflater)
-
-        // Initialize BottomSheetDialog
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(bottomSheetBinding.root)
 
-        // Set current theme (example: light mode by default)
-//        val currentTheme = getCurrentTheme()
-//        if (currentTheme == "light") {
-//            bottomSheetBinding.radioLightMode.isChecked = true
-//        } else {
-//            bottomSheetBinding.radioDarkMode.isChecked = true
-//        }
+        // Mendapatkan status Dark Mode dari ThemeManager
+        val themeManager = ThemeManager(getSharedPreferences("app_prefs", MODE_PRIVATE))
+        val isDarkModeEnabled = themeManager.isDarkModeEnabled()
 
-        // Save button click listener
-        bottomSheetBinding.btnSave.setOnClickListener {
-//            val selectedTheme = when (bottomSheetBinding.radioGroupTheme.checkedRadioButtonId) {
-//                R.id.radioLightMode -> "light"
-//                R.id.radioDarkMode -> "dark"
-//                else -> "light"
-//            }
-//            setThemePreference(selectedTheme)
-//            bottomSheetDialog.dismiss()
-//
-//            // Apply theme change immediately
-//            applyTheme(selectedTheme)
+        // Menyesuaikan RadioButton dengan status Dark Mode
+        if (isDarkModeEnabled) {
+            bottomSheetBinding.radioDarkMode.isChecked = true
+        } else {
+            bottomSheetBinding.radioLightMode.isChecked = true
         }
 
-        // Show BottomSheet
+        // Simpan pilihan tema
+        bottomSheetBinding.btnSave.setOnClickListener {
+            val isDarkModeSelected = bottomSheetBinding.radioDarkMode.isChecked
+            themeManager.saveDarkModeEnabled(isDarkModeSelected)
+            bottomSheetDialog.dismiss()
+
+            // Terapkan tema baru
+            applyTheme(isDarkModeSelected)
+        }
+
         bottomSheetDialog.show()
     }
+
+    private fun applyTheme(isDarkMode: Boolean) {
+        if (isDarkMode){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
 
     private fun showLanguageBottomSheet() {
         // Inflate layout BottomSheet

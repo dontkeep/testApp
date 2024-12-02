@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.exal.testapp.databinding.ActivityDebugMenuBinding
+import com.exal.testapp.helper.manager.ThemeManager
 import com.exal.testapp.view.intro.IntroActivity
 import com.exal.testapp.view.perspective.PerspectiveActivity
 import dagger.hilt.android.AndroidEntryPoint

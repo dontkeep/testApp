@@ -38,7 +38,7 @@ class EditListAdapter(
             val categories = categoryMapping.values.toList()
             val adapter = ArrayAdapter(
                 binding.textFieldCategory.context,
-                R.layout.simple_dropdown_item_1line,
+                R.layout.simple_list_item_1,
                 categories
             )
             (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setAdapter(adapter)
