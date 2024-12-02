@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.Animation
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.exal.testapp.R
+import com.exal.testapp.data.network.response.ProductsItem
 import com.exal.testapp.databinding.ActivityCreateListBinding
 import com.exal.testapp.view.camera.CameraActivity
 
@@ -75,6 +77,11 @@ class CreateListActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val productList: ArrayList<ProductsItem>? = intent.getParcelableArrayListExtra("PRODUCT_LIST")
+        productList?.forEach { product ->
+            Log.d("CreateListActivity", "Name: ${product.name}, Price: ${product.price}, Quantity: ${product.amount}, ID: ${product.id}")
         }
 
         binding.fabBottomAppBar.setOnClickListener {

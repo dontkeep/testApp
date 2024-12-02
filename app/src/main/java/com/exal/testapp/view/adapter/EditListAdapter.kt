@@ -131,7 +131,7 @@ class EditListAdapter(
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ProductsItem>() {
             override fun areItemsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {
-                return oldItem.detail?.type == newItem.detail?.type
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {
