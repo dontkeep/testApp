@@ -2,7 +2,6 @@ package com.exal.testapp.view.editlist
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -43,6 +42,8 @@ class EditListActivity : AppCompatActivity() {
             insets
         }
 
+        val imageUri = intent.getStringExtra("IMAGE_URI")
+
         editListAdapter = EditListAdapter { updatedItem ->
             editListViewModel.updateItem(updatedItem)
         }
@@ -53,6 +54,7 @@ class EditListActivity : AppCompatActivity() {
 
             val intent = Intent(this, CreateListActivity::class.java)
             intent.putParcelableArrayListExtra("PRODUCT_LIST", ArrayList(productList))
+            intent.putExtra("IMAGE_URI", imageUri.toString())
             intent.putExtra("PRICE", totalPrice)
             startActivity(intent)
         }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -32,6 +33,8 @@ class PerspectiveActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPerspectiveBinding
     private val viewModel: PerspectiveViewModel by viewModels()
+
+    private lateinit var fileImageUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +97,7 @@ class PerspectiveActivity : AppCompatActivity() {
             if (transformedBitmap != null) {
                 val file = bitmapToFile(transformedBitmap)
                 val compressedFile = file?.compressFile(this)
+                fileImageUri = compressedFile?.toUri() ?: Uri.EMPTY
                 if (compressedFile != null) {
                     val filePart = MultipartBody.Part.createFormData(
                         "file", compressedFile.name, compressedFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
@@ -118,6 +122,8 @@ class PerspectiveActivity : AppCompatActivity() {
                     if (scanResponse != null) {
                         showLoading(false)
                         val intent = Intent(this, EditListActivity::class.java)
+                        intent.putExtra("IMAGE_URI", fileImageUri.toString())
+                        Log.d("PerspectiveActivity", "Uri gambar: $fileImageUri")
                         intent.putExtra("SCAN_DATA", scanResponse)
                         startActivity(intent)
                     }
@@ -133,7 +139,7 @@ class PerspectiveActivity : AppCompatActivity() {
 
     private fun bitmapToFile(bitmap: Bitmap): File? {
         return try {
-            val file = File(cacheDir, "transformed_image.jpg")
+            val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "transformed_image.jpg")
             var outputStream: FileOutputStream
 
             var quality = 100

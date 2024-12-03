@@ -1,20 +1,23 @@
 package com.exal.testapp.view.createlist
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.Snackbar
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -72,25 +75,38 @@ class CreateListActivity : AppCompatActivity() {
 
     private val viewModel: CreateListViewModel by viewModels()
 
-    private val requestPermissionLauncher =
+    private val requestPermissionsLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            val grantedPermissions = permissions.filterValues { it }
+            val deniedPermissions = permissions.filterValues { !it }
+
+            if (grantedPermissions.isNotEmpty()) {
                 Toast.makeText(this, R.string.permission_request_granted, Toast.LENGTH_LONG).show()
-            } else {
+            }
+            if (deniedPermissions.isNotEmpty()) {
                 Toast.makeText(this, R.string.permission_request_denied, Toast.LENGTH_LONG).show()
             }
         }
 
-    private fun allPermissionsGranted() =
-        ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
+
+    private fun allPermissionsGranted(): Boolean {
+        val cameraGranted = ContextCompat.checkSelfPermission(
+            this, REQUIRED_CAMERA_PERMISSION
         ) == PackageManager.PERMISSION_GRANTED
+
+        val mediaGranted = ContextCompat.checkSelfPermission(
+            this, REQUIRED_MEDIA_PERMISSION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        return cameraGranted && mediaGranted
+    }
+
 
     private var clicked = false
 
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -100,6 +116,17 @@ class CreateListActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        val imageUri = intent.getStringExtra("IMAGE_URI")
+
+        if (imageUri != null) {
+            val uri = Uri.parse(imageUri)
+            viewModel.setImageUri(uri.toString())
+            viewModel.imageUri.observe(this) { image ->
+                binding.imageView.setImageURI(image.toUri())
+            }
+        } else {
+            Log.e("CreateListActivity", "Path gambar tidak tersedia!")
         }
 
         if(viewModel.productList.value?.isEmpty() == true && viewModel.totalPrice.value == 0) {
@@ -114,7 +141,16 @@ class CreateListActivity : AppCompatActivity() {
 
         binding.fabScanReceipt.setOnClickListener {
             if (!allPermissionsGranted()) {
-                requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    requestPermissionsLauncher.launch(
+                        arrayOf(REQUIRED_MEDIA_SELECTED, REQUIRED_MEDIA_PERMISSION, REQUIRED_CAMERA_PERMISSION)
+                    )
+                } else {
+
+                    requestPermissionsLauncher.launch(
+                        arrayOf(REQUIRED_EXTERNAL_STORAGE, REQUIRED_CAMERA_PERMISSION)
+                    )
+                }
             } else {
                 val intent = Intent(this, CameraActivity::class.java)
                 startActivity(intent)
@@ -259,6 +295,9 @@ class CreateListActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+        private const val REQUIRED_CAMERA_PERMISSION = Manifest.permission.CAMERA
+        private const val REQUIRED_MEDIA_PERMISSION = Manifest.permission.READ_MEDIA_IMAGES
+        private const val REQUIRED_EXTERNAL_STORAGE = Manifest.permission.READ_EXTERNAL_STORAGE
+        private const val REQUIRED_MEDIA_SELECTED = Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
     }
 }

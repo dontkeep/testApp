@@ -3,17 +3,14 @@ package com.exal.testapp.view.createlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.exal.testapp.data.DataRepository
 import com.exal.testapp.data.Resource
 import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.ProductsItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +42,9 @@ class CreateListViewModel @Inject constructor(private val dataRepository: DataRe
         totalExpenses
     )
 
+    private val _imageUri = MutableLiveData<String>()
+    val imageUri: LiveData<String> get() = _imageUri
+
     fun setProductList(products: List<ProductsItem>, price: Int) {
         _productList.value = products
         _totalPrice.value = price
@@ -57,5 +57,9 @@ class CreateListViewModel @Inject constructor(private val dataRepository: DataRe
 
         val newTotalPrice = currentList.sumOf { (it.price ?: 0) * (it.amount ?: 0) }
         _totalPrice.value = newTotalPrice
+    }
+
+    fun setImageUri(uri: String) {
+        _imageUri.value = uri
     }
 }
