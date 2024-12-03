@@ -32,14 +32,16 @@ class CreateListViewModel @Inject constructor(private val dataRepository: DataRe
         thumbnailImage: MultipartBody.Part?,
         productItems: RequestBody,
         type: RequestBody,
-        totalExpenses: RequestBody
+        totalExpenses: RequestBody,
+        totalItems: RequestBody
     ): Flow<Resource<PostListResponse>> = dataRepository.postData(
         title,
         receiptImage,
         thumbnailImage,
         productItems,
         type,
-        totalExpenses
+        totalExpenses,
+        totalItems
     )
 
     private val _imageUri = MutableLiveData<String>()

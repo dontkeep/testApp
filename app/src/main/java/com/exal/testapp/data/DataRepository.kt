@@ -130,7 +130,8 @@ class DataRepository @Inject constructor(@RegularApiService private val apiServi
         thumbnailImage: MultipartBody.Part?,
         productItems: RequestBody,
         type: RequestBody,
-        totalExpenses: RequestBody
+        totalExpenses: RequestBody,
+        totalItems: RequestBody
     ): Flow<Resource<PostListResponse>> = flow {
         emit(Resource.Loading())
         try {
@@ -141,7 +142,8 @@ class DataRepository @Inject constructor(@RegularApiService private val apiServi
                 thumbnailImage,
                 productItems,
                 type,
-                totalExpenses
+                totalExpenses,
+                totalItems
             )
             emit(Resource.Success(response))
         } catch (e: Exception) {

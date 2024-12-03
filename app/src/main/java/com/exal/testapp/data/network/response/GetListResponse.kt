@@ -17,6 +17,12 @@ data class GetListResponse(
 	val status: Boolean? = null
 )
 
+data class Data(
+
+	@field:SerializedName("lists")
+	val lists: List<ListsItem?>? = null
+)
+
 data class ListsItem(
 
 	@field:SerializedName("image")
@@ -32,11 +38,11 @@ data class ListsItem(
 	val type: String? = null,
 
 	@field:SerializedName("total_expenses")
-	val totalExpenses: String? = null
-)
+	val totalExpenses: String? = null,
 
-data class Data(
+	@field:SerializedName("total_products")
+	val totalProducts: Int? = null,
 
-	@field:SerializedName("lists")
-	val lists: List<ListsItem?>? = null
+	@field:SerializedName("total_items")
+	val totalItems: Int? = null
 )

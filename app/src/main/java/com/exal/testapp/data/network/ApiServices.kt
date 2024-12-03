@@ -67,7 +67,8 @@ interface ApiServices {
         @Part thumbnailImage: MultipartBody.Part?,
         @Part("product_items") productItems: RequestBody,
         @Part("type") type: RequestBody,
-        @Part("total_expenses") totalExpenses: RequestBody
+        @Part("total_expenses") totalExpenses: RequestBody,
+        @Part("total_items") totalItems: RequestBody
     ): PostListResponse
 
     @GET("/list")

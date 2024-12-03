@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -113,6 +114,7 @@ class CreateListActivity : AppCompatActivity() {
         if (imageUri != null) {
             val uri = Uri.parse(imageUri)
             viewModel.setImageUri(uri.toString())
+            receiptImagePath = viewModel.imageUri.value
             viewModel.imageUri.observe(this) { image ->
                 binding.imageView.setImageURI(image.toUri())
             }
@@ -154,6 +156,10 @@ class CreateListActivity : AppCompatActivity() {
             val titleRequestBody = createRequestBody(binding.textFieldTitle.editText?.text.toString())
             val typeRequestBody = createRequestBody("Track")
             val totalExpensesRequestBody = createRequestBody(viewModel.totalPrice.value.toString())
+            val totalItems = viewModel.productList.value?.fold(0) { sum, item ->
+                sum + (item.amount ?: 0)
+            } ?: 0
+            val totalItemsPart = createRequestBody(totalItems.toString())
             val productItemsRequestBody = createRequestBody(
                 Gson().toJson(
                     viewModel.productList.value?.map {
@@ -161,8 +167,18 @@ class CreateListActivity : AppCompatActivity() {
                     }
                 )
             )
+
+            if(thumbnailImagePath == null){
+                thumbnailImagePath = receiptImagePath
+            }
+            Log.d("CreateListActivity", "Receipt Image Path: $receiptImagePath")
+            Log.d("CreateListActivity", "Thumbnail Image Path: $thumbnailImagePath")
+
             val receiptImagePart = createImagePart("receipt_image", receiptImagePath)
             val thumbnailImagePart = createImagePart("thumbnail_image", thumbnailImagePath)
+
+            Log.d("CreateListActivity", "Thumbnail Image Part: $thumbnailImagePart")
+            Log.d("CreateListActivity", "Receipt Image Part: $receiptImagePart")
 
             viewModel.postData(
                 titleRequestBody,
@@ -170,7 +186,8 @@ class CreateListActivity : AppCompatActivity() {
                 thumbnailImagePart,
                 productItemsRequestBody,
                 typeRequestBody,
-                totalExpensesRequestBody
+                totalExpensesRequestBody,
+                totalItemsPart
             ).collect { resource ->
                 handleResource(resource)
             }
@@ -189,21 +206,40 @@ class CreateListActivity : AppCompatActivity() {
                 finish()
             }
             is Resource.Error -> {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                Log.d("CreateListActivity", "Error: ${resource.message}")
+                Toast.makeText(this, "Error ${resource.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+//    private fun getFilePathFromUri(uri: Uri): String? {
+//        val cursor = contentResolver.query(uri, arrayOf(MediaStore.Images.Media.DATA), null, null, null)
+//        cursor?.use {
+//            if (it.moveToFirst()) {
+//                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//                return it.getString(columnIndex)
+//            }
+//        }
+//        return null
+//    }
+
     private fun createRequestBody(value: String?): okhttp3.RequestBody =
         value.orEmpty().toRequestBody("text/plain".toMediaTypeOrNull())
 
-    private fun createImagePart(name: String, path: String?): MultipartBody.Part? {
-        return path?.let {
-            val file = File(it)
-            MultipartBody.Part.createFormData(
-                name, file.name, file.asRequestBody("image/*".toMediaTypeOrNull())
-            )
+    private fun createImagePart(partName: String, uriPath: String?): MultipartBody.Part? {
+        Log.d("CreateListActivity", "Image Path: $uriPath")
+        uriPath?.let { path ->
+            val uri = Uri.parse(path)
+            val inputStream = contentResolver.openInputStream(uri)
+            val file = File(cacheDir, "temp_image.jpeg")
+            file.outputStream().use { outputStream ->
+                inputStream?.copyTo(outputStream)
+            }
+
+            val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            return MultipartBody.Part.createFormData(partName, file.name, requestBody)
         }
+        return null
     }
 
     private fun saveReceivedData(){

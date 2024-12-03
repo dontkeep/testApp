@@ -22,7 +22,7 @@ class ExpensesAdapter: ListAdapter<ListsItem, ExpensesAdapter.ItemViewHolder>(DI
             binding.itemImage.setImageResource(R.drawable.placeholder)
             val totalExpensesInt = item.totalExpenses?.toDoubleOrNull()?.toInt()
             binding.itemPrice.text = totalExpensesInt?.let { formatRupiah(it) } ?: "0"
-            "100 Items".also { binding.itemTotal.text = it }
+            "${item.totalItems} Items".also { binding.itemTotal.text = it }
             binding.itemDate.text = "12-1-2024"
 
             Log.d("ExpensesAdapter", "Item: $item.image")
