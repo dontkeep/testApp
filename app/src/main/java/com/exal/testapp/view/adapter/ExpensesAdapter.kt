@@ -1,5 +1,6 @@
 package com.exal.testapp.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,19 +10,22 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.exal.testapp.R
 import com.exal.testapp.data.network.response.DataItem
+import com.exal.testapp.data.network.response.ListsItem
 import com.exal.testapp.databinding.ItemRowExpenseBinding
 import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 
-class ExpensesAdapter: ListAdapter<DataItem, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class ExpensesAdapter: ListAdapter<ListsItem, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemRowExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: DataItem) {
+        fun bind(item: ListsItem) {
             binding.itemImage.setImageResource(R.drawable.placeholder)
-            binding.itemPrice.text = formatRupiah(item.listTotalPrice.toInt())
-            "${item.totalItems} Items".also { binding.itemTotal.text = it }
-            binding.itemDate.text = item.date.let { DateFormatter.localizeDate(it) }
+            val totalExpensesInt = item.totalExpenses?.toDoubleOrNull()?.toInt()
+            binding.itemPrice.text = totalExpensesInt?.let { formatRupiah(it) } ?: "0"
+            "100 Items".also { binding.itemTotal.text = it }
+            binding.itemDate.text = "12-1-2024"
 
+            Log.d("ExpensesAdapter", "Item: $item.image")
             Glide.with(itemView.context)
                 .load(item.image)
                 .apply(
@@ -43,12 +47,12 @@ class ExpensesAdapter: ListAdapter<DataItem, ExpensesAdapter.ItemViewHolder>(DIF
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DataItem>(){
-            override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-                return oldItem.listId == newItem.listId
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListsItem>(){
+            override fun areItemsTheSame(oldItem: ListsItem, newItem: ListsItem): Boolean {
+                return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+            override fun areContentsTheSame(oldItem: ListsItem, newItem: ListsItem): Boolean {
                 return oldItem == newItem
             }
         }

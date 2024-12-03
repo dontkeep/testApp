@@ -19,7 +19,6 @@ class MonthYearPickerDialog(
         val okButton = findViewById<Button>(R.id.okButton)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
 
-        // Konfigurasi NumberPicker untuk bulan
         monthPicker?.apply {
             minValue = 0
             maxValue = 11
@@ -29,19 +28,16 @@ class MonthYearPickerDialog(
             )
         }
 
-        // Konfigurasi NumberPicker untuk tahun
         val currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
         yearPicker?.apply {
             minValue = 1980
             maxValue = currentYear + 50
         }
 
-        // Set nilai default ke bulan dan tahun saat ini
         val currentMonth = java.util.Calendar.getInstance().get(java.util.Calendar.MONTH)
         monthPicker?.value = currentMonth
         yearPicker?.value = currentYear
 
-        // Tombol OK untuk menyimpan pilihan
         okButton?.setOnClickListener {
             val selectedMonth = monthPicker.value
             val selectedYear = yearPicker?.value ?: currentYear
@@ -49,7 +45,6 @@ class MonthYearPickerDialog(
             dismiss()
         }
 
-        // Tombol Cancel untuk menutup dialog
         cancelButton?.setOnClickListener {
             dismiss()
         }
