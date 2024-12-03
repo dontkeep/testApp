@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,8 @@ class ExpensesFragment : Fragment() {
     private var _binding: FragmentExpensesBinding? = null
     private val binding get() = _binding!!
 
+    val expenseViewModel: ExpensesViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,37 +39,31 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val expensesViewModel: ExpensesViewModel by viewModels()
-
         val adapter = ExpensesAdapter()
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
         binding.rvExpense.adapter = adapter
 
-        expensesViewModel.getExpenses("1").observe(viewLifecycleOwner) { resource ->
+        expenseViewModel.expenses.observe(viewLifecycleOwner, { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    // Show loading indicator (e.g., ProgressBar)
                     binding.progressBar.visibility = View.VISIBLE
                 }
-
                 is Resource.Success -> {
-                    // Hide loading indicator
                     binding.progressBar.visibility = View.GONE
-                    Log.d("ExpensesFragment", "Data: ${resource.data}")
-                    // Update adapter with data
-                    val dataList = resource.data?.firstOrNull()?.data
-                    adapter.submitList(dataList)
+                    resource.data?.data?.lists?.let { expenseList ->
+                        adapter.submitList(expenseList)
+                    }
                 }
-
                 is Resource.Error -> {
-                    // Hide loading indicator
                     binding.progressBar.visibility = View.GONE
-                    // Show error message (e.g., Toast or Snackbar)
-                    Log.d("ExpensesFragment", "Error: ${resource.message}")
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    resource.message?.let { message ->
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-        }
+        })
+
+        expenseViewModel.getExpenseList()
 
         binding.icCalender.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->

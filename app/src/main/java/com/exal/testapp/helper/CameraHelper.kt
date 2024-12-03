@@ -38,7 +38,6 @@ fun uriToFile(imageUri: Uri, context: Context): File {
 
 fun File.compressFile(context: Context): File? {
     try {
-        // Step 1: Convert the file to Bitmap
         val bitmap = BitmapFactory.decodeFile(this.path)
 
         if (bitmap == null) {
@@ -46,10 +45,8 @@ fun File.compressFile(context: Context): File? {
             return null
         }
 
-        // Step 2: Reduce the Bitmap size by compressing it
         val compressedFile = this.reduceFileImage(bitmap, context)
 
-        // Step 3: Save the compressed Bitmap to the file
         val outputStream = FileOutputStream(compressedFile)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream) // 80% quality
         outputStream.flush()
@@ -68,7 +65,6 @@ fun File.reduceFileImage(bitmap: Bitmap, context: Context): File {
     var streamLength: Int
     val bmpStream = ByteArrayOutputStream()
 
-    // Compressing the bitmap until it's under the 2MB size
     do {
         bmpStream.reset()
         bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
@@ -80,7 +76,6 @@ fun File.reduceFileImage(bitmap: Bitmap, context: Context): File {
     val outputDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) // You can use INTERNAL_STORAGE if needed
     val compressedFile = File(outputDir, "compressed_image_${System.currentTimeMillis()}.jpg")
 
-    // Saving the compressed bitmap back to the new file
     val outputStream = FileOutputStream(compressedFile)
     outputStream.write(bmpStream.toByteArray())
     outputStream.flush()

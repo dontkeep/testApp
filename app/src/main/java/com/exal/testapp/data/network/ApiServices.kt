@@ -3,6 +3,7 @@ package com.exal.testapp.data.network
 import androidx.lifecycle.LiveData
 import com.exal.testapp.data.network.response.ExpenseListResponse
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
+import com.exal.testapp.data.network.response.GetListResponse
 import com.exal.testapp.data.network.response.LoginResponse
 import com.exal.testapp.data.network.response.LogoutResponse
 import com.exal.testapp.data.network.response.PostListResponse
@@ -68,4 +69,10 @@ interface ApiServices {
         @Part("type") type: RequestBody,
         @Part("total_expenses") totalExpenses: RequestBody
     ): PostListResponse
+
+    @GET("/list")
+    suspend fun getExpenseList(
+        @Header("Authorization") token: String,
+        @Query("type") type: String = "Track"
+    ): GetListResponse
 }
