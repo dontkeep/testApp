@@ -29,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/saveButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
@@ -82,7 +82,7 @@
         app:layout_constraintTop_toBottomOf="@+id/card_image" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldEmail"
+        android:id="@+id/textFieldTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
@@ -117,7 +117,7 @@
         app:layout_constraintBottom_toTopOf="@+id/card_create_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/textFieldTitle" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_bottom_app_bar"

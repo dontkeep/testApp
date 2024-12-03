@@ -3,14 +3,19 @@ package com.exal.testapp.data
 import android.util.Log
 import com.exal.testapp.data.network.ApiServices
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
+import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.ResultListResponseItem
 import com.exal.testapp.data.network.response.ScanImageResponse
+import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.helper.hilt.MlApiService
 import com.exal.testapp.helper.hilt.RegularApiService
 import com.exal.testapp.helper.manager.TokenManager
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -103,21 +108,43 @@ class DataRepository @Inject constructor(@RegularApiService private val apiServi
     }
 
     fun scanImage(file: MultipartBody.Part): Flow<Resource<ScanImageResponse>> = flow {
-        emit(Resource.Loading()) // Emitting loading state initially
+        emit(Resource.Loading())
         try {
-            // Make the API call and get the ScanImageResponse directly
             val response = apiServiceML.scanImage(file)
 
-            // Check if the response contains products and is not null
             if (response.products?.isNotEmpty() == true) {
-                emit(Resource.Success(response)) // Emit success if products exist
+                emit(Resource.Success(response))
                 Log.d("DataRepository", "Data: $response")
             } else {
-                emit(Resource.Error("No products found in the response")) // Emit error if products are empty or null
+                emit(Resource.Error("No products found in the response"))
             }
         } catch (exception: Exception) {
-            // In case of any exception, emit error with exception message
             emit(Resource.Error(exception.message ?: "An error occurred during image scanning"))
+        }
+    }
+
+    fun postData(
+        title: RequestBody,
+        receiptImage: MultipartBody.Part?,
+        thumbnailImage: MultipartBody.Part?,
+        productItems: RequestBody,
+        type: RequestBody,
+        totalExpenses: RequestBody
+    ): Flow<Resource<PostListResponse>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.postData(
+                "Bearer: ${tokenManager.getToken()}",
+                title,
+                receiptImage,
+                thumbnailImage,
+                productItems,
+                type,
+                totalExpenses
+            )
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Error posting data"))
         }
     }
 }

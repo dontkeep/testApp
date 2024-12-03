@@ -5,10 +5,12 @@ import com.exal.testapp.data.network.response.ExpenseListResponse
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.LoginResponse
 import com.exal.testapp.data.network.response.LogoutResponse
+import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.RegisterResponse
 import com.exal.testapp.data.network.response.ResultListResponseItem
 import com.exal.testapp.data.network.response.ScanImageResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -54,4 +56,16 @@ interface ApiServices {
     suspend fun scanImage(
         @Part file: MultipartBody.Part
     ): ScanImageResponse
+
+    @Multipart
+    @POST("/list")
+    suspend fun postData(
+        @Header("Authorization") token: String,
+        @Part("title") title: RequestBody,
+        @Part receiptImage: MultipartBody.Part?,
+        @Part thumbnailImage: MultipartBody.Part?,
+        @Part("product_items") productItems: RequestBody,
+        @Part("type") type: RequestBody,
+        @Part("total_expenses") totalExpenses: RequestBody
+    ): PostListResponse
 }

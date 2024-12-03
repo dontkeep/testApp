@@ -13,22 +13,37 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.Snackbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.exal.testapp.MainActivity
 import com.exal.testapp.R
+import com.exal.testapp.data.Resource
+import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.ProductsItem
+import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.databinding.ActivityCreateListBinding
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ItemAdapter
 import com.exal.testapp.view.camera.CameraActivity
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 @AndroidEntryPoint
 class CreateListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateListBinding
+    private var receiptImagePath: String? = null
+    private var thumbnailImagePath: String? = null
 
     private val rotateOpen: Animation by lazy {
         AnimationUtils.loadAnimation(
@@ -87,7 +102,9 @@ class CreateListActivity : AppCompatActivity() {
             insets
         }
 
-        saveReceivedData()
+        if(viewModel.productList.value?.isEmpty() == true && viewModel.totalPrice.value == 0) {
+            saveReceivedData()
+        }
 
         rvSetup()
 
@@ -104,8 +121,70 @@ class CreateListActivity : AppCompatActivity() {
             }
         }
 
+        binding.saveButton.setOnClickListener {
+            handleSaveButtonClick()
+        }
+
+
         binding.fabAddManual.setOnClickListener {
             Toast.makeText(this, "Add Manual", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handleSaveButtonClick() {
+        lifecycleScope.launch {
+            val titleRequestBody = createRequestBody(binding.textFieldTitle.editText?.text.toString())
+            val typeRequestBody = createRequestBody("Track")
+            val totalExpensesRequestBody = createRequestBody(viewModel.totalPrice.value.toString())
+            val productItemsRequestBody = createRequestBody(
+                Gson().toJson(
+                    viewModel.productList.value?.map {
+                        ProductItem(it.name, it.amount, it.price, it.detail?.category, it.totalPrice)
+                    }
+                )
+            )
+            val receiptImagePart = createImagePart("receipt_image", receiptImagePath)
+            val thumbnailImagePart = createImagePart("thumbnail_image", thumbnailImagePath)
+
+            viewModel.postData(
+                titleRequestBody,
+                receiptImagePart,
+                thumbnailImagePart,
+                productItemsRequestBody,
+                typeRequestBody,
+                totalExpensesRequestBody
+            ).collect { resource ->
+                handleResource(resource)
+            }
+        }
+    }
+
+    private fun handleResource(resource: Resource<PostListResponse>) {
+        when (resource) {
+            is Resource.Loading -> {
+                Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+            }
+            is Resource.Success -> {
+                Toast.makeText(this, "List Saved", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            is Resource.Error -> {
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun createRequestBody(value: String?): okhttp3.RequestBody =
+        value.orEmpty().toRequestBody("text/plain".toMediaTypeOrNull())
+
+    private fun createImagePart(name: String, path: String?): MultipartBody.Part? {
+        return path?.let {
+            val file = File(it)
+            MultipartBody.Part.createFormData(
+                name, file.name, file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
         }
     }
 
@@ -172,6 +251,11 @@ class CreateListActivity : AppCompatActivity() {
             binding.fabScanReceipt.isClickable = false
             binding.fabAddManual.isClickable = false
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.setProductList(emptyList(), 0)
     }
 
     companion object {
