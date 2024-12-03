@@ -66,6 +66,7 @@ class RegisterActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     resetUIState()
                     binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

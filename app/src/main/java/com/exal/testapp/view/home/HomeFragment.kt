@@ -56,6 +56,8 @@ class HomeFragment : Fragment() {
                     resource.data?.data?.lists?.forEach { expense ->
                         totalPrice += expense?.totalExpenses?.toDouble()?.toInt() ?: 0
                         binding.total.text = formatRupiah(totalPrice)
+                        totalItem += expense?.totalItems ?: 0
+                        binding.items.text = "$totalItem Items"
                     }
                 }
                 is Resource.Error -> {
