@@ -15,9 +15,10 @@ class EditPerspectiveImageView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     companion object {
-        private const val POINT_RADIUS_DP = 10
-        private const val LINE_WIDTH_DP = 2
+        private const val POINT_RADIUS_DP = 15
+        private const val LINE_WIDTH_DP = 5
         private const val MIN_POINT_DISTANCE_DP = 20
+        private const val SAFE_MARGIN_DP = 25
     }
 
     private val paint = Paint()
@@ -27,6 +28,9 @@ class EditPerspectiveImageView @JvmOverloads constructor(
     private val minPointDistancePx = dpToPx(MIN_POINT_DISTANCE_DP)
     private var activePoint: PointF? = null
     private var bitmapRect: RectF = RectF()
+
+    private val safeMarginPx = dpToPx(SAFE_MARGIN_DP)
+    private var safeRect: RectF = RectF()
 
     fun setBitmap(newBitmap: Bitmap?) {
         bitmap = newBitmap
@@ -80,7 +84,7 @@ class EditPerspectiveImageView @JvmOverloads constructor(
             drawLine(canvas, perspectivePoints.pointLeftBottom, perspectivePoints.pointLeftTop)
 
             // Draw perspective points
-            paint.color = Color.RED
+            paint.color = Color.argb( 128, 255, 0, 0 )
             paint.style = Paint.Style.FILL
             drawPoint(canvas, perspectivePoints.pointLeftTop)
             drawPoint(canvas, perspectivePoints.pointRightTop)
@@ -100,12 +104,20 @@ class EditPerspectiveImageView @JvmOverloads constructor(
 
             bitmapRect.set(left, top, left + scaledWidth, top + scaledHeight)
 
-            // Set default points for perspective adjustment
+            // Hitung safe rect dengan margin
+            safeRect.set(
+                bitmapRect.left + safeMarginPx,
+                bitmapRect.top + safeMarginPx,
+                bitmapRect.right - safeMarginPx,
+                bitmapRect.bottom - safeMarginPx
+            )
+
+            // Set default points ke dalam safe rect
             perspectivePoints.set(
-                PointF(bitmapRect.left, bitmapRect.top),
-                PointF(bitmapRect.right, bitmapRect.top),
-                PointF(bitmapRect.right, bitmapRect.bottom),
-                PointF(bitmapRect.left, bitmapRect.bottom)
+                PointF(safeRect.left, safeRect.top),
+                PointF(safeRect.right, safeRect.top),
+                PointF(safeRect.right, safeRect.bottom),
+                PointF(safeRect.left, safeRect.bottom)
             )
         }
     }
