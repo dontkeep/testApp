@@ -27,13 +27,13 @@ class AddManualDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private val categoryMapping = mapOf(
-        "0" to "Food",
-        "1" to "Beauty",
-        "2" to "Home Living",
-        "3" to "Drink",
-        "4" to "Fresh Product",
-        "5" to "Health",
-        "6" to "Other"
+        0 to "Food",
+        1 to "Beauty",
+        2 to "Home Living",
+        3 to "Drink",
+        4 to "Fresh Product",
+        5 to "Health",
+        6 to "Other"
     )
 
     private val reverseCategoryMapping = categoryMapping.entries.associate { (key, value) -> value to key }
@@ -42,8 +42,8 @@ class AddManualDialogFragment : DialogFragment() {
         super.onResume()
         val window = dialog?.window
         val params = window?.attributes
-        params?.width = WindowManager.LayoutParams.MATCH_PARENT // Set width to match parent
-        params?.height = WindowManager.LayoutParams.WRAP_CONTENT // Set height to wrap content (or a specific height if needed)
+        params?.width = WindowManager.LayoutParams.MATCH_PARENT
+        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
         window?.attributes = params
     }
 
@@ -88,7 +88,7 @@ class AddManualDialogFragment : DialogFragment() {
                 price = productPrice,
                 amount = productAmount,
                 totalPrice = productPrice * productAmount,
-                detail = Detail(category = categoryKey)
+                detail = Detail(categoryIndex = categoryKey)
             )
 
             (activity as? CreateListActivity)?.viewModel?.addProduct(newItem)

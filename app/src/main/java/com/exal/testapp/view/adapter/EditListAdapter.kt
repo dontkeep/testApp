@@ -18,13 +18,13 @@ class EditListAdapter(
 ) : ListAdapter<ProductsItem, EditListAdapter.ItemViewHolder>(DIFF_CALLBACK) {
 
     private val categoryMapping = mapOf(
-        "0" to "Food",
-        "1" to "Beauty",
-        "2" to "Home Living",
-        "3" to "Drink",
-        "4" to "Fresh Product",
-        "5" to "Health",
-        "6" to "Other"
+        0 to "Food",
+        1 to "Beauty",
+        2 to "Home Living",
+        3 to "Drink",
+        4 to "Fresh Product",
+        5 to "Health",
+        6 to "Other"
     )
 
     private val reverseCategoryMapping = categoryMapping.entries.associate { (key, value) -> value to key }
@@ -48,7 +48,7 @@ class EditListAdapter(
                 isUpdating = false
             }
 
-            val displayCategory = categoryMapping[item.detail?.category]
+            val displayCategory = categoryMapping[item.detail?.categoryIndex]
             if (binding.textFieldCategory.editText?.text.toString() != displayCategory) {
                 isUpdating = true
                 (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setText(displayCategory, false)
@@ -81,8 +81,8 @@ class EditListAdapter(
             (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setOnItemClickListener { _, _, position, _ ->
                 val selectedCategory = categories[position]
                 val originalCategory = reverseCategoryMapping[selectedCategory]
-                if (originalCategory != item.detail?.category) {
-                    onItemUpdated(item.copy(detail = item.detail?.copy(category = originalCategory)))
+                if (originalCategory != item.detail?.categoryIndex) {
+                    onItemUpdated(item.copy(detail = item.detail?.copy(categoryIndex = originalCategory)))
                 }
             }
 

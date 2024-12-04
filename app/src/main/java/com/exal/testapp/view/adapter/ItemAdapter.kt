@@ -5,33 +5,27 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.exal.testapp.R
-import com.exal.testapp.data.network.response.DataItem
 import com.exal.testapp.data.network.response.ProductsItem
 import com.exal.testapp.databinding.ItemExpensesItemBinding
-import com.exal.testapp.databinding.ItemRowExpenseBinding
-import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 
 class ItemAdapter(private val onDelete: (ProductsItem) -> Unit): ListAdapter<ProductsItem, ItemAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     private val categoryMapping = mapOf(
-        "0" to "Food",
-        "1" to "Beauty",
-        "2" to "Home Living",
-        "3" to "Drink",
-        "4" to "Fresh Product",
-        "5" to "Health",
-        "6" to "Other"
+        0 to "Food",
+        1 to "Beauty",
+        2 to "Home Living",
+        3 to "Drink",
+        4 to "Fresh Product",
+        5 to "Health",
+        6 to "Other"
     )
 
     inner class ItemViewHolder(private val binding: ItemExpensesItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ProductsItem) {
             with(binding) {
                 itemName.text = item.name
-                itemCategory.text = categoryMapping[item.detail?.category]
+                itemCategory.text = categoryMapping[item.detail?.categoryIndex]
                 itemQuantity.text = item.amount.toString()
                 itemPrice.text = item.price?.let { formatRupiah(it) }
 

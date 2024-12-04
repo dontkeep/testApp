@@ -12,20 +12,20 @@ import com.exal.testapp.helper.formatRupiah
 class DetailExpenseAdapter: ListAdapter<ProductsItem, DetailExpenseAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     private val categoryMapping = mapOf(
-        "0" to "Food",
-        "1" to "Beauty",
-        "2" to "Home Living",
-        "3" to "Drink",
-        "4" to "Fresh Product",
-        "5" to "Health",
-        "6" to "Other"
+        0 to "Food",
+        1 to "Beauty",
+        2 to "Home Living",
+        3 to "Drink",
+        4 to "Fresh Product",
+        5 to "Health",
+        6 to "Other"
     )
 
     inner class ItemViewHolder(private val binding: ItemDetailListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ProductsItem) {
             with(binding) {
                 itemName.text = item.name
-                itemCategory.text = categoryMapping[item.detail?.category]
+                itemCategory.text = categoryMapping[item.detail?.categoryIndex]
                 itemQuantity.text = item.amount.toString()
                 itemPrice.text = item.price?.let { formatRupiah(it) }
             }
