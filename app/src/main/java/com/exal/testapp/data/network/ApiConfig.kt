@@ -5,9 +5,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class ApiConfig {
-    private val BASE_URL = "http://192.168.106.1:3000" //TODO : Change into the correct address
+    private val BASE_URL = "http://192.168.13.1:3000" //TODO : Change into the correct address
     private val BASE_URL_ML = "https://mlmodelapi-407517281668.asia-southeast2.run.app"
 
     fun getApiService(): ApiServices {

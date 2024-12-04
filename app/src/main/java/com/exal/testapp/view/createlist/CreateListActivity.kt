@@ -11,11 +11,16 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.semantics.dismiss
+import androidx.compose.ui.semantics.text
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -48,6 +53,8 @@ class CreateListActivity : AppCompatActivity() {
     private var receiptImagePath: String? = null
     private var thumbnailImagePath: String? = null
 
+    val viewModel: CreateListViewModel by viewModels()
+
     private val rotateOpen: Animation by lazy {
         AnimationUtils.loadAnimation(
             this,
@@ -66,14 +73,13 @@ class CreateListActivity : AppCompatActivity() {
             R.anim.from_bottom_anim
         )
     }
+
     private val toBottom: Animation by lazy {
         AnimationUtils.loadAnimation(
             this,
             R.anim.to_bottom_anim
         )
     }
-
-    private val viewModel: CreateListViewModel by viewModels()
 
     private val requestPermissionsLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -95,7 +101,6 @@ class CreateListActivity : AppCompatActivity() {
         return cameraGranted
     }
 
-
     private var clicked = false
 
     @SuppressLint("WrongConstant")
@@ -111,6 +116,10 @@ class CreateListActivity : AppCompatActivity() {
         }
         val imageUri = intent.getStringExtra("IMAGE_URI")
 
+        if (savedInstanceState == null) {
+            saveReceivedData()
+        }
+
         if (imageUri != null) {
             val uri = Uri.parse(imageUri)
             viewModel.setImageUri(uri.toString())
@@ -120,10 +129,6 @@ class CreateListActivity : AppCompatActivity() {
             }
         } else {
             Log.e("CreateListActivity", "Path gambar tidak tersedia!")
-        }
-
-        if(viewModel.productList.value?.isEmpty() == true && viewModel.totalPrice.value == 0) {
-            saveReceivedData()
         }
 
         rvSetup()
@@ -148,8 +153,23 @@ class CreateListActivity : AppCompatActivity() {
 
         binding.fabAddManual.setOnClickListener {
             Toast.makeText(this, "Add Manual", Toast.LENGTH_SHORT).show()
+            val dialogFragment = AddManualDialogFragment()
+            dialogFragment.show(supportFragmentManager, "addManualDialog")
+        }
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.productList.observe(this) { products ->
+            (binding.itemRv.adapter as? ItemAdapter)?.submitList(products)
+        }
+
+        viewModel.totalPrice.observe(this) { price ->
+            binding.totalPriceTv.text = formatRupiah(price)
+            Log.d("CreateListActivity", "Total Price: $price")
         }
     }
+
 
     private fun handleSaveButtonClick() {
         lifecycleScope.launch {
@@ -212,17 +232,6 @@ class CreateListActivity : AppCompatActivity() {
         }
     }
 
-//    private fun getFilePathFromUri(uri: Uri): String? {
-//        val cursor = contentResolver.query(uri, arrayOf(MediaStore.Images.Media.DATA), null, null, null)
-//        cursor?.use {
-//            if (it.moveToFirst()) {
-//                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//                return it.getString(columnIndex)
-//            }
-//        }
-//        return null
-//    }
-
     private fun createRequestBody(value: String?): okhttp3.RequestBody =
         value.orEmpty().toRequestBody("text/plain".toMediaTypeOrNull())
 
@@ -242,30 +251,20 @@ class CreateListActivity : AppCompatActivity() {
         return null
     }
 
-    private fun saveReceivedData(){
+    private fun saveReceivedData() {
         val productList: ArrayList<ProductsItem>? = intent.getParcelableArrayListExtra("PRODUCT_LIST")
         val price = intent.getIntExtra("PRICE", 0)
-        if (productList != null) {
+        if (productList != null && viewModel.productList.value.isNullOrEmpty()) {
             viewModel.setProductList(productList.toList(), price)
         }
     }
 
     private fun rvSetup() {
-        val adapter = ItemAdapter{ item ->
+        val adapter = ItemAdapter { item ->
             viewModel.deleteProduct(item)
         }
-
-        val layoutManager = LinearLayoutManager(this)
-        binding.itemRv.layoutManager = layoutManager
+        binding.itemRv.layoutManager = LinearLayoutManager(this)
         binding.itemRv.adapter = adapter
-
-        viewModel.productList.observe(this) {
-            adapter.submitList(it)
-        }
-        viewModel.totalPrice.observe(this) { price ->
-            binding.totalPriceTv.text = formatRupiah(price)
-            Log.d("CreateListActivity", "Total Price: $price")
-        }
     }
 
     private fun onAddButtonClick() {
@@ -305,11 +304,6 @@ class CreateListActivity : AppCompatActivity() {
             binding.fabScanReceipt.isClickable = false
             binding.fabAddManual.isClickable = false
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.setProductList(emptyList(), 0)
     }
 
     companion object {

@@ -200,5 +200,4 @@
         app:layout_constraintBottom_toBottomOf="@+id/item_rv"
         app:layout_constraintStart_toEndOf="@+id/totalPriceTxt" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

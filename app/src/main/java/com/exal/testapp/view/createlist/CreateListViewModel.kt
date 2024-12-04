@@ -61,6 +61,15 @@ class CreateListViewModel @Inject constructor(private val dataRepository: DataRe
         _totalPrice.value = newTotalPrice
     }
 
+    fun addProduct(product: ProductsItem) {
+        val currentList = _productList.value.orEmpty().toMutableList()
+        currentList.add(product)
+        _productList.value = currentList
+
+        val newTotalPrice = currentList.sumOf { (it.price ?: 0) * (it.amount ?: 0) }
+        _totalPrice.value = newTotalPrice
+    }
+
     fun setImageUri(uri: String) {
         _imageUri.value = uri
     }

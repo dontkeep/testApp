@@ -76,4 +76,10 @@ interface ApiServices {
         @Header("Authorization") token: String,
         @Query("type") type: String = "Track"
     ): GetListResponse
+
+//    @GET("/list/{id}")
+//    suspend fun getListById(
+//        @Header("Authorization") token: String,
+//        @Path("id") id: String
+//    ):
 }
