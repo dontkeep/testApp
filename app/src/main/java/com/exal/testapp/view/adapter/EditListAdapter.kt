@@ -18,13 +18,13 @@ class EditListAdapter(
 ) : ListAdapter<ProductsItem, EditListAdapter.ItemViewHolder>(DIFF_CALLBACK) {
 
     private val categoryMapping = mapOf(
-        "home living" to "Home & Living",
-        "minuman" to "Drink",
-        "product-segar" to "Fresh Product",
-        "kecantikan" to "Beauty",
-        "kesehatan" to "Health",
-        "makanan" to "Food",
-        "lainnya" to "Other"
+        "0" to "Food",
+        "1" to "Beauty",
+        "2" to "Home Living",
+        "3" to "Drink",
+        "4" to "Fresh Product",
+        "5" to "Health",
+        "6" to "Other"
     )
 
     private val reverseCategoryMapping = categoryMapping.entries.associate { (key, value) -> value to key }
