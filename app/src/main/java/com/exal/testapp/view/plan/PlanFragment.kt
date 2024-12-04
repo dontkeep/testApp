@@ -25,7 +25,6 @@ class PlanFragment : Fragment() {
     private var _binding: FragmentPlanBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,6 +55,6 @@ class PlanFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Avoid memory leaks
+        _binding = null
     }
 }
