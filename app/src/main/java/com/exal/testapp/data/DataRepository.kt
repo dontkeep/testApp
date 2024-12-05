@@ -1,6 +1,12 @@
 package com.exal.testapp.data
 
 import android.util.Log
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.exal.testapp.data.local.AppDatabase
+import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.network.ApiServices
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.GetListResponse
@@ -21,36 +27,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataRepository @Inject constructor(@RegularApiService private val apiService: ApiServices, @MlApiService private val apiServiceML: ApiServices, private val tokenManager: TokenManager) {
-    fun getExpensesList(id: String): Flow<Resource<List<ExpenseListResponseItem>>> = flow {
-            emit(Resource.Loading()) // Emit loading state
-            try {
-                val data = apiService.getExpensesList(id) // Fetch data from API
-                emit(Resource.Success(data)) // Emit success state with data
-            } catch (exception: Exception) {
-                emit(
-                    Resource.Error(
-                        exception.message ?: "Error fetching data"
-                    )
-                )
-            }
-     }
-
-    fun getResultList(id: String): Flow<Resource<List<ResultListResponseItem>>> = flow {
-        emit(Resource.Loading())
-        try {
-            val data = apiService.getResultList(id)
-            emit(Resource.Success(data))
-            Log.d("DataRepository", "Data: $data")
-        } catch (exception: Exception) {
-            emit(
-                Resource.Error(
-                    exception.message ?: "Error fetching data"
-                )
-            )
-            Log.d("DataRepository", "Error: ${exception.message}")
-        }
-    }
+class DataRepository @Inject constructor(
+    @RegularApiService private val apiService: ApiServices,
+    @MlApiService private val apiServiceML: ApiServices,
+    private val tokenManager: TokenManager,
+    private val database: AppDatabase
+) {
 
     fun login(username: String, password: String): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading()) // Emit loading state
@@ -72,13 +54,18 @@ class DataRepository @Inject constructor(@RegularApiService private val apiServi
         }
     }
 
-    fun register(name: String, email: String, password: String, passwordRepeat: String): Flow<Resource<Boolean>> = flow {
+    fun register(
+        name: String,
+        email: String,
+        password: String,
+        passwordRepeat: String
+    ): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading())
         try {
             val response = apiService.register(name, email, password, passwordRepeat)
             if (response.status == true) {
                 emit(Resource.Success(true))
-                } else {
+            } else {
                 emit(Resource.Error("Registration failed: ${response.message}")) // Emit error with message
             }
         } catch (exception: Exception) {
@@ -157,7 +144,39 @@ class DataRepository @Inject constructor(@RegularApiService private val apiServi
             val response = apiService.getExpenseList("Bearer: ${tokenManager.getToken()}")
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Error fetching expense list")) // Emit error if something goes wrong
+            emit(
+                Resource.Error(
+                    e.message ?: "Error fetching expense list"
+                )
+            ) // Emit error if something goes wrong
         }
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    fun getListData(type: String): Flow<PagingData<ListEntity>> {
+        return Pager(
+            config = PagingConfig(pageSize = 5, enablePlaceholders = false),
+            remoteMediator = ListRemoteMediator(
+                type = type,
+                token = "Bearer ${tokenManager.getToken()}",
+                apiService = apiService,
+                database = database
+            ),
+            pagingSourceFactory = { database.listDao().getListsByType(type) }
+        ).flow
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    fun getFiveLatestData(type: String): Flow<PagingData<ListEntity>> {
+        return Pager(
+            config = PagingConfig(pageSize = 5, enablePlaceholders = false),
+            remoteMediator = ListRemoteMediator(
+                type = type,
+                token = "Bearer ${tokenManager.getToken()}",
+                apiService = apiService,
+                database = database
+            ),
+            pagingSourceFactory = { database.listDao().getFiveLatestData(type) }
+        ).flow
     }
 }

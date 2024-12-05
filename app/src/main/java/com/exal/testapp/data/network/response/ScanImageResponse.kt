@@ -6,7 +6,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ScanImageResponse(
-
 	@field:SerializedName("products")
 	val products: List<ProductsItem?>? = null
 ): Parcelable

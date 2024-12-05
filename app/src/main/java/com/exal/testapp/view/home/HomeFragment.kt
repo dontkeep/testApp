@@ -3,11 +3,13 @@ package com.exal.testapp.view.home
 import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.data.Resource
 import com.exal.testapp.databinding.FragmentHomeBinding
@@ -15,6 +17,8 @@ import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ExpensesAdapter
 import com.exal.testapp.view.createlist.CreateListActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -41,33 +45,38 @@ class HomeFragment : Fragment() {
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
         binding.rvExpense.adapter = adapter
 
-        homeViewModel.getExpenseList()
+        lifecycleScope.launch {
+            Log.d("ExpensesFragment", "Fetching data...")
+//            homeViewModel.getLists("Track").collectLatest { pagingData ->
+//                adapter.submitData(pagingData)
+//            }
+        }
 
-        homeViewModel.expenses.observe(viewLifecycleOwner, { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    resource.data?.data?.lists?.take(5).let { expenseList ->
-                        adapter.submitList(expenseList)
-                    }
-                    resource.data?.data?.lists?.forEach { expense ->
-                        totalPrice += expense?.totalExpenses?.toDouble()?.toInt() ?: 0
-                        binding.total.text = formatRupiah(totalPrice)
-                        totalItem += expense?.totalItems ?: 0
-                        binding.items.text = "$totalItem Items"
-                    }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    resource.message?.let { message ->
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
+//        homeViewModel.expenses.observe(viewLifecycleOwner, { resource ->
+//            when (resource) {
+//                is Resource.Loading -> {
+//                    binding.progressBar.visibility = View.VISIBLE
+//                }
+//                is Resource.Success -> {
+//                    binding.progressBar.visibility = View.GONE
+//                    resource.data?.data?.lists?.take(5).let { expenseList ->
+//                        adapter.submitList(expenseList)
+//                    }
+//                    resource.data?.data?.lists?.forEach { expense ->
+//                        totalPrice += expense?.totalExpenses?.toDouble()?.toInt() ?: 0
+//                        binding.total.text = formatRupiah(totalPrice)
+//                        totalItem += expense?.totalItems ?: 0
+//                        binding.items.text = "$totalItem Items"
+//                    }
+//                }
+//                is Resource.Error -> {
+//                    binding.progressBar.visibility = View.GONE
+//                    resource.message?.let { message ->
+//                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        })
 
         binding.total.text = formatRupiah(totalPrice)
         binding.items.text = "$totalItem Items"

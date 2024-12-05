@@ -116,6 +116,8 @@ class CreateListActivity : AppCompatActivity() {
         }
         val imageUri = intent.getStringExtra("IMAGE_URI")
 
+        val thumbnailUri: Uri
+
         if (savedInstanceState == null) {
             saveReceivedData()
         }
@@ -141,8 +143,12 @@ class CreateListActivity : AppCompatActivity() {
             if (!allPermissionsGranted()) {
                 requestPermissionsLauncher.launch(REQUIRED_CAMERA_PERMISSION)
             } else {
-                val intent = Intent(this, CameraActivity::class.java)
-                startActivity(intent)
+                if (viewModel.productList.value.isNullOrEmpty()) {
+                    val intent = Intent(this, CameraActivity::class.java)
+                    startActivity(intent)
+                } else {
+
+                }
             }
         }
 
@@ -150,9 +156,7 @@ class CreateListActivity : AppCompatActivity() {
             handleSaveButtonClick()
         }
 
-
         binding.fabAddManual.setOnClickListener {
-            Toast.makeText(this, "Add Manual", Toast.LENGTH_SHORT).show()
             val dialogFragment = AddManualDialogFragment()
             dialogFragment.show(supportFragmentManager, "addManualDialog")
         }
@@ -183,7 +187,7 @@ class CreateListActivity : AppCompatActivity() {
             val productItemsRequestBody = createRequestBody(
                 Gson().toJson(
                     viewModel.productList.value?.map {
-                        ProductItem(it.name, it.amount, it.price, it.detail?.categoryIndex, it.totalPrice)
+                        ProductItem(it.name, it.amount, it.price, it.detail?.categoryIndex.toString(), it.totalPrice)
                     }
                 )
             )

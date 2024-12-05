@@ -1,30 +1,30 @@
 package com.exal.testapp.view.expenses
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.exal.testapp.data.DataRepository
-import com.exal.testapp.data.Resource
-import com.exal.testapp.data.network.response.ExpenseListResponseItem
-import com.exal.testapp.data.network.response.GetListResponse
+import com.exal.testapp.data.local.entity.ListEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class ExpensesViewModel @Inject constructor(private val dataRepository: DataRepository) : ViewModel() {
-    private val _expenses = MutableLiveData<Resource<GetListResponse>>()
-    val expenses: LiveData<Resource<GetListResponse>> get() = _expenses
+    private val _expenses = MutableLiveData<PagingData<ListEntity>>()
+    val expenses: LiveData<PagingData<ListEntity>> get() = _expenses
 
-    fun getExpenseList() {
-        viewModelScope.launch {
-            dataRepository.getExpenseList()
-                .collect { resource ->
-                    _expenses.postValue(resource)
-                }
+    fun getLists(type: String): Flow<PagingData<ListEntity>> {
+        val flow = dataRepository.getListData(type).cachedIn(viewModelScope)
+        flow.onEach { pagingData ->
+            _expenses.value = pagingData
+            Log.d("ExpensesViewModel", "PagingData Collected: $pagingData")
         }
+        return flow
     }
 }

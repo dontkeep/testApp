@@ -25,11 +25,6 @@ import retrofit2.http.Query
 
 
 interface ApiServices {
-    @GET("/expense-lists")
-    suspend fun getExpensesList(@Query("id_user") id: String): List<ExpenseListResponseItem>
-
-    @GET("/expense-detail")
-    suspend fun getResultList(@Query("list_id") id: String): List<ResultListResponseItem>
 
     @FormUrlEncoded
     @POST("/auth/login")
@@ -74,12 +69,8 @@ interface ApiServices {
     @GET("/list")
     suspend fun getExpenseList(
         @Header("Authorization") token: String,
-        @Query("type") type: String = "Track"
+        @Query("type") type: String = "Track",
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10
     ): GetListResponse
-
-//    @GET("/list/{id}")
-//    suspend fun getListById(
-//        @Header("Authorization") token: String,
-//        @Path("id") id: String
-//    ):
 }

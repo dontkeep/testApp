@@ -8,16 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.exal.testapp.data.Resource
-import com.exal.testapp.data.network.response.DataItem
 import com.exal.testapp.databinding.FragmentExpensesBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
 import com.exal.testapp.view.adapter.ExpensesAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 
@@ -26,7 +26,8 @@ class ExpensesFragment : Fragment() {
     private var _binding: FragmentExpensesBinding? = null
     private val binding get() = _binding!!
 
-    val expenseViewModel: ExpensesViewModel by viewModels()
+    private val expenseViewModel: ExpensesViewModel by viewModels()
+    private lateinit var pagingAdapter: ExpensesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,31 +40,17 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ExpensesAdapter()
-        binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvExpense.adapter = adapter
+        pagingAdapter = ExpensesAdapter()
+        binding.rvExpense.layoutManager = LinearLayoutManager(context)
+        binding.rvExpense.adapter = pagingAdapter
 
-        expenseViewModel.expenses.observe(viewLifecycleOwner, { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    resource.data?.data?.lists?.let { expenseList ->
-                        adapter.submitList(expenseList)
-                    }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    resource.message?.let { message ->
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                    }
+        viewLifecycleOwner.lifecycleScope.launch  {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                expenseViewModel.getLists("Track").collect { pagingData ->
+                    pagingAdapter.submitData(pagingData)
                 }
             }
-        })
-
-        expenseViewModel.getExpenseList()
+        }
 
         binding.icCalender.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
