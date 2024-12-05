@@ -107,6 +107,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
 
     // Datastore lib
     implementation(libs.androidx.datastore.preferences)
@@ -122,4 +123,9 @@ dependencies {
 
     // Glide lib
     implementation(libs.glide)
+
+    // Paging3
+    implementation(libs.androidx.paging.runtime.ktx)
+    testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.androidx.paging.common.ktx)
 }
