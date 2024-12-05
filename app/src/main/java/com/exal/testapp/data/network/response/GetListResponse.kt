@@ -7,6 +7,9 @@ data class GetListResponse(
 	@field:SerializedName("code")
 	val code: Int? = null,
 
+	@field:SerializedName("pagination")
+	val pagination: Pagination? = null,
+
 	@field:SerializedName("data")
 	val data: Data? = null,
 
@@ -17,13 +20,10 @@ data class GetListResponse(
 	val status: Boolean? = null
 )
 
-data class Data(
-
-	@field:SerializedName("lists")
-	val lists: List<ListsItem?>? = null
-)
-
 data class ListsItem(
+
+	@field:SerializedName("createdAt")
+	val createdAt: String? = null,
 
 	@field:SerializedName("image")
 	val image: String? = null,
@@ -45,4 +45,25 @@ data class ListsItem(
 
 	@field:SerializedName("total_items")
 	val totalItems: Int? = null
+)
+
+data class Pagination(
+
+	@field:SerializedName("total")
+	val total: Int? = null,
+
+	@field:SerializedName("limit")
+	val limit: Int? = null,
+
+	@field:SerializedName("totalPages")
+	val totalPages: Int? = null,
+
+	@field:SerializedName("page")
+	val page: Int? = null
+)
+
+data class Data(
+
+	@field:SerializedName("lists")
+	val lists: List<ListsItem?>? = null
 )
