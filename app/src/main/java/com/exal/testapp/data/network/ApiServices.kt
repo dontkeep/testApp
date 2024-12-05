@@ -1,18 +1,14 @@
 package com.exal.testapp.data.network
 
-import androidx.lifecycle.LiveData
-import com.exal.testapp.data.network.response.ExpenseListResponse
-import com.exal.testapp.data.network.response.ExpenseListResponseItem
+import com.exal.testapp.data.network.response.DetailListResponse
 import com.exal.testapp.data.network.response.GetListResponse
 import com.exal.testapp.data.network.response.LoginResponse
 import com.exal.testapp.data.network.response.LogoutResponse
 import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.RegisterResponse
-import com.exal.testapp.data.network.response.ResultListResponseItem
 import com.exal.testapp.data.network.response.ScanImageResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -25,12 +21,6 @@ import retrofit2.http.Query
 
 
 interface ApiServices {
-    @GET("/expense-lists")
-    suspend fun getExpensesList(@Query("id_user") id: String): List<ExpenseListResponseItem>
-
-    @GET("/expense-detail")
-    suspend fun getResultList(@Query("list_id") id: String): List<ResultListResponseItem>
-
     @FormUrlEncoded
     @POST("/auth/login")
     suspend fun login(
@@ -77,9 +67,9 @@ interface ApiServices {
         @Query("type") type: String = "Track"
     ): GetListResponse
 
-//    @GET("/list/{id}")
-//    suspend fun getListById(
-//        @Header("Authorization") token: String,
-//        @Path("id") id: String
-//    ):
+    @GET("/list/{id_list}")
+    suspend fun getExpensesDetail(
+        @Header("Authorization") token: String,
+        @Path("id_list") id: Int
+    ): DetailListResponse
 }

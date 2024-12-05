@@ -1,5 +1,6 @@
 package com.exal.testapp.view.expenses
 
+import android.content.Intent
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import com.exal.testapp.data.network.response.DataItem
 import com.exal.testapp.databinding.FragmentExpensesBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
 import com.exal.testapp.view.adapter.ExpensesAdapter
+import com.exal.testapp.view.detailexpense.DetailExpenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
@@ -39,7 +41,9 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ExpensesAdapter()
+        val adapter = ExpensesAdapter{id, title ->
+            navigateToDetail(id = id, title = title)
+        }
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
         binding.rvExpense.adapter = adapter
 
@@ -71,6 +75,13 @@ class ExpensesFragment : Fragment() {
                 Toast.makeText(requireContext(), "$monthName $year", Toast.LENGTH_SHORT).show()
             }.show()
         }
+    }
+
+    private fun navigateToDetail(id: Int, title: String) {
+        val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

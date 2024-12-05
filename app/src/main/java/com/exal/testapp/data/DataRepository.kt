@@ -2,6 +2,7 @@ package com.exal.testapp.data
 
 import android.util.Log
 import com.exal.testapp.data.network.ApiServices
+import com.exal.testapp.data.network.response.DetailListResponse
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.GetListResponse
 import com.exal.testapp.data.network.response.PostListResponse
@@ -22,35 +23,6 @@ import javax.inject.Singleton
 
 @Singleton
 class DataRepository @Inject constructor(@RegularApiService private val apiService: ApiServices, @MlApiService private val apiServiceML: ApiServices, private val tokenManager: TokenManager) {
-    fun getExpensesList(id: String): Flow<Resource<List<ExpenseListResponseItem>>> = flow {
-            emit(Resource.Loading()) // Emit loading state
-            try {
-                val data = apiService.getExpensesList(id) // Fetch data from API
-                emit(Resource.Success(data)) // Emit success state with data
-            } catch (exception: Exception) {
-                emit(
-                    Resource.Error(
-                        exception.message ?: "Error fetching data"
-                    )
-                )
-            }
-     }
-
-    fun getResultList(id: String): Flow<Resource<List<ResultListResponseItem>>> = flow {
-        emit(Resource.Loading())
-        try {
-            val data = apiService.getResultList(id)
-            emit(Resource.Success(data))
-            Log.d("DataRepository", "Data: $data")
-        } catch (exception: Exception) {
-            emit(
-                Resource.Error(
-                    exception.message ?: "Error fetching data"
-                )
-            )
-            Log.d("DataRepository", "Error: ${exception.message}")
-        }
-    }
 
     fun login(username: String, password: String): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading()) // Emit loading state
@@ -160,4 +132,15 @@ class DataRepository @Inject constructor(@RegularApiService private val apiServi
             emit(Resource.Error(e.message ?: "Error fetching expense list")) // Emit error if something goes wrong
         }
     }
+
+    fun getExpensesDetail(id: Int): Flow<Resource<DetailListResponse>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.getExpensesDetail("Bearer: ${tokenManager.getToken()}", id)
+            emit(Resource.Success(response))
+        } catch (exception: Exception) {
+            emit(Resource.Error(exception.message ?: "Error fetching data"))
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.exal.testapp.view.detailexpense
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -29,7 +30,18 @@ class DetailExpenseActivity : AppCompatActivity() {
             insets
         }
 
+        val expenseTitle = intent.getStringExtra(EXTRA_EXPENSE_TITLE)
+        val expenseId = intent.getIntExtra(EXTRA_EXPENSE_ID, -1)
+        if (expenseId != -1) {
+            viewModel.getExpenseDetail(expenseId)
+        } else {
+            Toast.makeText(this, "Invalid expense ID", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
         rvSetup()
+
+        binding.titleTv.text = expenseTitle
 
         binding.editBtn.setOnClickListener {
             Toast.makeText(this, "Edit List Clicked", Toast.LENGTH_SHORT).show()
@@ -47,8 +59,14 @@ class DetailExpenseActivity : AppCompatActivity() {
         binding.itemRv.layoutManager = layoutManager
         binding.itemRv.adapter = adapter
 
-//        viewModel.productList.observe(this) {
-//            adapter.submitList(it)
-//        }
+        viewModel.productList.observe(this) {
+            Log.d("DetailExpenseActivity", "Product List: ${it.data?.data?.detailItems}")
+            adapter.submitList(it.data?.data?.detailItems)
+        }
+    }
+
+    companion object {
+        const val EXTRA_EXPENSE_ID = "extra_expense_id"
+        const val EXTRA_EXPENSE_TITLE = "extra_expense_title"
     }
 }

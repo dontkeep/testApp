@@ -5,29 +5,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.exal.testapp.data.network.response.ProductsItem
+import com.exal.testapp.data.network.response.DetailItemsItem
 import com.exal.testapp.databinding.ItemDetailListBinding
 import com.exal.testapp.helper.formatRupiah
 
-class DetailExpenseAdapter: ListAdapter<ProductsItem, DetailExpenseAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class DetailExpenseAdapter: ListAdapter<DetailItemsItem, DetailExpenseAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     private val categoryMapping = mapOf(
-        0 to "Food",
-        1 to "Beauty",
-        2 to "Home Living",
-        3 to "Drink",
-        4 to "Fresh Product",
-        5 to "Health",
-        6 to "Other"
+        "0" to "Food",
+        "1" to "Beauty",
+        "2" to "Home Living",
+        "3" to "Drink",
+        "4" to "Fresh Product",
+        "5" to "Health",
+        "6" to "Other"
     )
 
     inner class ItemViewHolder(private val binding: ItemDetailListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ProductsItem) {
+        fun bind(item: DetailItemsItem) {
             with(binding) {
                 itemName.text = item.name
-                itemCategory.text = categoryMapping[item.detail?.categoryIndex]
+                itemCategory.text = categoryMapping[item.category]
                 itemQuantity.text = item.amount.toString()
-                itemPrice.text = item.price?.let { formatRupiah(it) }
+                itemPrice.text = item.price?.let { formatRupiah(it.toInt()) }
             }
         }
     }
@@ -43,12 +43,12 @@ class DetailExpenseAdapter: ListAdapter<ProductsItem, DetailExpenseAdapter.ItemV
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ProductsItem>(){
-            override fun areItemsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DetailItemsItem>(){
+            override fun areItemsTheSame(oldItem: DetailItemsItem, newItem: DetailItemsItem): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {
+            override fun areContentsTheSame(oldItem: DetailItemsItem, newItem: DetailItemsItem): Boolean {
                 return oldItem == newItem
             }
         }

@@ -76,15 +76,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_image" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textFieldTitle"
+    <TextView
+        android:id="@+id/titleTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:hint="@string/input_title_list"
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="18dp"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
@@ -92,15 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bottom_app_bar"
-        app:startIconContentDescription="Insert Title">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:backgroundTint="@color/text"
-            android:maxLength="40" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        app:startIconContentDescription="Insert Title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_rv"
@@ -112,6 +106,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

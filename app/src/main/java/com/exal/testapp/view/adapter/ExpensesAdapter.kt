@@ -15,7 +15,7 @@ import com.exal.testapp.databinding.ItemRowExpenseBinding
 import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 
-class ExpensesAdapter: ListAdapter<ListsItem, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class ExpensesAdapter(private val onItemClick: (Int, String) -> Unit): ListAdapter<ListsItem, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemRowExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ListsItem) {
@@ -30,7 +30,7 @@ class ExpensesAdapter: ListAdapter<ListsItem, ExpensesAdapter.ItemViewHolder>(DI
                 .load(item.image)
                 .apply(
                     RequestOptions.placeholderOf(R.drawable.placeholder)
-                        .error(R.drawable.ic_close)
+                        .error(R.drawable.placeholder)
                 )
                 .into(binding.itemImage)
         }
@@ -44,6 +44,9 @@ class ExpensesAdapter: ListAdapter<ListsItem, ExpensesAdapter.ItemViewHolder>(DI
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+        holder.itemView.setOnClickListener {
+            onItemClick(item.id ?: -1, item.title ?: "")
+        }
     }
 
     companion object {
