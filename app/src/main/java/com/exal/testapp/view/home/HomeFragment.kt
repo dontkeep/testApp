@@ -16,6 +16,7 @@ import com.exal.testapp.databinding.FragmentHomeBinding
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ExpensesAdapter
 import com.exal.testapp.view.createlist.CreateListActivity
+import com.exal.testapp.view.detailexpense.DetailExpenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,7 +42,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ExpensesAdapter()
+        val adapter = ExpensesAdapter{id, title ->
+            navigateToDetail(id = id, title = title)
+        }
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
         binding.rvExpense.adapter = adapter
 
@@ -85,6 +88,13 @@ class HomeFragment : Fragment() {
             val intent = Intent(requireContext(), CreateListActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun navigateToDetail(id: Int, title: String) {
+        val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

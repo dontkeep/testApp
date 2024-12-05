@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.exal.testapp.R
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.network.response.DataItem
+import com.exal.testapp.data.network.response.ListsItem
 import com.exal.testapp.databinding.ItemRowExpenseBinding
 import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
@@ -19,7 +20,7 @@ import com.exal.testapp.helper.formatRupiah
 class ExpensesAdapter: PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemRowExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListEntity) {
+        fun bind(item: ListsItem) {
             binding.itemImage.setImageResource(R.drawable.placeholder)
             val totalExpensesInt = item.totalExpenses?.toDoubleOrNull()?.toInt()
             binding.itemPrice.text = totalExpensesInt?.let { formatRupiah(it) } ?: "0"

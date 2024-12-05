@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import com.exal.testapp.data.local.AppDatabase
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.network.ApiServices
+import com.exal.testapp.data.network.response.DetailListResponse
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.GetListResponse
 import com.exal.testapp.data.network.response.PostListResponse
@@ -151,6 +152,17 @@ class DataRepository @Inject constructor(
             ) // Emit error if something goes wrong
         }
     }
+
+    fun getExpensesDetail(id: Int): Flow<Resource<DetailListResponse>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response = apiService.getExpensesDetail("Bearer: ${tokenManager.getToken()}", id)
+            emit(Resource.Success(response))
+        } catch (exception: Exception) {
+            emit(Resource.Error(exception.message ?: "Error fetching data"))
+        }
+    }
+
 
     @OptIn(ExperimentalPagingApi::class)
     fun getListData(type: String): Flow<PagingData<ListEntity>> {
