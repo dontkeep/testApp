@@ -32,12 +32,14 @@ class ListRemoteMediator(
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKeys?.nextKey?.minus(1) ?: INITIAL_PAGE_INDEX
             }
+
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey
                     ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 prevKey
             }
+
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
@@ -46,9 +48,9 @@ class ListRemoteMediator(
             }
         }
 
-        return try {
+        try {
             val response = apiService.getExpenseList(
-                token = "Bearer $token",
+                token = "Bearer: $token",
                 type = type,
                 page = page,
                 limit = state.config.pageSize
@@ -57,18 +59,17 @@ class ListRemoteMediator(
             val lists = response.data?.lists?.mapNotNull { list ->
                 list?.let {
                     ListEntity(
-                        id = it.id?.toString() ?: "", // Default ke "" jika null
-                        title = it.title ?: "Untitled", // Default title jika null
+                        id = it.id?.toString() ?: throw IllegalArgumentException("ID is required"), // Default ke "" jika null
+                        title = it.title, // Default title jika null
                         type = type,
-                        totalExpenses = it.totalExpenses ?: "0",
-                        totalProducts = it.totalProducts ?: 0,
-                        totalItems = it.totalItems ?: 0,
-                        createdAt = it.createdAt ?: "Unknown Date",
-                        image = it.image ?: ""
+                        totalExpenses = it.totalExpenses,
+                        totalProducts = it.totalProducts,
+                        totalItems = it.totalItems,
+                        createdAt = it.createdAt,
+                        image = it.image
                     )
                 }
             }
-
 
             Log.d("RemoteMediator", "Fetched ${lists?.size} items for page $page")
 
@@ -79,40 +80,29 @@ class ListRemoteMediator(
                     database.remoteKeysDao().clearRemoteKeys()
                     database.listDao().clearByType(type)
                 }
-
-                val keys = lists?.map {
-                    RemoteKeys(
-                        id = it.id ?: "", // Gunakan default "" jika id null
-                        prevKey = if (page == 1) null else page - 1,
-                        nextKey = if (endOfPaginationReached) null else page + 1
-                    )
+                val prevKey = if (page == 1) null else page - 1
+                val nextKey = if (endOfPaginationReached) null else page + 1
+                val keys = lists!!.map {
+                    RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
-
-
-                if (!keys.isNullOrEmpty()) {
-                    database.remoteKeysDao().insertAll(keys)
-                }
-
-                if (!lists.isNullOrEmpty()) {
-                    database.listDao().insertAll(lists)
-                }
+                database.remoteKeysDao().insertAll(keys)
+                database.listDao().insertAll(lists)
             }
-
-            MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+            return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (e: Exception) {
-            MediatorResult.Error(e)
+            return MediatorResult.Error(e)
         }
     }
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
-            data.id.let { database.remoteKeysDao().getRemoteKeysById(it) }
+            database.remoteKeysDao().getRemoteKeysById(data.id)
         }
     }
 
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
-            data.id.let { database.remoteKeysDao().getRemoteKeysById(it) }
+            database.remoteKeysDao().getRemoteKeysById(data.id)
         }
     }
 

@@ -20,14 +20,12 @@ import com.exal.testapp.helper.formatRupiah
 class ExpensesAdapter: PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemRowExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListsItem) {
+        fun bind(item: ListEntity) {
             binding.itemImage.setImageResource(R.drawable.placeholder)
             val totalExpensesInt = item.totalExpenses?.toDoubleOrNull()?.toInt()
             binding.itemPrice.text = totalExpensesInt?.let { formatRupiah(it) } ?: "0"
             "${item.totalItems} Items".also { binding.itemTotal.text = it }
             binding.itemDate.text = "12-1-2024"
-
-            Log.d("ExpensesAdapter", "Item: $item.image")
             Glide.with(itemView.context)
                 .load(item.image)
                 .apply(

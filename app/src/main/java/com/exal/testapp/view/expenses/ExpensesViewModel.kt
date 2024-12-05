@@ -11,20 +11,24 @@ import com.exal.testapp.data.DataRepository
 import com.exal.testapp.data.local.entity.ListEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ExpensesViewModel @Inject constructor(private val dataRepository: DataRepository) : ViewModel() {
+class ExpensesViewModel @Inject constructor(private val dataRepository: DataRepository) :
+    ViewModel() {
     private val _expenses = MutableLiveData<PagingData<ListEntity>>()
     val expenses: LiveData<PagingData<ListEntity>> get() = _expenses
 
-    fun getLists(type: String): Flow<PagingData<ListEntity>> {
-        val flow = dataRepository.getListData(type).cachedIn(viewModelScope)
-        flow.onEach { pagingData ->
-            _expenses.value = pagingData
-            Log.d("ExpensesViewModel", "PagingData Collected: $pagingData")
+    fun getLists(type: String) {
+        viewModelScope.launch {
+            dataRepository.getListData(type)
+                .cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    _expenses.value = pagingData
+                }
         }
-        return flow
     }
 }

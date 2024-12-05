@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.databinding.FragmentExpensesBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
 import com.exal.testapp.view.adapter.ExpensesAdapter
+import com.exal.testapp.view.adapter.LoadingStateAdapter
 import com.exal.testapp.view.detailexpense.DetailExpenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
@@ -46,11 +48,15 @@ class ExpensesFragment : Fragment() {
         binding.rvExpense.layoutManager = LinearLayoutManager(context)
         binding.rvExpense.adapter = pagingAdapter
 
-        viewLifecycleOwner.lifecycleScope.launch  {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                expenseViewModel.getLists("Track").collect { pagingData ->
-                    pagingAdapter.submitData(pagingData)
-                }
+        val loadingStateAdapter = LoadingStateAdapter { pagingAdapter.retry() }
+        binding.rvExpense.adapter = pagingAdapter.withLoadStateFooter(
+            footer = loadingStateAdapter
+        )
+
+        lifecycleScope.launch {
+            expenseViewModel.getLists("Track")
+            expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                pagingAdapter.submitData(lifecycle, pagingData)
             }
         }
 

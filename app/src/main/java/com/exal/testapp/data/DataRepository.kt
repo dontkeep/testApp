@@ -156,8 +156,8 @@ class DataRepository @Inject constructor(
     fun getExpensesDetail(id: Int): Flow<Resource<DetailListResponse>> = flow {
         emit(Resource.Loading())
         try {
-            val response = apiService.getExpensesDetail("Bearer: ${tokenManager.getToken()}", id)
-            emit(Resource.Success(response))
+//            val response = apiService.getExpensesDetail("Bearer: ${tokenManager.getToken()}", id)
+//            emit(Resource.Success(response))
         } catch (exception: Exception) {
             emit(Resource.Error(exception.message ?: "Error fetching data"))
         }
@@ -167,28 +167,14 @@ class DataRepository @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     fun getListData(type: String): Flow<PagingData<ListEntity>> {
         return Pager(
-            config = PagingConfig(pageSize = 5, enablePlaceholders = false),
+            config = PagingConfig(pageSize = 5),
             remoteMediator = ListRemoteMediator(
                 type = type,
-                token = "Bearer ${tokenManager.getToken()}",
+                token = "${tokenManager.getToken()}",
                 apiService = apiService,
                 database = database
             ),
             pagingSourceFactory = { database.listDao().getListsByType(type) }
-        ).flow
-    }
-
-    @OptIn(ExperimentalPagingApi::class)
-    fun getFiveLatestData(type: String): Flow<PagingData<ListEntity>> {
-        return Pager(
-            config = PagingConfig(pageSize = 5, enablePlaceholders = false),
-            remoteMediator = ListRemoteMediator(
-                type = type,
-                token = "Bearer ${tokenManager.getToken()}",
-                apiService = apiService,
-                database = database
-            ),
-            pagingSourceFactory = { database.listDao().getFiveLatestData(type) }
         ).flow
     }
 }
