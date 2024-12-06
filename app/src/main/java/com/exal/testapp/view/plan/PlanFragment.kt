@@ -16,6 +16,7 @@ import com.exal.testapp.databinding.FragmentPlanBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.PlanAdapter
+import com.exal.testapp.view.createplan.CreatePlanActivity
 import com.exal.testapp.view.detailexpense.DetailExpenseActivity
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -86,6 +87,11 @@ class PlanFragment : Fragment() {
             datePicker.addOnPositiveButtonClickListener {
                 Toast.makeText(requireContext(), format.format(it), Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.floatingActionButton.setOnClickListener {
+            val intent = Intent(requireContext(), CreatePlanActivity::class.java)
+            startActivity(intent)
         }
     }
 

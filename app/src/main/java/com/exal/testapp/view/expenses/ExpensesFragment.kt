@@ -44,7 +44,9 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pagingAdapter = ExpensesAdapter()
+        pagingAdapter = ExpensesAdapter{ id, title ->
+            navigateToDetail(id = id, title = title)
+        }
         binding.rvExpense.layoutManager = LinearLayoutManager(context)
         binding.rvExpense.adapter = pagingAdapter
 
@@ -54,7 +56,7 @@ class ExpensesFragment : Fragment() {
         )
 
         lifecycleScope.launch {
-            expenseViewModel.getLists("Track")
+            expenseViewModel.getLists("Track", null, null)
             expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
                 pagingAdapter.submitData(lifecycle, pagingData)
             }
@@ -62,8 +64,10 @@ class ExpensesFragment : Fragment() {
 
         binding.icCalender.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
-                val monthName = DateFormatSymbols().months[month]
-                Toast.makeText(requireContext(), "$monthName $year", Toast.LENGTH_SHORT).show()
+                expenseViewModel.getLists("Track", month, year)
+                expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                    pagingAdapter.submitData(lifecycle, pagingData)
+                }
             }.show()
         }
     }

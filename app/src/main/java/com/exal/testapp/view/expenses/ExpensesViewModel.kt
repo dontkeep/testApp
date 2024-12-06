@@ -10,9 +10,7 @@ import androidx.paging.cachedIn
 import com.exal.testapp.data.DataRepository
 import com.exal.testapp.data.local.entity.ListEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,9 +20,9 @@ class ExpensesViewModel @Inject constructor(private val dataRepository: DataRepo
     private val _expenses = MutableLiveData<PagingData<ListEntity>>()
     val expenses: LiveData<PagingData<ListEntity>> get() = _expenses
 
-    fun getLists(type: String) {
+    fun getLists(type: String, month: Int?, year: Int?) {
         viewModelScope.launch {
-            dataRepository.getListData(type)
+            dataRepository.getListData(type, month, year)
                 .cachedIn(viewModelScope)
                 .collectLatest { pagingData ->
                     _expenses.value = pagingData

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="iconButton">#E6E6E6</color>
-    <color name="cardColor">#454545</color>
+    <color name="cardColor">#4E4E4E</color>
     <color name="navColor">#313131</color>
     <color name="navIconColor">#E6E6E6</color>
     <color name="textGradient">#FFFFFF</color>

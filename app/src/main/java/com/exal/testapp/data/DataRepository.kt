@@ -139,25 +139,25 @@ class DataRepository @Inject constructor(
         }
     }
 
-    fun getExpenseList(): Flow<Resource<GetListResponse>> = flow {
+    fun getExpenseList(type: String): Flow<Resource<GetListResponse>> = flow {
         emit(Resource.Loading())
         try {
-            val response = apiService.getExpenseList("Bearer: ${tokenManager.getToken()}")
+            val response = apiService.getExpenseList("Bearer: ${tokenManager.getToken()}", type)
             emit(Resource.Success(response))
         } catch (e: Exception) {
             emit(
                 Resource.Error(
                     e.message ?: "Error fetching expense list"
                 )
-            ) // Emit error if something goes wrong
+            )
         }
     }
 
     fun getExpensesDetail(id: Int): Flow<Resource<DetailListResponse>> = flow {
         emit(Resource.Loading())
         try {
-//            val response = apiService.getExpensesDetail("Bearer: ${tokenManager.getToken()}", id)
-//            emit(Resource.Success(response))
+            val response = apiService.getExpensesDetail("Bearer: ${tokenManager.getToken()}", id)
+            emit(Resource.Success(response))
         } catch (exception: Exception) {
             emit(Resource.Error(exception.message ?: "Error fetching data"))
         }
@@ -165,11 +165,13 @@ class DataRepository @Inject constructor(
 
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getListData(type: String): Flow<PagingData<ListEntity>> {
+    fun getListData(type: String, month: Int?, year: Int?): Flow<PagingData<ListEntity>> {
         return Pager(
             config = PagingConfig(pageSize = 10),
             remoteMediator = ListRemoteMediator(
                 type = type,
+                month = month,
+                year = year,
                 token = "${tokenManager.getToken()}",
                 apiService = apiService,
                 database = database

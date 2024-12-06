@@ -31,18 +31,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
 
-        if (!introManager.isIntroCompleted()) {
-            redirectToIntroActivity()
-            return
-        }
+//        if (!introManager.isIntroCompleted()) {
+//            redirectToIntroActivity()
+//            return
+//        }
 
 //        if (!isUserLoggedIn()) {
 //            redirectToLandingActivity()
 //            return
 //        }
 
+        val token = tokenManager.getToken()
+        Log.d("MainActivity", "Token: $token")
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -50,9 +53,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-//        val token = tokenManager.getToken()
-//        Log.d("MainActivity", "Token: $token")
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment

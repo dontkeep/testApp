@@ -1,6 +1,7 @@
 package com.exal.testapp.view.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,7 +28,12 @@ class DetailExpenseAdapter: ListAdapter<DetailItemsItem, DetailExpenseAdapter.It
                 itemName.text = item.name
                 itemCategory.text = categoryMapping[item.category]
                 itemQuantity.text = item.amount.toString()
-                itemPrice.text = item.price?.let { formatRupiah(it.toInt()) }
+                if (item.price == "0") {
+                    priceTxt.visibility = View.GONE
+                    itemPrice.visibility = View.GONE
+                } else {
+                    itemPrice.text = item.price?.let { formatRupiah(it.toInt()) }
+                }
             }
         }
     }

@@ -17,7 +17,7 @@ import com.exal.testapp.databinding.ItemRowExpenseBinding
 import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 
-class ExpensesAdapter: PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class ExpensesAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemRowExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ListEntity) {
@@ -46,8 +46,11 @@ class ExpensesAdapter: PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHol
         if (item != null) {
             holder.bind(item)
         }
-
-
+        holder.itemView.setOnClickListener {
+            if (item != null) {
+                onItemClick(item.id.toInt(), item.title ?: "")
+            }
+        }
     }
 
     companion object {

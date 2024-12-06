@@ -10,11 +10,14 @@ import com.exal.testapp.data.local.AppDatabase
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.local.entity.RemoteKeys
 import com.exal.testapp.data.network.ApiServices
+import com.exal.testapp.data.network.response.GetListResponse
 
 @OptIn(ExperimentalPagingApi::class)
 class ListRemoteMediator(
     private val type: String,
     private val token: String,
+    private val month: Int?,
+    private val year: Int?,
     private val apiService: ApiServices,
     private val database: AppDatabase
 ) : RemoteMediator<Int, ListEntity>() {
@@ -53,7 +56,16 @@ class ListRemoteMediator(
         }
 
         try {
-            val responseData = apiService.getExpenseList("Bearer: $token", type, page, state.config.pageSize)
+            val responseData: GetListResponse
+
+            if (month != null && year != null) {
+                Log.d("RemoteMediator", "Fetching data for month: $month, year: $year")
+                responseData = apiService.getExpensesMonth("Bearer: $token", type, month, year, page, state.config.pageSize)
+            } else {
+                Log.d("RemoteMediator", "Fetching data for type: $type")
+                responseData = apiService.getExpenseList("Bearer: $token", type, page, state.config.pageSize)
+            }
+
 
             val endOfPaginationReached = page >= responseData.pagination?.totalPages!!
 
@@ -112,7 +124,7 @@ class ListRemoteMediator(
     }
 
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
-        return state.pages.firstOrNull() { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
+        return state.pages.firstOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
             Log.d("statePages First", state.pages.toString())
             Log.d("data First", data.toString())
             database.remoteKeysDao().getRemoteKeysById(data.id)

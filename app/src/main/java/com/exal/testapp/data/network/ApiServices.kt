@@ -1,6 +1,7 @@
 package com.exal.testapp.data.network
 
 import androidx.lifecycle.LiveData
+import com.exal.testapp.data.network.response.DetailListResponse
 import com.exal.testapp.data.network.response.ExpenseListResponse
 import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.GetListResponse
@@ -69,7 +70,23 @@ interface ApiServices {
     @GET("/list")
     suspend fun getExpenseList(
         @Header("Authorization") token: String,
+        @Query("type") type: String,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10
+    ): GetListResponse
+
+    @GET("/list/{id}")
+    suspend fun getExpensesDetail(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): DetailListResponse
+
+    @GET("/list/")
+    suspend fun getExpensesMonth(
+        @Header("Authorization") token: String,
         @Query("type") type: String = "Track",
+        @Query("month") month: Int,
+        @Query("year") year: Int,
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 10
     ): GetListResponse

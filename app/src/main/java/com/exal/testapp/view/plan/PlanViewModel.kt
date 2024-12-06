@@ -18,7 +18,7 @@ class PlanViewModel @Inject constructor(private val dataRepository: DataReposito
 
     fun getExpenseList() {
         viewModelScope.launch {
-            dataRepository.getExpenseList()
+            dataRepository.getExpenseList(type = "Plan")
                 .collect { resource ->
                     _expenses.postValue(resource)
                 }

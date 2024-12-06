@@ -42,18 +42,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val adapter = ExpensesAdapter{id, title ->
-//            navigateToDetail(id = id, title = title)
-//        }
-        binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
-//        binding.rvExpense.adapter = adapter
-
-        lifecycleScope.launch {
-            Log.d("ExpensesFragment", "Fetching data...")
-//            homeViewModel.getLists("Track").collectLatest { pagingData ->
-//                adapter.submitData(pagingData)
-//            }
+        val adapter = ExpensesAdapter{id, title ->
+            navigateToDetail(id = id, title = title)
         }
+        binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvExpense.adapter = adapter
+
+//        lifecycleScope.lau
+////            Log.d("ExpensesFragment", "Fetching data...")
+////            homeViewModel.getLists("Track").collectLatest { pagingData ->
+////                adapter.submitData(pagingData)
+////            }
+////        }nch {
 
 //        homeViewModel.expenses.observe(viewLifecycleOwner, { resource ->
 //            when (resource) {

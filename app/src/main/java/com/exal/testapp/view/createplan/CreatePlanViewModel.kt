@@ -1,5 +1,6 @@
-package com.exal.testapp.view.createlist
+package com.exal.testapp.view.createplan
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +15,7 @@ import okhttp3.RequestBody
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateListViewModel @Inject constructor(private val dataRepository: DataRepository) : ViewModel() {
+class CreatePlanViewModel @Inject constructor(private val dataRepository: DataRepository) : ViewModel() {
     private val _productList = MutableLiveData<List<ProductsItem>>()
     val productList: LiveData<List<ProductsItem>> get() = _productList
 
@@ -44,14 +45,6 @@ class CreateListViewModel @Inject constructor(private val dataRepository: DataRe
         totalItems
     )
 
-    private val _imageUri = MutableLiveData<String>()
-    val imageUri: LiveData<String> get() = _imageUri
-
-    fun setProductList(products: List<ProductsItem>, price: Int) {
-        _productList.value = products
-        _totalPrice.value = price
-    }
-
     fun deleteProduct(item: ProductsItem) {
         val currentList = _productList.value.orEmpty().toMutableList()
         currentList.remove(item)
@@ -65,12 +58,10 @@ class CreateListViewModel @Inject constructor(private val dataRepository: DataRe
         val currentList = _productList.value.orEmpty().toMutableList()
         currentList.add(product)
         _productList.value = currentList
+        Log.d("CreatePlanViewModel", "Added product: $product")
 
         val newTotalPrice = currentList.sumOf { (it.price ?: 0) * (it.amount ?: 0) }
         _totalPrice.value = newTotalPrice
-    }
-
-    fun setImageUri(uri: String) {
-        _imageUri.value = uri
+        Log.d("CreatePlanViewModel", "Updated total price: $newTotalPrice")
     }
 }
