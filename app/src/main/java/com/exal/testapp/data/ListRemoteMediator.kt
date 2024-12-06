@@ -19,6 +19,10 @@ class ListRemoteMediator(
     private val database: AppDatabase
 ) : RemoteMediator<Int, ListEntity>() {
 
+    override suspend fun initialize(): InitializeAction {
+        return InitializeAction.LAUNCH_INITIAL_REFRESH
+    }
+
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
     }
@@ -36,14 +40,14 @@ class ListRemoteMediator(
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 prevKey
             }
 
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
-                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+                    ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 nextKey
             }
         }
@@ -99,30 +103,11 @@ class ListRemoteMediator(
     }
 
 
-//    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
-//        return state.pages.lastOrNull()  { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
-//            Log.d("statePages Last", state.pages.toString())
-//            Log.d("data Last", data.toString())
-//            database.remoteKeysDao().getRemoteKeysById(data.id)
-//        }
-//    }
-
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
+        return state.pages.lastOrNull()  { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
             Log.d("statePages Last", state.pages.toString())
             Log.d("data Last", data.toString())
-
-            val itemsInDatabase = database.listDao().getCountByType(type)
-
-            val adjustedId = if (itemsInDatabase == state.config.pageSize) {
-                data.id.toInt() - state.config.pageSize + 1
-            } else {
-                data.id.toInt()
-            }
-
-            Log.d("Adjusted ID", adjustedId.toString())
-
-            database.remoteKeysDao().getRemoteKeysById(adjustedId.toString())
+            database.remoteKeysDao().getRemoteKeysById(data.id)
         }
     }
 
