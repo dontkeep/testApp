@@ -54,6 +54,7 @@ class ListRemoteMediator(
             val endOfPaginationReached = page >= responseData.pagination?.totalPages!!
 
             val lists = responseData.data?.lists?.mapNotNull { list ->
+                Log.d("RemoteMediator", "Processing item: $list")
                 list?.let {
                     ListEntity(
                         id = it.id?.toString()
@@ -87,6 +88,7 @@ class ListRemoteMediator(
                     )
                 }
                 keys?.let { database.remoteKeysDao().insertAll(it) }
+                Log.d("List Size", lists?.size.toString())
                 lists?.let { database.listDao().insertAll(it) }
             }
 
@@ -97,11 +99,33 @@ class ListRemoteMediator(
     }
 
 
+//    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
+//        return state.pages.lastOrNull()  { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
+//            Log.d("statePages Last", state.pages.toString())
+//            Log.d("data Last", data.toString())
+//            database.remoteKeysDao().getRemoteKeysById(data.id)
+//        }
+//    }
+
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
-        return state.pages.lastOrNull()  { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
             Log.d("statePages Last", state.pages.toString())
             Log.d("data Last", data.toString())
-            database.remoteKeysDao().getRemoteKeysById(data.id)
+
+            // Check the number of items in the database
+            val itemsInDatabase = database.listDao().getCountByType(type)
+
+            // Adjust the ID based on the condition
+            val adjustedId = if (itemsInDatabase == state.config.pageSize) {
+                data.id.toInt() - state.config.pageSize + 1
+            } else {
+                data.id.toInt()
+            }
+
+            Log.d("Adjusted ID", adjustedId.toString())
+
+            // Retrieve the remote key using the adjusted ID
+            database.remoteKeysDao().getRemoteKeysById(adjustedId.toString())
         }
     }
 

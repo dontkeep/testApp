@@ -24,4 +24,7 @@ interface ListDao {
 
     @Query("DELETE FROM list_table")
     suspend fun clearAll()
+
+    @Query("SELECT COUNT(*) FROM list_table WHERE type = :type")
+    suspend fun getCountByType(type: String): Int
 }
