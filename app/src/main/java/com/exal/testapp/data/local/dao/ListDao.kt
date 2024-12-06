@@ -10,7 +10,7 @@ import com.exal.testapp.data.local.entity.ListEntity
 
 @Dao
 interface ListDao {
-    @Query("SELECT * FROM list_table WHERE type = :type ORDER BY id ASC")
+    @Query("SELECT * FROM list_table WHERE type = :type ORDER BY createdAt DESC")
     fun getListsByType(type: String): PagingSource<Int, ListEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

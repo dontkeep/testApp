@@ -108,14 +108,12 @@ class ListRemoteMediator(
 //    }
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
             Log.d("statePages Last", state.pages.toString())
             Log.d("data Last", data.toString())
 
-            // Check the number of items in the database
             val itemsInDatabase = database.listDao().getCountByType(type)
 
-            // Adjust the ID based on the condition
             val adjustedId = if (itemsInDatabase == state.config.pageSize) {
                 data.id.toInt() - state.config.pageSize + 1
             } else {
@@ -124,7 +122,6 @@ class ListRemoteMediator(
 
             Log.d("Adjusted ID", adjustedId.toString())
 
-            // Retrieve the remote key using the adjusted ID
             database.remoteKeysDao().getRemoteKeysById(adjustedId.toString())
         }
     }
