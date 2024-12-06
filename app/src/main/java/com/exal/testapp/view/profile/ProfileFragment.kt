@@ -69,19 +69,18 @@ class ProfileFragment : Fragment() {
                 2 -> {
                     viewModel.logout()
                     tokenManager.clearToken()
+                    viewModel.clearDatabase()
                     logoutObserver()
                 }
             }
         }
 
-        // Set content for ComposeView
         binding.composeView.setContent {
             MaterialTheme {
                 LineSample()
             }
         }
 
-        // Setup for calendar button
         binding.calendarButton.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
                 val monthName = DateFormatSymbols().months[month]

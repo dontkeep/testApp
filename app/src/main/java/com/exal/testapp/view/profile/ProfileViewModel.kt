@@ -22,4 +22,12 @@ class ProfileViewModel @Inject constructor(private val dataRepository: DataRepos
             }
         }
     }
+
+    fun clearDatabase() {
+        viewModelScope.launch {
+            dataRepository.deleteAllDatabaseData().collect { resource ->
+                _logoutState.postValue(resource)
+            }
+        }
+    }
 }

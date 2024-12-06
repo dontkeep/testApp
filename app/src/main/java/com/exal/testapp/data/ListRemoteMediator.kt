@@ -1,5 +1,6 @@
 package com.exal.testapp.data
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -52,6 +53,23 @@ class ListRemoteMediator(
 
             val endOfPaginationReached = page >= responseData.pagination?.totalPages!!
 
+            val lists = responseData.data?.lists?.mapNotNull { list ->
+                list?.let {
+                    ListEntity(
+                        id = it.id?.toString()
+                            ?: throw IllegalArgumentException("ID is required"),
+                        title = it.title,
+                        type = type,
+                        totalExpenses = it.totalExpenses,
+                        totalProducts = it.totalProducts,
+                        totalItems = it.totalItems,
+                        createdAt = it.createdAt,
+                        image = it.image
+                    )
+                }
+            }
+//                ?.sortedByDescending { it.createdAt }
+
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     database.remoteKeysDao().clearRemoteKeys()
@@ -69,22 +87,6 @@ class ListRemoteMediator(
                     )
                 }
                 keys?.let { database.remoteKeysDao().insertAll(it) }
-
-                val lists = responseData.data?.lists?.mapNotNull { list ->
-                    list?.let {
-                        ListEntity(
-                            id = it.id?.toString()
-                                ?: throw IllegalArgumentException("ID is required"),
-                            title = it.title,
-                            type = type,
-                            totalExpenses = it.totalExpenses,
-                            totalProducts = it.totalProducts,
-                            totalItems = it.totalItems,
-                            createdAt = it.createdAt,
-                            image = it.image
-                        )
-                    }
-                }
                 lists?.let { database.listDao().insertAll(it) }
             }
 
@@ -96,13 +98,17 @@ class ListRemoteMediator(
 
 
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
-        return state.pages.lastOrNull()  { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
+        return state.pages.lastOrNull()  { it.data.isNotEmpty() }?.data?.lastOrNull()?.let { data ->
+            Log.d("statePages Last", state.pages.toString())
+            Log.d("data Last", data.toString())
             database.remoteKeysDao().getRemoteKeysById(data.id)
         }
     }
 
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, ListEntity>): RemoteKeys? {
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
+        return state.pages.firstOrNull() { it.data.isNotEmpty() }?.data?.firstOrNull()?.let { data ->
+            Log.d("statePages First", state.pages.toString())
+            Log.d("data First", data.toString())
             database.remoteKeysDao().getRemoteKeysById(data.id)
         }
     }

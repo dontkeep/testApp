@@ -177,4 +177,15 @@ class DataRepository @Inject constructor(
             pagingSourceFactory = { database.listDao().getListsByType(type) }
         ).flow
     }
+
+    fun deleteAllDatabaseData(): Flow<Resource<Boolean>> = flow {
+        emit(Resource.Loading())
+        try {
+            database.listDao().clearAll()
+            database.remoteKeysDao().clearRemoteKeys()
+            emit(Resource.Success(true))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Error deleting data"))
+        }
+    }
 }
