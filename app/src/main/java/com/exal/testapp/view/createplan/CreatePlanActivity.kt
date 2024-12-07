@@ -87,6 +87,13 @@ class CreatePlanActivity : AppCompatActivity() {
             val receiptImagePart = null
             val thumbnailImagePart = null
 
+            val currentDate = System.currentTimeMillis()
+            val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+            val formattedDate = dateFormat.format(java.util.Date(currentDate))
+            val boughtAt = createRequestBody(formattedDate)
+
+
+
             viewModel.postData(
                 titleRequestBody,
                 receiptImagePart,
@@ -94,7 +101,8 @@ class CreatePlanActivity : AppCompatActivity() {
                 productItemsRequestBody,
                 typeRequestBody,
                 totalExpensesRequestBody,
-                totalItemsPart
+                totalItemsPart,
+                boughtAt
             ).collect { resource ->
                 handleResource(resource)
             }

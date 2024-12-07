@@ -26,11 +26,13 @@ class HomeViewModel @Inject constructor(private val dataRepository: DataReposito
     val totalItems: LiveData<Int> get() = _totalItems
 
     fun setLists(list: List<ListEntity>) {
-        list.forEach { item ->
-            val totalExpenses = item.totalExpenses?.toDoubleOrNull()?.toInt() ?: 0
+        _totalItems.value = list.sumOf { item ->
             val totalItems = item.totalItems ?: 0
-            _totalExpenses.value = (_totalExpenses.value ?: 0) + totalExpenses
-            _totalItems.value = (_totalItems.value ?: 0) + totalItems
+            totalItems
+        }
+        _totalExpenses.value = list.sumOf { item ->
+            val totalExpenses = item.totalExpenses?.toDoubleOrNull()?.toInt() ?: 0
+            totalExpenses
         }
     }
 

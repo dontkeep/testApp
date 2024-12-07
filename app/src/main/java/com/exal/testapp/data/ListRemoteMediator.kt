@@ -84,6 +84,7 @@ class ListRemoteMediator(
                         totalProducts = it.totalProducts,
                         totalItems = it.totalItems,
                         createdAt = it.createdAt,
+                        boughtAt = it.boughtAt,
                         image = it.image
                     )
                 }

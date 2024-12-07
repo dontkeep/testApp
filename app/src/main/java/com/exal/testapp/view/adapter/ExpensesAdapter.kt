@@ -1,19 +1,17 @@
 package com.exal.testapp.view.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.exal.testapp.R
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.databinding.ItemRowExpenseBinding
+import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 
-class ExpensesAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class ExpensesAdapter(private val onItemClick: (Int, String, String) -> Unit): PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemRowExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ListEntity) {
@@ -21,14 +19,14 @@ class ExpensesAdapter(private val onItemClick: (Int, String) -> Unit): PagingDat
             val totalExpensesInt = item.totalExpenses?.toDoubleOrNull()?.toInt()
             binding.itemPrice.text = totalExpensesInt?.let { formatRupiah(it) } ?: "0"
             "${item.totalItems} Items".also { binding.itemTotal.text = it }
-            binding.itemDate.text = "12-1-2024"
-            Glide.with(itemView.context)
-                .load(item.image)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.placeholder)
-                        .error(R.drawable.ic_close)
-                )
-                .into(binding.itemImage)
+            binding.itemDate.text = DateFormatter.localizeDate(item.boughtAt ?: "")
+//            Glide.with(itemView.context)
+//                .load(item.image)
+//                .apply(
+//                    RequestOptions.placeholderOf(R.drawable.placeholder)
+//                        .error(R.drawable.ic_close)
+//                )
+//                .into(binding.itemImage)
         }
     }
 
@@ -44,7 +42,7 @@ class ExpensesAdapter(private val onItemClick: (Int, String) -> Unit): PagingDat
         }
         holder.itemView.setOnClickListener {
             if (item != null) {
-                onItemClick(item.id.toInt(), item.title ?: "")
+                onItemClick(item.id.toInt(), item.title ?: "", item.boughtAt ?: "")
             }
         }
     }

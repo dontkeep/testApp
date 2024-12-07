@@ -41,8 +41,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pagingAdapter = ExpensesAdapter{id, title ->
-            navigateToDetail(id = id, title = title)
+        pagingAdapter = ExpensesAdapter{id, title, date ->
+            navigateToDetail(id = id, title = title, date = date)
         }
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
         binding.rvExpense.adapter = pagingAdapter
@@ -51,7 +51,6 @@ class HomeFragment : Fragment() {
             homeViewModel.getLists("Track")
             homeViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
                 Log.d("HomeFragment", "Paging Data: $pagingData")
-                // calculate item.amount & item.total
 
                 pagingAdapter.submitData(lifecycle, pagingData)
                 val list = pagingAdapter.snapshot().items
@@ -73,10 +72,11 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun navigateToDetail(id: Int, title: String) {
+    private fun navigateToDetail(id: Int, title: String, date: String) {
         val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_DATE, date)
         startActivity(intent)
     }
 

@@ -3,6 +3,7 @@
     <color name="iconButton">#E6E6E6</color>
     <color name="cardColor">#4E4E4E</color>
     <color name="navColor">#313131</color>
+    <color name="totalColor">#313131</color>
     <color name="navIconColor">#E6E6E6</color>
     <color name="textGradient">#FFFFFF</color>
     <color name="navIndicator">#555555</color>

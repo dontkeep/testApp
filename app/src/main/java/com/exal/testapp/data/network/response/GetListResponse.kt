@@ -43,6 +43,9 @@ data class ListsItem(
 	@field:SerializedName("total_products")
 	val totalProducts: Int? = null,
 
+	@field:SerializedName("boughtAt")
+	val boughtAt: String? = null,
+
 	@field:SerializedName("total_items")
 	val totalItems: Int? = null
 )

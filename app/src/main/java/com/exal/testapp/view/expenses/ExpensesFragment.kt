@@ -44,8 +44,8 @@ class ExpensesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pagingAdapter = ExpensesAdapter{ id, title ->
-            navigateToDetail(id = id, title = title)
+        pagingAdapter = ExpensesAdapter{ id, title, date ->
+            navigateToDetail(id = id, title = title, date = date)
         }
         binding.rvExpense.layoutManager = LinearLayoutManager(context)
         binding.rvExpense.adapter = pagingAdapter
@@ -64,18 +64,21 @@ class ExpensesFragment : Fragment() {
 
         binding.icCalender.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
-                expenseViewModel.getLists("Track", month, year)
-                expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
-                    pagingAdapter.submitData(lifecycle, pagingData)
+                lifecycleScope.launch {
+                    expenseViewModel.getLists("Track", month, year)
+                    expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                        pagingAdapter.submitData(lifecycle, pagingData)
+                    }
                 }
             }.show()
         }
     }
 
-    private fun navigateToDetail(id: Int, title: String) {
+    private fun navigateToDetail(id: Int, title: String, date: String) {
         val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_DATE, date)
         startActivity(intent)
     }
 

@@ -71,17 +71,14 @@ class PlanFragment : Fragment() {
         }
 
         binding.icCalender.setOnClickListener {
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .build()
-
-            datePicker.show(parentFragmentManager, "DatePicker")
-
-            datePicker.addOnPositiveButtonClickListener {
-                Toast.makeText(requireContext(), format.format(it), Toast.LENGTH_SHORT).show()
-            }
+            MonthYearPickerDialog(requireContext()) { month, year ->
+                lifecycleScope.launch {
+                    planViewModel.getLists("Plan", month, year)
+                    planViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                        pagingAdapter.submitData(lifecycle, pagingData)
+                    }
+                }
+            }.show()
         }
 
         binding.floatingActionButton.setOnClickListener {

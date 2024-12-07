@@ -20,6 +20,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -64,7 +65,8 @@ interface ApiServices {
         @Part("product_items") productItems: RequestBody,
         @Part("type") type: RequestBody,
         @Part("total_expenses") totalExpenses: RequestBody,
-        @Part("total_items") totalItems: RequestBody
+        @Part("total_items") totalItems: RequestBody,
+        @Part("boughtAt") boughtAt: RequestBody
     ): PostListResponse
 
     @GET("/list")

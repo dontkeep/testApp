@@ -119,7 +119,8 @@ class DataRepository @Inject constructor(
         productItems: RequestBody,
         type: RequestBody,
         totalExpenses: RequestBody,
-        totalItems: RequestBody
+        totalItems: RequestBody,
+        boughtAt: RequestBody
     ): Flow<Resource<PostListResponse>> = flow {
         emit(Resource.Loading())
         try {
@@ -131,7 +132,8 @@ class DataRepository @Inject constructor(
                 productItems,
                 type,
                 totalExpenses,
-                totalItems
+                totalItems,
+                boughtAt
             )
             emit(Resource.Success(response))
         } catch (e: Exception) {

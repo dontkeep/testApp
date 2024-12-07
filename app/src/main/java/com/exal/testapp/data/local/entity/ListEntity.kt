@@ -12,5 +12,6 @@ data class ListEntity(
     val totalProducts: Int?,
     val totalItems: Int?,
     val createdAt: String?,
+    val boughtAt: String?,
     val image: String?
 )

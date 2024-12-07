@@ -1,5 +1,6 @@
 package com.exal.testapp.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.network.response.ListsItem
 import com.exal.testapp.databinding.ItemPlanListBinding
+import com.exal.testapp.helper.DateFormatter
 
 class PlanAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAdapter<ListEntity, PlanAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
@@ -16,9 +18,9 @@ class PlanAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAda
         fun bind(item: ListEntity) {
             binding.titleTv.text = item.title
             "${item.totalItems} Items".also { binding.totalTv.text = it }
-            binding.dayTv.text = item.createdAt?.substring(8, 10)
-            binding.dateTv.text = item.createdAt?.substring(5, 7)
-            binding.yearTv.text = item.createdAt?.substring(0, 4)
+            binding.dayTv.text = DateFormatter.localizeDay(item.boughtAt ?: "")
+            binding.dateTv.text = DateFormatter.localizeMonth(item.boughtAt ?: "")
+            binding.yearTv.text = DateFormatter.localizeYear(item.boughtAt ?: "")
         }
     }
 

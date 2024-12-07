@@ -44,7 +44,7 @@
     <ImageView
         android:id="@+id/shareBtn"
         android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_height="26dp"
         android:layout_marginEnd="24dp"
         android:src="@drawable/ic_share"
         app:layout_constraintBottom_toBottomOf="@+id/homeTxt"
@@ -112,12 +112,41 @@
         android:id="@+id/item_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:clipToPadding="false"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTv" />
+
+    <TextView
+        android:id="@+id/totalPriceTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/total_shape"
+        android:paddingStart="10dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="8dp"
+        android:text="Total : "
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/dateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Senin 03 agustus 2024"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/titleTv"
         app:layout_constraintTop_toBottomOf="@+id/titleTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -239,6 +239,11 @@ class CreateListActivity : AppCompatActivity() {
             val receiptImagePart = createImagePart("receipt_image", receiptImagePath)
             val thumbnailImagePart = createImagePart("thumbnail_image", thumbnailImagePath)
 
+            val currentDate = System.currentTimeMillis()
+            val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+            val formattedDate = dateFormat.format(java.util.Date(currentDate))
+            val boughtAt = createRequestBody(formattedDate)
+
             Log.d("CreateListActivity", "Thumbnail Image Part: $thumbnailImagePart")
             Log.d("CreateListActivity", "Receipt Image Part: $receiptImagePart")
 
@@ -249,7 +254,8 @@ class CreateListActivity : AppCompatActivity() {
                 productItemsRequestBody,
                 typeRequestBody,
                 totalExpensesRequestBody,
-                totalItemsPart
+                totalItemsPart,
+                boughtAt
             ).collect { resource ->
                 handleResource(resource)
             }
