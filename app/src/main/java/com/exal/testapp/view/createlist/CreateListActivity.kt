@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +38,9 @@ import com.exal.testapp.databinding.ActivityCreateListBinding
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ItemAdapter
 import com.exal.testapp.view.camera.CameraActivity
+import com.exal.testapp.view.perspective.PerspectiveActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -101,6 +105,16 @@ class CreateListActivity : AppCompatActivity() {
         return cameraGranted
     }
 
+    private val launcherGallery = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            processSelectedImage(uri)
+        } else {
+            Snackbar.make(binding.root, "Tidak ada gambar yang dipilih", Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
     private var clicked = false
 
     @SuppressLint("WrongConstant")
@@ -116,8 +130,6 @@ class CreateListActivity : AppCompatActivity() {
         }
         val imageUri = intent.getStringExtra("IMAGE_URI")
 
-        val thumbnailUri: Uri
-
         if (savedInstanceState == null) {
             saveReceivedData()
         }
@@ -129,11 +141,13 @@ class CreateListActivity : AppCompatActivity() {
             viewModel.imageUri.observe(this) { image ->
                 binding.imageView.setImageURI(image.toUri())
             }
-        } else {
-            Log.e("CreateListActivity", "Path gambar tidak tersedia!")
         }
 
         rvSetup()
+
+        binding.cardImage.setOnClickListener {
+            openGallery()
+        }
 
         binding.fabBottomAppBar.setOnClickListener {
             onAddButtonClick()
@@ -147,7 +161,17 @@ class CreateListActivity : AppCompatActivity() {
                     val intent = Intent(this, CameraActivity::class.java)
                     startActivity(intent)
                 } else {
-
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle(resources.getString(R.string.create_new_list))
+                        .setMessage(resources.getString(R.string.items_will_be_removed))
+                        .setNeutralButton(resources.getString(R.string.cancel)) { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .setPositiveButton(resources.getString(R.string.proceed)){ _, _ ->
+                            requestPermissionsLauncher.launch(REQUIRED_CAMERA_PERMISSION)
+                            viewModel.setProductList(emptyList(), 0)
+                        }
+                        .show()
                 }
             }
         }
@@ -163,6 +187,11 @@ class CreateListActivity : AppCompatActivity() {
         observeViewModel()
     }
 
+    private fun processSelectedImage(uri: Uri) {
+        binding.imageView.setImageURI(uri)
+        receiptImagePath = uri.toString()
+    }
+
     private fun observeViewModel() {
         viewModel.productList.observe(this) { products ->
             (binding.itemRv.adapter as? ItemAdapter)?.submitList(products)
@@ -174,6 +203,9 @@ class CreateListActivity : AppCompatActivity() {
         }
     }
 
+    private fun openGallery() {
+        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
 
     private fun handleSaveButtonClick() {
         lifecycleScope.launch {
@@ -194,6 +226,8 @@ class CreateListActivity : AppCompatActivity() {
 
             if(thumbnailImagePath == null){
                 thumbnailImagePath = receiptImagePath
+            } else {
+                thumbnailImagePath = viewModel.imageUri.value
             }
             Log.d("CreateListActivity", "Receipt Image Path: $receiptImagePath")
             Log.d("CreateListActivity", "Thumbnail Image Path: $thumbnailImagePath")
