@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.data.Resource
 import com.exal.testapp.databinding.FragmentHomeBinding
@@ -49,6 +50,9 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             homeViewModel.getLists("Track")
             homeViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                Log.d("HomeFragment", "Paging Data: $pagingData")
+                // calculate item.amount & item.total
+
                 pagingAdapter.submitData(lifecycle, pagingData)
             }
         }

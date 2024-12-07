@@ -5,16 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.exal.testapp.R
 import com.exal.testapp.data.local.entity.ListEntity
-import com.exal.testapp.data.network.response.DataItem
-import com.exal.testapp.data.network.response.ListsItem
 import com.exal.testapp.databinding.ItemRowExpenseBinding
-import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 
 class ExpensesAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAdapter<ListEntity, ExpensesAdapter.ItemViewHolder>(DIFF_CALLBACK){

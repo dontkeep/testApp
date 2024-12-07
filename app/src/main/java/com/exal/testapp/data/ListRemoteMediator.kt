@@ -85,7 +85,6 @@ class ListRemoteMediator(
                     )
                 }
             }
-//                ?.sortedByDescending { it.createdAt }
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
