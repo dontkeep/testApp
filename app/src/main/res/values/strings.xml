@@ -40,5 +40,6 @@
     <string name="scan_result">Scan Result</string>
     <string name="next">Next</string>
     <string name="detail_list">Detail List</string>
+    <string name="crop_receipt">Crop Receipt</string>
 
 </resources>
