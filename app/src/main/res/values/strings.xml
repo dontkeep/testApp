@@ -40,6 +40,10 @@
     <string name="scan_result">Scan Result</string>
     <string name="next">Next</string>
     <string name="detail_list">Detail List</string>
+    <string name="create_new_list">Create New list?</string>
+    <string name="items_will_be_removed">All your current list and images will be removed.</string>
+    <string name="cancel">Cancel</string>
+    <string name="proceed">Proceed</string>
     <string name="crop_receipt">Crop Receipt</string>
 
 </resources>
