@@ -54,6 +54,8 @@ class HomeFragment : Fragment() {
                 // calculate item.amount & item.total
 
                 pagingAdapter.submitData(lifecycle, pagingData)
+                val list = pagingAdapter.snapshot().items
+                Log.d("HomeFragment", "List of times inside ListAdapter: $list")
             }
         }
 
