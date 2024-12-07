@@ -12,13 +12,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.MainActivity
-import com.exal.testapp.R
 import com.exal.testapp.data.Resource
 import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.databinding.ActivityCreatePlanBinding
 import com.exal.testapp.view.adapter.ItemAdapter
-import com.exal.testapp.view.createplan.AddManualDialogFragment
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -42,6 +40,10 @@ class CreatePlanActivity : AppCompatActivity() {
         }
 
         rvSetup()
+
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
 
         binding.fabBottomAppBar.setOnClickListener {
             val dialogFragment = AddManualDialogFragment()

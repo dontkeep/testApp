@@ -41,6 +41,10 @@ class DetailExpenseActivity : AppCompatActivity() {
 
         rvSetup()
 
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
+
         binding.titleTv.text = expenseTitle
 
         binding.editBtn.setOnClickListener {

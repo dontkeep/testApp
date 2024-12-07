@@ -63,6 +63,10 @@ class PerspectiveActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
+
         binding.transformBtn.setOnClickListener {
             val points = binding.edtView.getPerspective()
             if (points == null || !viewModel.isValidPoints(points)) {

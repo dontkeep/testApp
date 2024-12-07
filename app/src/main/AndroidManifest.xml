@@ -50,6 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".view.createlist.CreateListActivity"
+            android:noHistory="true"
             android:exported="false" />
         <activity
             android:name=".view.register.RegisterActivity"

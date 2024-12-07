@@ -145,6 +145,10 @@ class CreateListActivity : AppCompatActivity() {
 
         rvSetup()
 
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
+
         binding.cardImage.setOnClickListener {
             openGallery()
         }
