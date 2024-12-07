@@ -2,16 +2,18 @@ package com.exal.testapp.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.network.response.ListsItem
 import com.exal.testapp.databinding.ItemPlanListBinding
 
-class PlanAdapter(private val onItemClick: (Int, String) -> Unit): ListAdapter<ListsItem, PlanAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class PlanAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAdapter<ListEntity, PlanAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemPlanListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ListsItem) {
+        fun bind(item: ListEntity) {
             binding.titleTv.text = item.title
             "${item.totalItems} Items".also { binding.totalTv.text = it }
             binding.dayTv.text = item.createdAt?.substring(8, 10)
@@ -27,19 +29,23 @@ class PlanAdapter(private val onItemClick: (Int, String) -> Unit): ListAdapter<L
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        if (item != null) {
+            holder.bind(item)
+        }
         holder.itemView.setOnClickListener {
-            onItemClick(item.id ?: -1, item.title ?: "")
+            if (item != null) {
+                onItemClick(item.id.toInt(), item.title ?: "")
+            }
         }
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListsItem>(){
-            override fun areItemsTheSame(oldItem: ListsItem, newItem: ListsItem): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ListEntity>(){
+            override fun areItemsTheSame(oldItem: ListEntity, newItem: ListEntity): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: ListsItem, newItem: ListsItem): Boolean {
+            override fun areContentsTheSame(oldItem: ListEntity, newItem: ListEntity): Boolean {
                 return oldItem == newItem
             }
         }

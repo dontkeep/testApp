@@ -27,9 +27,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
-
-    private var totalPrice = 0
-    private var totalItem = 0
+    private lateinit var pagingAdapter: ExpensesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,47 +40,26 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ExpensesAdapter{id, title ->
+        pagingAdapter = ExpensesAdapter{id, title ->
             navigateToDetail(id = id, title = title)
         }
         binding.rvExpense.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvExpense.adapter = adapter
+        binding.rvExpense.adapter = pagingAdapter
 
-//        lifecycleScope.lau
-////            Log.d("ExpensesFragment", "Fetching data...")
-////            homeViewModel.getLists("Track").collectLatest { pagingData ->
-////                adapter.submitData(pagingData)
-////            }
-////        }nch {
+        lifecycleScope.launch {
+            homeViewModel.getLists("Track")
+            homeViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                pagingAdapter.submitData(lifecycle, pagingData)
+            }
+        }
 
-//        homeViewModel.expenses.observe(viewLifecycleOwner, { resource ->
-//            when (resource) {
-//                is Resource.Loading -> {
-//                    binding.progressBar.visibility = View.VISIBLE
-//                }
-//                is Resource.Success -> {
-//                    binding.progressBar.visibility = View.GONE
-//                    resource.data?.data?.lists?.take(5).let { expenseList ->
-//                        adapter.submitList(expenseList)
-//                    }
-//                    resource.data?.data?.lists?.forEach { expense ->
-//                        totalPrice += expense?.totalExpenses?.toDouble()?.toInt() ?: 0
-//                        binding.total.text = formatRupiah(totalPrice)
-//                        totalItem += expense?.totalItems ?: 0
-//                        binding.items.text = "$totalItem Items"
-//                    }
-//                }
-//                is Resource.Error -> {
-//                    binding.progressBar.visibility = View.GONE
-//                    resource.message?.let { message ->
-//                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        })
+        homeViewModel.totalExpenses.observe(viewLifecycleOwner) { totalPrice ->
+            binding.total.text = formatRupiah(totalPrice)
+        }
 
-        binding.total.text = formatRupiah(totalPrice)
-        binding.items.text = "$totalItem Items"
+        homeViewModel.totalItems.observe(viewLifecycleOwner) { totalItems ->
+            binding.items.text = "${totalItems} items"
+        }
 
         binding.floatingActionButton.setOnClickListener {
             val intent = Intent(requireContext(), CreateListActivity::class.java)

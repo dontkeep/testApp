@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.R
 import com.exal.testapp.data.Resource
@@ -15,6 +16,8 @@ import com.exal.testapp.databinding.FragmentExpensesBinding
 import com.exal.testapp.databinding.FragmentPlanBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
 import com.exal.testapp.helper.formatRupiah
+import com.exal.testapp.view.adapter.ExpensesAdapter
+import com.exal.testapp.view.adapter.LoadingStateAdapter
 import com.exal.testapp.view.adapter.PlanAdapter
 import com.exal.testapp.view.createplan.CreatePlanActivity
 import com.exal.testapp.view.detailexpense.DetailExpenseActivity
@@ -22,6 +25,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatterBuilder
@@ -32,6 +36,7 @@ class PlanFragment : Fragment() {
     private var _binding: FragmentPlanBinding? = null
     private val binding get() = _binding!!
     private val planViewModel: PlanViewModel by viewModels()
+    private lateinit var pagingAdapter: PlanAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,34 +51,24 @@ class PlanFragment : Fragment() {
 
         val format = SimpleDateFormat("dd MMMM yyyy", Locale("in", "ID"))
 
-        val adapter = PlanAdapter{ id, title ->
+        pagingAdapter = PlanAdapter{ id, title ->
             navigateToDetail(id = id, title = title)
         }
 
+        val loadingStateAdapter = LoadingStateAdapter { pagingAdapter.retry() }
+        binding.rvPlan.adapter = pagingAdapter.withLoadStateFooter(
+            footer = loadingStateAdapter
+        )
+
         binding.rvPlan.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvPlan.adapter = adapter
+        binding.rvPlan.adapter = pagingAdapter
 
-        planViewModel.getExpenseList()
-
-        planViewModel.expenses.observe(viewLifecycleOwner, { resource ->
-            when (resource) {
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                }
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    resource.data?.data?.lists.let { expenseList ->
-                        adapter.submitList(expenseList)
-                    }
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    resource.message?.let { message ->
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                    }
-                }
+        lifecycleScope.launch {
+            planViewModel.getLists("Plan", null, null)
+            planViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                pagingAdapter.submitData(lifecycle, pagingData)
             }
-        })
+        }
 
         binding.icCalender.setOnClickListener {
             val datePicker =

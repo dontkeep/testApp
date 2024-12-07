@@ -178,7 +178,25 @@ class DataRepository @Inject constructor(
             ),
             pagingSourceFactory = {
                 val data = database.listDao().getListsByType(type)
-                Log.d("ListDao", "Query result size: ${data}")
+                return@Pager data
+            }
+        ).flow
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    fun getFiveListData(type: String): Flow<PagingData<ListEntity>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10),
+            remoteMediator = ListRemoteMediator(
+                type = type,
+                month = null,
+                year = null,
+                token = "${tokenManager.getToken()}",
+                apiService = apiService,
+                database = database
+            ),
+            pagingSourceFactory = {
+                val data = database.listDao().getFiveLatestData(type)
                 return@Pager data
             }
         ).flow
