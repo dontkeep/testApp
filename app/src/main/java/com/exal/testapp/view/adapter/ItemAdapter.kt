@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.exal.testapp.data.network.response.ProductsItem
 import com.exal.testapp.databinding.ItemExpensesItemBinding
+import com.exal.testapp.helper.formatRupiah
 
 class ItemAdapter(private val onDelete: (ProductsItem) -> Unit): ListAdapter<ProductsItem, ItemAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
@@ -26,6 +27,11 @@ class ItemAdapter(private val onDelete: (ProductsItem) -> Unit): ListAdapter<Pro
                 itemName.text = item.name
                 itemCategory.text = categoryMapping[item.detail?.categoryIndex]
                 itemQuantity.text = item.amount.toString()
+                if (item.price == 0) {
+                    itemPrice.text = "-"
+                } else {
+                    itemPrice.text = item.price?.let { formatRupiah(it) }
+                }
                 deleteButton.setOnClickListener {
                     onDelete(item)
                 }
