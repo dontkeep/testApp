@@ -81,7 +81,7 @@ interface ApiServices {
         @Path("id") id: Int
     ): DetailListResponse
 
-    @GET("/list/")
+    @GET("/list/filter")
     suspend fun getExpensesMonth(
         @Header("Authorization") token: String,
         @Query("type") type: String = "Track",

@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
 
                 pagingAdapter.submitData(lifecycle, pagingData)
                 val list = pagingAdapter.snapshot().items
-                Log.d("HomeFragment", "List of times inside ListAdapter: $list")
+                homeViewModel.setLists(list)
             }
         }
 

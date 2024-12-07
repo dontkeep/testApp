@@ -57,7 +57,6 @@ class ListRemoteMediator(
 
         try {
             val responseData: GetListResponse
-
             if (month != null && year != null) {
                 Log.d("RemoteMediator", "Fetching data for month: $month, year: $year")
                 responseData = apiService.getExpensesMonth("Bearer: $token", type, month, year, page, state.config.pageSize)
@@ -66,6 +65,10 @@ class ListRemoteMediator(
                 responseData = apiService.getExpenseList("Bearer: $token", type, page, state.config.pageSize)
             }
 
+            if (responseData.message == "No lists found for this user") {
+                database.listDao().clearByType(type)
+                database.remoteKeysDao().clearRemoteKeys()
+            }
 
             val endOfPaginationReached = page >= responseData.pagination?.totalPages!!
 

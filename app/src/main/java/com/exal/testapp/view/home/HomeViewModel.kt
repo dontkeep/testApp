@@ -25,6 +25,15 @@ class HomeViewModel @Inject constructor(private val dataRepository: DataReposito
     private val _totalItems = MutableLiveData<Int>()
     val totalItems: LiveData<Int> get() = _totalItems
 
+    fun setLists(list: List<ListEntity>) {
+        list.forEach { item ->
+            val totalExpenses = item.totalExpenses?.toDoubleOrNull()?.toInt() ?: 0
+            val totalItems = item.totalItems ?: 0
+            _totalExpenses.value = (_totalExpenses.value ?: 0) + totalExpenses
+            _totalItems.value = (_totalItems.value ?: 0) + totalItems
+        }
+    }
+
     fun getLists(type: String) {
         viewModelScope.launch {
             dataRepository.getFiveListData(type)
