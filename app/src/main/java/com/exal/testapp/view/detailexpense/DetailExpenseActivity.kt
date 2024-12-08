@@ -1,7 +1,9 @@
 package com.exal.testapp.view.detailexpense
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -13,6 +15,8 @@ import com.exal.testapp.databinding.ActivityDetailExpenseBinding
 import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.DetailExpenseAdapter
+import com.exal.testapp.view.editlistdetail.EditListDetailActivity
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,6 +24,9 @@ class DetailExpenseActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailExpenseBinding
     private val viewModel: DetailExpenseViewModel by viewModels()
+
+    private lateinit var expenseTitle: String
+    private var listId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +39,17 @@ class DetailExpenseActivity : AppCompatActivity() {
             insets
         }
 
-        val expenseTitle = intent.getStringExtra(EXTRA_EXPENSE_TITLE)
-        val expenseDate = intent.getStringExtra(EXTRA_EXPENSE_DATE)
+        listId = intent.getIntExtra(EXTRA_EXPENSE_ID, -1)
+        expenseTitle = intent.getStringExtra(EXTRA_EXPENSE_TITLE).toString()
+        Log.d("DetailExpenseActivity", "Expense ID: $listId, Title: $expenseTitle")
+        val expenseDate = intent.getStringExtra(EXTRA_EXPENSE_DATE).toString()
+        val expenseType = intent.getStringExtra(EXTRA_EXPENSE_TYPE)
+
+        if (expenseType == "Detail Plan") {
+            binding.cardImage.visibility = View.GONE
+            binding.shareBtn.visibility = View.GONE
+        }
+        binding.activityTxt.text = expenseType
 
         binding.dateTv.text = DateFormatter.localizeDate(expenseDate ?: "")
 
@@ -54,12 +70,24 @@ class DetailExpenseActivity : AppCompatActivity() {
         binding.titleTv.text = expenseTitle
 
         binding.editBtn.setOnClickListener {
-            Toast.makeText(this, "Edit List Clicked", Toast.LENGTH_SHORT).show()
+            navigateToEditListDetail()
         }
 
         binding.shareBtn.setOnClickListener {
             Toast.makeText(this, "Share List Clicked", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun navigateToEditListDetail() {
+        val intent = Intent(this, EditListDetailActivity::class.java)
+        intent.putExtra(EditListDetailActivity.EXTRA_EXPENSE_ID, listId)
+        intent.putExtra(EditListDetailActivity.EXTRA_EXPENSE_TITLE, expenseTitle)
+
+        val detailItems = viewModel.productList.value?.data?.data?.detailItems.orEmpty()
+        val jsonList = Gson().toJson(detailItems)
+        intent.putExtra(EditListDetailActivity.EXTRA_DETAIL_LIST, jsonList)
+
+        startActivity(intent)
     }
 
     private fun rvSetup() {
@@ -85,5 +113,6 @@ class DetailExpenseActivity : AppCompatActivity() {
         const val EXTRA_EXPENSE_ID = "extra_expense_id"
         const val EXTRA_EXPENSE_TITLE = "extra_expense_title"
         const val EXTRA_EXPENSE_DATE = "extra_expense_date"
+        const val EXTRA_EXPENSE_TYPE = "extra_expense_type"
     }
 }

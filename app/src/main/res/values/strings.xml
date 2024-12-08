@@ -46,5 +46,7 @@
     <string name="proceed">Proceed</string>
     <string name="crop_receipt">Crop Receipt</string>
     <string name="today">Today</string>
+    <string name="edit_list">Edit List</string>
+    <string name="save_changes">Save Changes</string>
 
 </resources>

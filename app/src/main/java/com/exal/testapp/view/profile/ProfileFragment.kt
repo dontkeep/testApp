@@ -2,6 +2,7 @@ package com.exal.testapp.view.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -84,6 +85,8 @@ class ProfileFragment : Fragment() {
         binding.calendarButton.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
                 val monthName = DateFormatSymbols().months[month]
+                val monthValue = month + 1
+                Log.d("month", "Bulan saat ini : $month  ||  $monthValue")
                 binding.dateTxt.text = "$monthName $year"
             }.show()
         }

@@ -87,9 +87,11 @@ class PlanFragment : Fragment() {
 
     private fun navigateToDetail(id: Int, title: String, date: String) {
         val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
+        val type = "Detail Plan"
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_DATE, date)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TYPE, type)
         startActivity(intent)
     }
 

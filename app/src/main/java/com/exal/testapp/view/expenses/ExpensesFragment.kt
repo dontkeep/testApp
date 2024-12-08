@@ -65,7 +65,9 @@ class ExpensesFragment : Fragment() {
         binding.icCalender.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
                 lifecycleScope.launch {
-                    expenseViewModel.getLists("Track", month, year)
+                    val monthValue = month + 1
+                    Log.d("month", "Bulan saat ini : $month   ||   $monthValue")
+                    expenseViewModel.getLists("Track", monthValue, year)
                     expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
                         pagingAdapter.submitData(lifecycle, pagingData)
                     }
@@ -76,9 +78,11 @@ class ExpensesFragment : Fragment() {
 
     private fun navigateToDetail(id: Int, title: String, date: String) {
         val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
+        val type = "Detail Expense"
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_DATE, date)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TYPE, type)
         startActivity(intent)
     }
 

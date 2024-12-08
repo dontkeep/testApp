@@ -20,8 +20,8 @@ class MonthYearPickerDialog(
         val cancelButton = findViewById<Button>(R.id.cancelButton)
 
         monthPicker?.apply {
-            minValue = 1
-            maxValue = 12
+            minValue = 0
+            maxValue = 11
             displayedValues = arrayOf(
                 "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
