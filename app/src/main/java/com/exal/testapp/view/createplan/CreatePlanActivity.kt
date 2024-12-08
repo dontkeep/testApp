@@ -12,21 +12,29 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.exal.testapp.MainActivity
+import com.exal.testapp.R
 import com.exal.testapp.data.Resource
 import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.databinding.ActivityCreatePlanBinding
+import com.exal.testapp.helper.DateFormatter
 import com.exal.testapp.view.adapter.ItemAdapter
 import com.google.gson.Gson
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class CreatePlanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePlanBinding
     val viewModel: CreatePlanViewModel by viewModels()
+    private var boughtAtUser = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +47,11 @@ class CreatePlanActivity : AppCompatActivity() {
             insets
         }
 
+        boughtAtUser = getString(R.string.today)
+
         rvSetup()
+
+        binding.dateTv.text = boughtAtUser
 
         binding.backBtn.setOnClickListener {
             finish()
@@ -54,6 +66,10 @@ class CreatePlanActivity : AppCompatActivity() {
             handleSaveButtonClick()
         }
 
+        binding.calendarBtn.setOnClickListener {
+            showDatePicker()
+        }
+
         viewModel.productList.observe(this) { products ->
             (binding.itemRv.adapter as? ItemAdapter)?.submitList(products)
         }
@@ -65,6 +81,42 @@ class CreatePlanActivity : AppCompatActivity() {
         }
         binding.itemRv.layoutManager = LinearLayoutManager(this)
         binding.itemRv.adapter = adapter
+    }
+
+    private fun showDatePicker() {
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select Date")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selectedDate ->
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = selectedDate
+            showTimePicker(calendar)
+        }
+
+        datePicker.show(supportFragmentManager, "DATE_PICKER")
+    }
+
+    private fun showTimePicker(calendar: Calendar) {
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setTitleText("Select Time")
+            .build()
+
+        timePicker.addOnPositiveButtonClickListener {
+            calendar.set(Calendar.HOUR_OF_DAY, timePicker.hour)
+            calendar.set(Calendar.MINUTE, timePicker.minute)
+
+            // Format date and time to "yyyy-MM-dd HH:mm:ss"
+            val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            boughtAtUser = dateFormat.format(calendar.time)
+
+            // Update UI or show a Toast
+            binding.dateTv.text = DateFormatter.normalizeDate(boughtAtUser)
+        }
+
+        timePicker.show(supportFragmentManager, "TIME_PICKER")
     }
 
     private fun handleSaveButtonClick() {
@@ -87,12 +139,14 @@ class CreatePlanActivity : AppCompatActivity() {
             val receiptImagePart = null
             val thumbnailImagePart = null
 
-            val currentDate = System.currentTimeMillis()
-            val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
-            val formattedDate = dateFormat.format(java.util.Date(currentDate))
-            val boughtAt = createRequestBody(formattedDate)
+            if (boughtAtUser == getString(R.string.today)){
+                val currentDate = System.currentTimeMillis()
+                val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                val formattedDate = dateFormat.format(java.util.Date(currentDate))
+                boughtAtUser = formattedDate
+            }
 
-
+            val boughtAt = createRequestBody(boughtAtUser)
 
             viewModel.postData(
                 titleRequestBody,

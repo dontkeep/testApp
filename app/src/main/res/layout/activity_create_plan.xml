@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".view.createplan.CreatePlanActivity">
 
+    <ImageView
+        android:id="@+id/calendarBtn"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        android:contentDescription="@string/content_image"
+        android:src="@drawable/ic_calendar"
+        app:layout_constraintBottom_toBottomOf="@+id/appBarTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appBarTxt"
+        app:tint="@color/iconButton" />
+
     <Button
         android:id="@+id/backBtn"
         style="?attr/materialIconButtonFilledStyle"
@@ -70,17 +83,41 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/dateTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Date : "
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textFieldTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldTitle" />
+
+    <TextView
+        android:id="@+id/dateTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/today"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/dateTxt"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldTitle" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:clipToPadding="false"
         android:paddingTop="8dp"
         android:paddingBottom="38dp"
         app:layout_constraintBottom_toTopOf="@+id/card_create_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/dateTv" />
 
     <View
         android:id="@+id/card_create_list"

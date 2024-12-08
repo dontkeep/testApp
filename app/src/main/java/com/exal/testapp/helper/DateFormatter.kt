@@ -68,4 +68,20 @@ object DateFormatter {
             utcDate
         }
     }
+
+    fun normalizeDate(utcDate: String): String {
+        return try {
+            val utcFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            utcFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+            val date: Date? = utcFormat.parse(utcDate)
+
+            val localFormat = SimpleDateFormat("EEEE, dd MMM yyyy, HH:mm", Locale.getDefault())
+            localFormat.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+
+            localFormat.format(date ?: return utcDate)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            utcDate
+        }
+    }
 }
