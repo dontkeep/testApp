@@ -49,10 +49,8 @@ class PlanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val format = SimpleDateFormat("dd MMMM yyyy", Locale("in", "ID"))
-
-        pagingAdapter = PlanAdapter{ id, title ->
-            navigateToDetail(id = id, title = title)
+        pagingAdapter = PlanAdapter{ id, title, date ->
+            navigateToDetail(id = id, title = title, date = date)
         }
 
         val loadingStateAdapter = LoadingStateAdapter { pagingAdapter.retry() }
@@ -87,10 +85,11 @@ class PlanFragment : Fragment() {
         }
     }
 
-    private fun navigateToDetail(id: Int, title: String) {
+    private fun navigateToDetail(id: Int, title: String, date: String) {
         val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
+        intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_DATE, date)
         startActivity(intent)
     }
 

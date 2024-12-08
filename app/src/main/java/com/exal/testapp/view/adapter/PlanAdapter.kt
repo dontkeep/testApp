@@ -12,7 +12,7 @@ import com.exal.testapp.data.network.response.ListsItem
 import com.exal.testapp.databinding.ItemPlanListBinding
 import com.exal.testapp.helper.DateFormatter
 
-class PlanAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAdapter<ListEntity, PlanAdapter.ItemViewHolder>(DIFF_CALLBACK){
+class PlanAdapter(private val onItemClick: (Int, String, String) -> Unit): PagingDataAdapter<ListEntity, PlanAdapter.ItemViewHolder>(DIFF_CALLBACK){
 
     inner class ItemViewHolder(private val binding: ItemPlanListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ListEntity) {
@@ -36,7 +36,7 @@ class PlanAdapter(private val onItemClick: (Int, String) -> Unit): PagingDataAda
         }
         holder.itemView.setOnClickListener {
             if (item != null) {
-                onItemClick(item.id.toInt(), item.title ?: "")
+                onItemClick(item.id.toInt(), item.title ?: "", item.boughtAt ?: "")
             }
         }
     }
