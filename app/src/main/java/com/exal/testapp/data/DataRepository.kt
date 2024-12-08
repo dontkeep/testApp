@@ -9,21 +9,16 @@ import com.exal.testapp.data.local.AppDatabase
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.network.ApiServices
 import com.exal.testapp.data.network.response.DetailListResponse
-import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.GetListResponse
 import com.exal.testapp.data.network.response.PostListResponse
-import com.exal.testapp.data.network.response.ResultListResponseItem
 import com.exal.testapp.data.network.response.ScanImageResponse
-import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.helper.hilt.MlApiService
 import com.exal.testapp.helper.hilt.RegularApiService
 import com.exal.testapp.helper.manager.TokenManager
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,14 +51,15 @@ class DataRepository @Inject constructor(
     }
 
     fun register(
-        name: String,
-        email: String,
-        password: String,
-        passwordRepeat: String
+        name: RequestBody,
+        email: RequestBody,
+        password: RequestBody,
+        passwordRepeat: RequestBody,
+        profileImage: MultipartBody.Part
     ): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading())
         try {
-            val response = apiService.register(name, email, password, passwordRepeat)
+            val response = apiService.register(name, email, password, passwordRepeat, profileImage)
             if (response.status == true) {
                 emit(Resource.Success(true))
             } else {

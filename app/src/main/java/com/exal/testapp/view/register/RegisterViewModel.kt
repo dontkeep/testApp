@@ -8,6 +8,8 @@ import com.exal.testapp.data.DataRepository
 import com.exal.testapp.data.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,9 +17,9 @@ class RegisterViewModel @Inject constructor(private val dataRepository: DataRepo
     private val _registerState = MutableLiveData<Resource<Boolean>>()
     val registerState: LiveData<Resource<Boolean>> get() = _registerState
 
-    fun register(name: String, email: String, password: String, passwordRepeat: String) {
+    fun register(name: RequestBody, email: RequestBody, password: RequestBody, passwordRepeat: RequestBody, profileImage: MultipartBody.Part) {
         viewModelScope.launch {
-            dataRepository.register(name, email, password, passwordRepeat).collect { resource ->
+            dataRepository.register(name, email, password, passwordRepeat, profileImage).collect { resource ->
                 _registerState.postValue(resource)
             }
         }

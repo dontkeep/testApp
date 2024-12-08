@@ -1,19 +1,14 @@
 package com.exal.testapp.data.network
 
-import androidx.lifecycle.LiveData
 import com.exal.testapp.data.network.response.DetailListResponse
-import com.exal.testapp.data.network.response.ExpenseListResponse
-import com.exal.testapp.data.network.response.ExpenseListResponseItem
 import com.exal.testapp.data.network.response.GetListResponse
 import com.exal.testapp.data.network.response.LoginResponse
 import com.exal.testapp.data.network.response.LogoutResponse
 import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.RegisterResponse
-import com.exal.testapp.data.network.response.ResultListResponseItem
 import com.exal.testapp.data.network.response.ScanImageResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -35,13 +30,14 @@ interface ApiServices {
         @Field("password") password: String
     ): LoginResponse
 
-    @FormUrlEncoded
+    @Multipart
     @POST("/auth/register")
     suspend fun register(
-        @Field("username") name: String,
-        @Field("email") email: String,
-        @Field("password") password: String,
-        @Field("passwordRepeat") passwordRepeat: String
+        @Part("username") name: RequestBody,
+        @Part("email") email: RequestBody,
+        @Part("password") password: RequestBody,
+        @Part("password_repeat") passwordRepeat: RequestBody,
+        @Part profileImage: MultipartBody.Part
     ): RegisterResponse
 
     @POST("/auth/logout")
