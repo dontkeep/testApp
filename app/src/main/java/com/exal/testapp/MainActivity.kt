@@ -58,6 +58,13 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
         navController = navHostFragment.navController
         setupSmoothBottomMenu()
+
+        val targetFragment = intent.getStringExtra("TARGET_FRAGMENT")
+        if (targetFragment == "ExpensesFragment") {
+            navController.navigate(R.id.expensesFragment)
+        } else if (targetFragment == "PlanFragment") {
+            navController.navigate(R.id.planFragment)
+        }
     }
 
     private fun isUserLoggedIn(): Boolean {

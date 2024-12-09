@@ -38,10 +38,23 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:clipToPadding="false"
-        android:paddingBottom="110dp"
+        android:paddingBottom="160dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/expensesTxt" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="100dp"
+        android:contentDescription="@string/fab_description"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/colorSurfaceDark"
+        app:backgroundTint="@color/BlueLight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

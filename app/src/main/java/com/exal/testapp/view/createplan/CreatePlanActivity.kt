@@ -172,8 +172,8 @@ class CreatePlanActivity : AppCompatActivity() {
                 Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
             }
             is Resource.Success -> {
-                Toast.makeText(this, "List Saved", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("TARGET_FRAGMENT", "PlanFragment")
                 startActivity(intent)
                 finish()
             }

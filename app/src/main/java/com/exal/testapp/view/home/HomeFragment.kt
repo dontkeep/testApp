@@ -65,11 +65,6 @@ class HomeFragment : Fragment() {
         homeViewModel.totalItems.observe(viewLifecycleOwner) { totalItems ->
             binding.items.text = "${totalItems} items"
         }
-
-        binding.floatingActionButton.setOnClickListener {
-            val intent = Intent(requireContext(), CreateListActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun navigateToDetail(id: Int, title: String, date: String) {

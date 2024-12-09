@@ -17,6 +17,7 @@ import com.exal.testapp.databinding.FragmentExpensesBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
 import com.exal.testapp.view.adapter.ExpensesAdapter
 import com.exal.testapp.view.adapter.LoadingStateAdapter
+import com.exal.testapp.view.createlist.CreateListActivity
 import com.exal.testapp.view.detailexpense.DetailExpenseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -60,6 +61,11 @@ class ExpensesFragment : Fragment() {
             expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
                 pagingAdapter.submitData(lifecycle, pagingData)
             }
+        }
+
+        binding.floatingActionButton.setOnClickListener {
+            val intent = Intent(requireContext(), CreateListActivity::class.java)
+            startActivity(intent)
         }
 
         binding.icCalender.setOnClickListener {
