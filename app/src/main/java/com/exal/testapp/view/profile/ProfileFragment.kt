@@ -69,8 +69,6 @@ class ProfileFragment : Fragment() {
                 }
                 2 -> {
                     viewModel.logout()
-                    tokenManager.clearToken()
-                    viewModel.clearDatabase()
                     logoutObserver()
                 }
             }
@@ -105,6 +103,8 @@ class ProfileFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
+                    tokenManager.clearToken()
+                    viewModel.clearDatabase()
                     val intent = Intent(requireContext(), LandingActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
