@@ -131,7 +131,7 @@ class CreatePlanActivity : AppCompatActivity() {
             val productItemsRequestBody = createRequestBody(
                 Gson().toJson(
                     viewModel.productList.value?.map {
-                        ProductItem(it.name, it.amount, it.price, it.detail?.categoryIndex.toString(), it.totalPrice)
+                        ProductItem(null, it.name, it.amount, it.price, it.detail?.categoryIndex.toString(), it.totalPrice)
                     }
                 )
             )

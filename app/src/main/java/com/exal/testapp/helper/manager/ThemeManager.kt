@@ -15,7 +15,7 @@ class ThemeManager(private val sharedPreferences: SharedPreferences) {
     }
 
     fun isDarkModeEnabled(): Boolean {
-        return sharedPreferences.getBoolean(DARK_MODE_KEY, false) // Default ke false (Light Mode)
+        return sharedPreferences.getBoolean(DARK_MODE_KEY, false)
     }
 }
 

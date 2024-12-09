@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.exal.testapp.view.profile.ProfileViewModel
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.extensions.format
 import ir.ehsannarmani.compose_charts.models.AnimationMode
@@ -76,7 +77,15 @@ val labelProperties = LabelProperties(
 )
 
 @Composable
-fun LineSample() {
+fun LineSample(viewModel: ProfileViewModel) {
+    viewModel.saveData()
+
+    val testData = remember {
+        viewModel.chartData.value
+    }
+
+    Log.d("Composable", "LineSample: $testData")
+
     val data = remember {
         listOf(
             Line(

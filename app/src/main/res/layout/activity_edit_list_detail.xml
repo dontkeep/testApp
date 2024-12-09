@@ -57,6 +57,8 @@
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white" />
 
+
+
     <Button
         android:id="@+id/saveBtn"
         android:layout_width="0dp"
@@ -86,21 +88,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 
-    <TextView
-        android:id="@+id/titleTv"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textFieldTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/input_title_list"
-        android:textStyle="bold"
-        android:textSize="18sp"
+        android:hint="@string/input_title_list"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/bottom_app_bar"
-        app:startIconContentDescription="Insert Title" />
+        app:startIconContentDescription="Insert Title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:backgroundTint="@color/text"
+            android:maxLength="25" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_rv"
@@ -113,7 +125,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTv"
+        app:layout_constraintTop_toBottomOf="@+id/textFieldTitle"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView

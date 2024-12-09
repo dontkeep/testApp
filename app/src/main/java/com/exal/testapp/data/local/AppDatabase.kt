@@ -35,5 +35,4 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
     }
-
 }

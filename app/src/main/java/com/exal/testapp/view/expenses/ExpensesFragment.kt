@@ -84,7 +84,7 @@ class ExpensesFragment : Fragment() {
 
     private fun navigateToDetail(id: Int, title: String, date: String) {
         val intent = Intent(requireContext(), DetailExpenseActivity::class.java)
-        val type = "Detail Expense"
+        val type = "Track"
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_ID, id)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_TITLE, title)
         intent.putExtra(DetailExpenseActivity.EXTRA_EXPENSE_DATE, date)

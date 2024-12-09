@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.exal.testapp.R
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.databinding.ItemRowExpenseBinding
@@ -20,13 +22,13 @@ class ExpensesAdapter(private val onItemClick: (Int, String, String) -> Unit): P
             binding.itemPrice.text = totalExpensesInt?.let { formatRupiah(it) } ?: "0"
             "${item.totalItems} Items".also { binding.itemTotal.text = it }
             binding.itemDate.text = DateFormatter.localizeDate(item.boughtAt ?: "")
-//            Glide.with(itemView.context)
-//                .load(item.image)
-//                .apply(
-//                    RequestOptions.placeholderOf(R.drawable.placeholder)
-//                        .error(R.drawable.ic_close)
-//                )
-//                .into(binding.itemImage)
+            Glide.with(itemView.context)
+                .load(item.image)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.placeholder)
+                        .error(R.drawable.ic_close)
+                )
+                .into(binding.itemImage)
         }
     }
 

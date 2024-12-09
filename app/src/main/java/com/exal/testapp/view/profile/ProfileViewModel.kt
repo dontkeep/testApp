@@ -15,6 +15,13 @@ class ProfileViewModel @Inject constructor(private val dataRepository: DataRepos
     private val _logoutState = MutableLiveData<Resource<Boolean>>()
     val logoutState: LiveData<Resource<Boolean>> get() = _logoutState
 
+    private val _chartData = MutableLiveData<String>()
+    val chartData: LiveData<String> get() = _chartData
+
+    fun saveData(){
+        _chartData.value = "Hello"
+    }
+
     fun logout() {
         viewModelScope.launch {
             dataRepository.logout().collect { resource ->

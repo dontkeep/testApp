@@ -78,7 +78,7 @@ class ProfileFragment : Fragment() {
 
         binding.composeView.setContent {
             MaterialTheme {
-                LineSample()
+                LineSample(viewModel)
             }
         }
 

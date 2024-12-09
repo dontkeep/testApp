@@ -30,7 +30,7 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
     private var imageCapture: ImageCapture? = null
-    private var cameraControl: CameraControl? = null // Tambahkan variabel untuk CameraControl
+    private var cameraControl: CameraControl? = null
     private var isTorchEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +71,6 @@ class CameraActivity : AppCompatActivity() {
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
-            // Kirim URI gambar ke PerspectiveActivity
             val intent = Intent(this, PerspectiveActivity::class.java)
             intent.putExtra(PerspectiveActivity.EXTRA_CAMERAX_IMAGE, uri.toString())
             Log.d(TAG, "Gambar dari galeri: $uri")

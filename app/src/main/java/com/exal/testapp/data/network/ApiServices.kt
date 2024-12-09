@@ -7,6 +7,7 @@ import com.exal.testapp.data.network.response.LogoutResponse
 import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.RegisterResponse
 import com.exal.testapp.data.network.response.ScanImageResponse
+import com.exal.testapp.data.network.response.UpdateListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field
@@ -88,4 +89,16 @@ interface ApiServices {
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 10
     ): GetListResponse
+
+    @Multipart
+    @PUT("/list/{id}")
+    suspend fun updateList(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Part("title") title: RequestBody,
+        @Part("product_items") productItems: RequestBody,
+        @Part("type") type: RequestBody,
+        @Part("total_expenses") totalExpenses: RequestBody,
+        @Part("total_items") totalItems: RequestBody
+    ): UpdateListResponse
 }

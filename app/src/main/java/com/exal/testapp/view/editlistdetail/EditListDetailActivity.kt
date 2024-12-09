@@ -1,5 +1,6 @@
 package com.exal.testapp.view.editlistdetail
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -8,16 +9,25 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Update
+import com.exal.testapp.MainActivity
 import com.exal.testapp.R
+import com.exal.testapp.data.Resource
+import com.exal.testapp.data.network.response.PostListResponse
 import com.exal.testapp.data.network.response.ProductsItem
+import com.exal.testapp.data.network.response.UpdateListResponse
+import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.databinding.ActivityEditListDetailBinding
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ItemAdapter
-import com.exal.testapp.view.createlist.AddManualDialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 @AndroidEntryPoint
 class EditListDetailActivity : AppCompatActivity() {
@@ -38,17 +48,15 @@ class EditListDetailActivity : AppCompatActivity() {
         val expenseTitle = intent.getStringExtra(EXTRA_EXPENSE_TITLE)
         Log.d("EditListDetailActivity", "Expense ID: $expenseId, Title: $expenseTitle")
 
-        // TODO (Receive List Intent Data from DetailActivity then send to viewmodel and rv, after that send to server)
-        // Existing setup
         val jsonList = intent.getStringExtra(EXTRA_DETAIL_LIST)
         val detailItems: List<ProductsItem> = Gson().fromJson(jsonList, object : TypeToken<List<ProductsItem>>() {}.type)
+        val type = intent.getStringExtra("list_type")
 
-        // Save to ViewModel
         viewModel.setInitialProductList(detailItems)
 
         rvSetup()
 
-        binding.titleTv.text = expenseTitle
+        binding.textFieldTitle.editText?.setText(expenseTitle)
 
         binding.fabBottomAppBar.setOnClickListener {
             val dialogFragment = AddManualDialogFragment()
@@ -60,11 +68,61 @@ class EditListDetailActivity : AppCompatActivity() {
         }
 
         binding.saveBtn.setOnClickListener {
-//            val updatedList = viewModel.productList.value ?: emptyList()
-//            val updatedJsonList = Gson().toJson(updatedList)
-            Toast.makeText(this, "List Updated", Toast.LENGTH_SHORT).show()
+            Log.d("before save type", "$type")
+            handleSaveButtonClick(type, expenseId)
         }
         observeViewModel()
+    }
+
+    private fun handleSaveButtonClick(type: String?, id: Int) {
+        lifecycleScope.launch {
+            val titleRequestBody = createRequestBody(binding.textFieldTitle.editText?.text.toString())
+            val typeRequestBody = createRequestBody(type)
+            val totalExpensesRequestBody = createRequestBody(viewModel.totalPrice.value.toString())
+            val totalItems = viewModel.productList.value?.fold(0) { sum, item ->
+                sum + (item.amount ?: 0)
+            } ?: 0
+            val totalItemsPart = createRequestBody(totalItems.toString())
+            val productItemsRequestBody = createRequestBody(
+                Gson().toJson(
+                    viewModel.productList.value?.map {
+                        ProductItem(it.id, it.name, it.amount, it.price, it.detail?.categoryIndex.toString(), it.totalPrice)
+                    }
+                )
+            )
+
+            viewModel.updateData(
+                id,
+                titleRequestBody,
+                productItemsRequestBody,
+                typeRequestBody,
+                totalExpensesRequestBody,
+                totalItemsPart
+            ).collect { resource ->
+                handleResource(resource)
+            }
+        }
+    }
+
+    private fun createRequestBody(value: String?): okhttp3.RequestBody =
+        value.orEmpty().toRequestBody("text/plain".toMediaTypeOrNull())
+
+    private fun handleResource(resource: Resource<UpdateListResponse>) {
+        when (resource) {
+            is Resource.Loading -> {
+                Toast.makeText(this, "Loading", Toast.LENGTH_SHORT).show()
+            }
+            is Resource.Success -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("TARGET_FRAGMENT", "ExpensesFragment")
+                startActivity(intent)
+                finish()
+            }
+            is Resource.Error -> {
+                Log.d("EditListDetailActivity", "Error: ${resource.message}")
+                Toast.makeText(this, "Error ${resource.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun rvSetup() {
@@ -74,8 +132,8 @@ class EditListDetailActivity : AppCompatActivity() {
         binding.itemRv.layoutManager = LinearLayoutManager(this)
         binding.itemRv.adapter = adapter
 
-        // Observe the product list
         viewModel.productList.observe(this) { products ->
+            Log.d("EditListDetailActivity", "Product List: ${products[0].detail?.categoryIndex}")
             adapter.submitList(products)
         }
     }
