@@ -10,33 +10,31 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.compose.ui.semantics.dialog
-import androidx.compose.ui.semantics.dismiss
-import androidx.compose.ui.semantics.text
 import androidx.fragment.app.DialogFragment
-import com.exal.testapp.data.network.response.Detail
-import com.exal.testapp.data.network.response.ProductsItem
+import com.exal.testapp.data.network.response.DetailItemsItem
 import com.exal.testapp.databinding.AddManualDialogFragmentBinding
-import com.exal.testapp.databinding.ItemEditListBinding
 import com.exal.testapp.helper.formatRupiah
 import kotlin.text.toIntOrNull
 
-class AddManualDialogFragment : DialogFragment() {
+class EditDialogFragment : DialogFragment() {
 
     private var _binding: AddManualDialogFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val categoryMapping = mapOf(
-        0 to "Food",
-        1 to "Beauty",
-        2 to "Home Living",
-        3 to "Drink",
-        4 to "Fresh Product",
-        5 to "Health",
-        6 to "Other"
+        "0" to "Food",
+        "1" to "Beauty",
+        "2" to "Home Living",
+        "3" to "Drink",
+        "4" to "Fresh Product",
+        "5" to "Health",
+        "6" to "Other"
     )
 
     private val reverseCategoryMapping = categoryMapping.entries.associate { (key, value) -> value to key }
+
+    private var detailItemsItem: DetailItemsItem? = null
+    private var onUpdateItemListener: ((DetailItemsItem) -> Unit)? = null
 
     override fun onResume() {
         super.onResume()
@@ -59,10 +57,6 @@ class AddManualDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val currentProductList = (activity as? EditListDetailActivity)?.viewModel?.productList?.value.orEmpty()
-        val highestId = currentProductList.maxOfOrNull { it.id ?: 0 } ?: 0
-        val newId = highestId + 1
-
         val categories = categoryMapping.values.toList()
         val adapter = ArrayAdapter(
             binding.textFieldCategory.context,
@@ -71,27 +65,37 @@ class AddManualDialogFragment : DialogFragment() {
         )
         (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-        textListenerAndWatcher()
+        // Set initial data
+        detailItemsItem?.let { item ->
+            binding.textFieldName.editText?.setText(item.name)
+            binding.textFieldPrice.editText?.setText(item.price)
+            binding.textFieldQuantity.editText?.setText(item.amount.toString())
+            (binding.textFieldCategory.editText as? AutoCompleteTextView)?.setText(
+                categoryMapping[item.category], false
+            )
+            updateTotalPrice()
+        }
 
-        updateTotalPrice()
+        textListenerAndWatcher()
 
         binding.addButton.setOnClickListener {
             val productName = binding.textFieldName.editText?.text.toString()
-            val productPrice = binding.textFieldPrice.editText?.text.toString().toIntOrNull() ?: 0
+            val productPrice = binding.textFieldPrice.editText?.text.toString()
             val productAmount = binding.textFieldQuantity.editText?.text.toString().toIntOrNull() ?: 0
             val selectedCategory = (binding.textFieldCategory.editText as? AutoCompleteTextView)?.text.toString()
             val categoryKey = reverseCategoryMapping[selectedCategory]
 
-            val newItem = ProductsItem(
-                id = newId,
-                name = productName,
-                price = productPrice,
-                amount = productAmount,
-                totalPrice = productPrice * productAmount,
-                detail = Detail(categoryIndex = categoryKey)
-            )
+            detailItemsItem?.let { item ->
+                val updatedItem = item.copy(
+                    name = productName,
+                    price = productPrice,
+                    amount = productAmount,
+                    category = categoryKey,
+                    totalPrice = productPrice.toDouble().toInt().times(productAmount).toString()
+                )
+                onUpdateItemListener?.invoke(updatedItem)
+            }
 
-            (activity as? EditListDetailActivity)?.viewModel?.addProduct(newItem)
             dismiss()
         }
 
@@ -127,6 +131,14 @@ class AddManualDialogFragment : DialogFragment() {
         val quantity = binding.textFieldQuantity.editText?.text.toString().toIntOrNull() ?: 0
         val totalPrice = price * quantity
         binding.tvTotal.text = formatRupiah(totalPrice)
+    }
+
+    fun setDetailItem(item: DetailItemsItem) {
+        detailItemsItem = item
+    }
+
+    fun setOnUpdateItemListener(listener: (DetailItemsItem) -> Unit) {
+        onUpdateItemListener = listener
     }
 
     override fun onDestroyView() {

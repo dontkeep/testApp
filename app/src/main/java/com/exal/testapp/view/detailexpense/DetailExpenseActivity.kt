@@ -88,7 +88,13 @@ class DetailExpenseActivity : AppCompatActivity() {
         intent.putExtra("list_type", type)
 
         val detailItems = viewModel.productList.value?.data?.data?.detailItems.orEmpty()
+        val detailItems2 = detailItems.forEach {
+            Log.d("DetailExpenseActivity", "Detail Item: ${it.toString()}")
+            it?.category?.toInt()
+        }
+        Log.d("DetailExpenseActivity", "Detail Items: ${detailItems2}")
         val jsonList = Gson().toJson(detailItems)
+        Log.d("DetailExpenseActivity", "JSON List: $jsonList")
         intent.putExtra(EditListDetailActivity.EXTRA_DETAIL_LIST, jsonList)
 
         startActivity(intent)

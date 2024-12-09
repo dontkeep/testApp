@@ -16,12 +16,13 @@ import com.exal.testapp.MainActivity
 import com.exal.testapp.R
 import com.exal.testapp.data.Resource
 import com.exal.testapp.data.network.response.PostListResponse
-import com.exal.testapp.data.network.response.ProductsItem
+import com.exal.testapp.data.network.response.DetailItemsItem
 import com.exal.testapp.data.network.response.UpdateListResponse
 import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.databinding.ActivityEditListDetailBinding
 import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ItemAdapter
+import com.exal.testapp.view.adapter.ItemEditAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +50,8 @@ class EditListDetailActivity : AppCompatActivity() {
         Log.d("EditListDetailActivity", "Expense ID: $expenseId, Title: $expenseTitle")
 
         val jsonList = intent.getStringExtra(EXTRA_DETAIL_LIST)
-        val detailItems: List<ProductsItem> = Gson().fromJson(jsonList, object : TypeToken<List<ProductsItem>>() {}.type)
+        val detailItems: List<DetailItemsItem> = Gson().fromJson(jsonList, object : TypeToken<List<DetailItemsItem>>() {}.type)
+        Log.d("EditListDetailActivity", "JSON List: $jsonList")
         val type = intent.getStringExtra("list_type")
 
         viewModel.setInitialProductList(detailItems)
@@ -57,11 +59,6 @@ class EditListDetailActivity : AppCompatActivity() {
         rvSetup()
 
         binding.textFieldTitle.editText?.setText(expenseTitle)
-
-        binding.fabBottomAppBar.setOnClickListener {
-            val dialogFragment = AddManualDialogFragment()
-            dialogFragment.show(supportFragmentManager, "addManualDialog")
-        }
 
         binding.backBtn.setOnClickListener {
             finish()
@@ -86,10 +83,11 @@ class EditListDetailActivity : AppCompatActivity() {
             val productItemsRequestBody = createRequestBody(
                 Gson().toJson(
                     viewModel.productList.value?.map {
-                        ProductItem(it.id, it.name, it.amount, it.price, it.detail?.categoryIndex.toString(), it.totalPrice)
+                        ProductItem(it.id, it.name, it.amount, it.price?.toInt(), it.category, it.totalPrice?.toInt())
                     }
                 )
             )
+            Log.d("EditListDetailActivity", "Product Items Request Body: ${viewModel.totalPrice.value.toString()} |||  $totalItems")
 
             viewModel.updateData(
                 id,
@@ -126,21 +124,27 @@ class EditListDetailActivity : AppCompatActivity() {
     }
 
     private fun rvSetup() {
-        val adapter = ItemAdapter{ item ->
-            viewModel.deleteProduct(item)
+        val adapter = ItemEditAdapter { item ->
+            val editDialog = EditDialogFragment().apply {
+                setDetailItem(item)
+                setOnUpdateItemListener { updatedItem ->
+                    (context as? EditListDetailActivity)?.viewModel?.updateProduct(updatedItem)
+                }
+            }
+            editDialog.show((this).supportFragmentManager, "EditDialog")
         }
+
         binding.itemRv.layoutManager = LinearLayoutManager(this)
         binding.itemRv.adapter = adapter
 
         viewModel.productList.observe(this) { products ->
-            Log.d("EditListDetailActivity", "Product List: ${products[0].detail?.categoryIndex}")
             adapter.submitList(products)
         }
     }
 
     private fun observeViewModel() {
         viewModel.productList.observe(this) { products ->
-            (binding.itemRv.adapter as? ItemAdapter)?.submitList(products)
+            (binding.itemRv.adapter as? ItemEditAdapter)?.submitList(products)
         }
 
         viewModel.totalPrice.observe(this) { price ->
