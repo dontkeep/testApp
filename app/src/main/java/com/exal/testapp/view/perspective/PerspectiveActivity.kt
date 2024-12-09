@@ -3,6 +3,8 @@ package com.exal.testapp.view.perspective
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -120,8 +122,10 @@ class PerspectiveActivity : AppCompatActivity() {
                 is Resource.Loading -> {
                     showLoading(true)
                     showSnackbar("Memindai gambar...")
+                    binding.root.foreground = ColorDrawable(Color.parseColor("#80000000"))
                 }
                 is Resource.Success -> {
+                    resetUIState()
                     val scanResponse = resource.data
                     if (scanResponse != null) {
                         showLoading(false)
@@ -133,6 +137,7 @@ class PerspectiveActivity : AppCompatActivity() {
                     }
                 }
                 is Resource.Error -> {
+                    resetUIState()
                     showLoading(false)
                     Log.d("PerspectiveActivity", "Error: ${resource.message}")
                     showSnackbar("Gagal memindai: ${resource.message}")
@@ -209,6 +214,10 @@ class PerspectiveActivity : AppCompatActivity() {
         Snackbar.make(binding.perspectiveActivity, message, Snackbar.LENGTH_LONG)
             .setAnchorView(binding.nextBtn)
             .show()
+    }
+
+    private fun resetUIState() {
+        binding.root.foreground = null
     }
 
     companion object {
