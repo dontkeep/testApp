@@ -1,13 +1,11 @@
 package com.exal.testapp.view.expenses
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.room.withTransaction
 import com.exal.testapp.data.DataRepository
 import com.exal.testapp.data.local.AppDatabase
 import com.exal.testapp.data.local.entity.ListEntity

@@ -71,6 +71,7 @@ class PlanFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             planViewModel.toastEvent.collect { message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                binding.resetBtn.visibility = View.GONE
             }
         }
 
@@ -82,7 +83,18 @@ class PlanFragment : Fragment() {
                 planViewModel.planList.observe(viewLifecycleOwner) { pagingData ->
                     pagingAdapter.submitData(lifecycle, pagingData)
                 }
+                binding.resetBtn.visibility = View.VISIBLE
             }.show()
+        }
+
+        binding.resetBtn.setOnClickListener {
+            lifecycleScope.launch {
+                planViewModel.getLists("Plan")
+                planViewModel.planList.observe(viewLifecycleOwner) { pagingData ->
+                    pagingAdapter.submitData(lifecycle, pagingData)
+                }
+            }
+            binding.resetBtn.visibility = View.GONE
         }
 
         binding.floatingActionButton.setOnClickListener {

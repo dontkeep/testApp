@@ -22,6 +22,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".view.sharelist.ShareListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.resetpassword.ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.accountsettings.AccountSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.editlistdetail.EditListDetailActivity"
             android:exported="false" />
         <activity

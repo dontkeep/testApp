@@ -19,6 +19,7 @@ import com.exal.testapp.data.Resource
 import com.exal.testapp.databinding.FragmentProfileBinding
 import com.exal.testapp.helper.MonthYearPickerDialog
 import com.exal.testapp.helper.manager.TokenManager
+import com.exal.testapp.view.accountsettings.AccountSettingsActivity
 import com.exal.testapp.view.adapter.MenuItem
 import com.exal.testapp.view.adapter.MenuProfileAdapter
 import com.exal.testapp.view.appsettings.AppSettingsActivity
@@ -62,7 +63,10 @@ class ProfileFragment : Fragment() {
 
         binding.listViewMenu.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             when (position) {
-                0 -> Toast.makeText(requireContext(), "Account Settings clicked", Toast.LENGTH_SHORT).show()
+                0 -> {
+                    val intent = Intent(requireContext(), AccountSettingsActivity::class.java)
+                    startActivity(intent)
+                }
                 1 -> {
                     val intent = Intent(requireContext(), AppSettingsActivity::class.java)
                     startActivity(intent)
@@ -88,11 +92,6 @@ class ProfileFragment : Fragment() {
                 binding.dateTxt.text = "$monthName $year"
             }.show()
         }
-
-//        binding.accSetting.setOnClickListener {
-//            val intent = Intent(requireContext(), AppSettingsActivity::class.java)
-//            startActivity(intent)
-//        }
     }
 
     private fun logoutObserver() {

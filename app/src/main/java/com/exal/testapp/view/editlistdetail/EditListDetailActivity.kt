@@ -21,7 +21,6 @@ import com.exal.testapp.data.network.response.UpdateListResponse
 import com.exal.testapp.data.request.ProductItem
 import com.exal.testapp.databinding.ActivityEditListDetailBinding
 import com.exal.testapp.helper.formatRupiah
-import com.exal.testapp.view.adapter.ItemAdapter
 import com.exal.testapp.view.adapter.ItemEditAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

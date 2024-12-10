@@ -49,5 +49,9 @@
     <string name="edit_list">Edit List</string>
     <string name="save_changes">Save Changes</string>
     <string name="edit_button">Edit button.</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="share_list">Share List</string>
+    <string name="reset">Reset</string>
 
 </resources>

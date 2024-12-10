@@ -32,6 +32,25 @@
         app:layout_constraintTop_toTopOf="@+id/expensesTxt"
         app:tint="@color/iconButton" />
 
+    <TextView
+        android:id="@+id/resetBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:text="@string/reset"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/rounded_corner_background"
+        android:backgroundTint="@color/deleteBtn"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/icCalender"
+        app:layout_constraintEnd_toStartOf="@+id/icCalender"
+        app:layout_constraintTop_toTopOf="@+id/icCalender" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvExpense"
         android:layout_width="match_parent"

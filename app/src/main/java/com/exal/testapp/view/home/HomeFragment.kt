@@ -18,6 +18,7 @@ import com.exal.testapp.helper.formatRupiah
 import com.exal.testapp.view.adapter.ExpensesAdapter
 import com.exal.testapp.view.createlist.CreateListActivity
 import com.exal.testapp.view.detailexpense.DetailExpenseActivity
+import com.exal.testapp.view.sharelist.ShareListActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -40,6 +41,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.sharedListBtn.setOnClickListener{
+            val intent = Intent(requireContext(), ShareListActivity::class.java)
+            startActivity(intent)
+        }
 
         pagingAdapter = ExpensesAdapter{id, title, date ->
             navigateToDetail(id = id, title = title, date = date)

@@ -34,7 +34,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/icPeople"
+                android:id="@+id/sharedListBtn"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="32dp"
