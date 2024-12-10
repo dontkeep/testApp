@@ -22,6 +22,8 @@ class ProfileViewModel @Inject constructor(private val dataRepository: DataRepos
         _chartData.value = "Hello"
     }
 
+
+
     fun logout() {
         viewModelScope.launch {
             dataRepository.logout().collect { resource ->

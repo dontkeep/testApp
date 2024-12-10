@@ -11,7 +11,7 @@ data class GetListResponse(
 	val pagination: Pagination? = null,
 
 	@field:SerializedName("data")
-	val data: Data? = null,
+	val data: Data3? = null,
 
 	@field:SerializedName("message")
 	val message: String? = null,
@@ -65,7 +65,7 @@ data class Pagination(
 	val page: Int? = null
 )
 
-data class Data(
+data class Data3(
 
 	@field:SerializedName("lists")
 	val lists: List<ListsItem?>? = null
