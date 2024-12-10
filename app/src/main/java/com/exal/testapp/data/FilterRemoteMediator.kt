@@ -1,6 +1,7 @@
 package com.exal.testapp.data
 
 import android.util.Log
+import android.widget.Toast
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -10,14 +11,17 @@ import com.exal.testapp.data.local.AppDatabase
 import com.exal.testapp.data.local.entity.ListEntity
 import com.exal.testapp.data.local.entity.RemoteKeys
 import com.exal.testapp.data.network.ApiServices
-import com.exal.testapp.data.network.response.GetListResponse
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 @OptIn(ExperimentalPagingApi::class)
-class ListRemoteMediator(
+class FilterRemoteMediator(
     private val type: String,
     private val token: String,
+    private val month: Int,
+    private val year: Int,
     private val apiService: ApiServices,
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val toastEvent: MutableSharedFlow<String>
 ) : RemoteMediator<Int, ListEntity>() {
 
     override suspend fun initialize(): InitializeAction {
@@ -54,7 +58,12 @@ class ListRemoteMediator(
         }
 
         try {
-            val responseData = apiService.getExpenseList("Bearer: $token", type, page, state.config.pageSize)
+            val responseData = apiService.getExpensesMonth("Bearer: $token", type, month, year, page, state.config.pageSize)
+
+            if (responseData.message == "No lists found for this user") {
+                toastEvent.emit("No lists found for this Month/Year")
+                return MediatorResult.Success(endOfPaginationReached = true)
+            }
 
             val endOfPaginationReached = page >= responseData.pagination?.totalPages!!
             Log.d("End of pagination", "End of pagination reached: $endOfPaginationReached")

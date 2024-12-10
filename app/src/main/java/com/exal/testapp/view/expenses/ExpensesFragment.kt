@@ -57,7 +57,7 @@ class ExpensesFragment : Fragment() {
         )
 
         lifecycleScope.launch {
-            expenseViewModel.getLists("Track", null, null)
+            expenseViewModel.getLists("Track")
             expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
                 pagingAdapter.submitData(lifecycle, pagingData)
             }
@@ -68,15 +68,19 @@ class ExpensesFragment : Fragment() {
             startActivity(intent)
         }
 
+        lifecycleScope.launchWhenStarted {
+            expenseViewModel.toastEvent.collect { message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
         binding.icCalender.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
-                lifecycleScope.launch {
-                    val monthValue = month + 1
-                    Log.d("month", "Bulan saat ini : $month   ||   $monthValue")
-                    expenseViewModel.getLists("Track", monthValue, year)
-                    expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
-                        pagingAdapter.submitData(lifecycle, pagingData)
-                    }
+                val monthValue = month + 1
+                expenseViewModel.filterData("Track", monthValue, year)
+
+                expenseViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+                    pagingAdapter.submitData(lifecycle, pagingData)
                 }
             }.show()
         }

@@ -54,27 +54,33 @@ class PlanFragment : Fragment() {
         }
 
         val loadingStateAdapter = LoadingStateAdapter { pagingAdapter.retry() }
-        binding.rvPlan.adapter = pagingAdapter.withLoadStateFooter(
+        binding.recyclerViewPlan.adapter = pagingAdapter.withLoadStateFooter(
             footer = loadingStateAdapter
         )
 
-        binding.rvPlan.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvPlan.adapter = pagingAdapter
+        binding.recyclerViewPlan.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewPlan.adapter = pagingAdapter
 
         lifecycleScope.launch {
-            planViewModel.getLists("Plan", null, null)
-            planViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
+            planViewModel.getLists("Plan")
+            planViewModel.planList.observe(viewLifecycleOwner) { pagingData ->
                 pagingAdapter.submitData(lifecycle, pagingData)
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            planViewModel.toastEvent.collect { message ->
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.icCalender.setOnClickListener {
             MonthYearPickerDialog(requireContext()) { month, year ->
-                lifecycleScope.launch {
-                    planViewModel.getLists("Plan", month, year)
-                    planViewModel.expenses.observe(viewLifecycleOwner) { pagingData ->
-                        pagingAdapter.submitData(lifecycle, pagingData)
-                    }
+                val monthValue = month + 1
+                planViewModel.filterData("Plan", monthValue, year)
+
+                planViewModel.planList.observe(viewLifecycleOwner) { pagingData ->
+                    pagingAdapter.submitData(lifecycle, pagingData)
                 }
             }.show()
         }

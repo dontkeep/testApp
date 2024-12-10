@@ -18,6 +18,7 @@ import com.exal.testapp.helper.hilt.MlApiService
 import com.exal.testapp.helper.hilt.RegularApiService
 import com.exal.testapp.helper.manager.TokenManager
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -151,16 +152,34 @@ class DataRepository @Inject constructor(
 
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getListData(type: String, month: Int?, year: Int?): Flow<PagingData<ListEntity>> {
+    fun getListData(type: String): Flow<PagingData<ListEntity>> {
         return Pager(
             config = PagingConfig(pageSize = 10),
             remoteMediator = ListRemoteMediator(
                 type = type,
-                month = month,
-                year = year,
                 token = "${tokenManager.getToken()}",
                 apiService = apiService,
                 database = database
+            ),
+            pagingSourceFactory = {
+                val data = database.listDao().getListsByType(type)
+                return@Pager data
+            }
+        ).flow
+    }
+
+    @OptIn(ExperimentalPagingApi::class)
+    fun getFilterData(type: String, month: Int, year: Int, toastEvent: MutableSharedFlow<String>): Flow<PagingData<ListEntity>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10),
+            remoteMediator = FilterRemoteMediator(
+                type = type,
+                token = "${tokenManager.getToken()}",
+                month = month,
+                year = year,
+                apiService = apiService,
+                database = database,
+                toastEvent = toastEvent
             ),
             pagingSourceFactory = {
                 val data = database.listDao().getListsByType(type)

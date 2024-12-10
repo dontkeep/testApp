@@ -83,7 +83,7 @@ interface ApiServices {
     @GET("/list/filter")
     suspend fun getExpensesMonth(
         @Header("Authorization") token: String,
-        @Query("type") type: String = "Track",
+        @Query("type") type: String,
         @Query("month") month: Int,
         @Query("year") year: Int,
         @Query("page") page: Int = 1,
